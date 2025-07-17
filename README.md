@@ -27,7 +27,7 @@ Implements a Linear issue using Claude with full TDD flow, memory tracking, and 
 
 → [Detailed command documentation](.claude/commands/linear-implement.md)
 
-### /full-code-review
+### `/full-code-review`
 
 This was extracted from a Ruby on Rails project I've been working on in my spare time. It triggers a full code review of the work on the current branch. Useful to have subagents review the work of another agent before creating a pull request.
 
