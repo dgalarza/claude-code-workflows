@@ -27,6 +27,15 @@ Implements a Linear issue using Claude with full TDD flow, memory tracking, and 
 
 → [Detailed command documentation](.claude/commands/linear-implement.md)
 
+### /full-code-review
+
+This was extracted from a Ruby on Rails project I've been working on in my spare time. It triggers a full code review of the work on the current branch. Useful to have subagents review the work of another agent before creating a pull request.
+
+- Checks for security issues such as multi-tenancy enforcement, SQL injection prevention and OWASP top 10 compliance.
+- Ruby on Rails best practices such as RESTful design, POODR principles, service objects, and code clarity.
+- Idiomatic ruby
+- Proper testing
+
 ---
 
 ## 🧠 Core Principles
@@ -61,9 +70,19 @@ Will:
 * Validate + open PR
 
 📦 Requirements
-* Git + gh GitHub CLI
-* Linear API access + MCP tools
-* Claude API access
-* Ruby project with:
-* bundle exec rspec
-* bin/lint
+* Git + [gh](https://cli.github.com/) GitHub CLI
+* [Linear MCP](https://linear.app/changelog/2025-05-01-mcp)
+
+```bash
+/full-code-review
+```
+
+Will:
+* Check memory for existing code review decisions to avoid redundant suggestions
+* Launch parallel subagents for security and Rails best practices reviews
+* Report back on the subagent findings to the user
+
+
+📦 Requirements
+
+* [Knowledge Graph Memory Server MCP](https://github.com/modelcontextprotocol/servers/tree/main/src/memory)
