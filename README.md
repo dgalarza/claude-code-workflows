@@ -86,3 +86,14 @@ Will:
 📦 Requirements
 
 * [Knowledge Graph Memory Server MCP](https://github.com/modelcontextprotocol/servers/tree/main/src/memory)
+
+---
+
+## 🧱 MCP Servers I Use or Recommend
+
+* [BrowserMCP](https://browsermcp.io/)
+* [Knowledge Graph Memory Server MCP](https://github.com/modelcontextprotocol/servers/tree/main/src/memory)
+* [Linear](https://linear.app/changelog/2025-05-01-mcp)
+* [Sentry](https://docs.sentry.io/product/sentry-mcp/) 
+* [Sequential Thinking](https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking)
+* [figma-dev-mode-mcp-server](https://www.figma.com/blog/introducing-figmas-dev-mode-mcp-server/)
