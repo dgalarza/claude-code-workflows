@@ -27,6 +27,18 @@ Implements a Linear issue using Claude with full TDD flow, memory tracking, and 
 
 → [Detailed command documentation](.claude/commands/linear-implement.md)
 
+### `/linear-worktree`
+
+Sets up a new git worktree for a Linear issue, creating an isolated working directory for parallel development. Typically run from a parent directory containing your project repos.
+
+- Fetches Linear issue details for proper branch naming
+- Creates worktree in parallel directory structure
+- Copies configuration files (`.env`, `config/master.key`)
+- Runs setup process in new worktree
+- Leaves you ready to run `/linear-implement`
+
+→ [Detailed command documentation](linear-worktree.md)
+
 ### `/full-code-review`
 
 This was extracted from a Ruby on Rails project I've been working on in my spare time. It triggers a full code review of the work on the current branch. Useful to have subagents review the work of another agent before creating a pull request.
