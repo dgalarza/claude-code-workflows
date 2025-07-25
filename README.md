@@ -66,6 +66,62 @@ This was extracted from a Ruby on Rails project I've been working on in my spare
 
 ---
 
+## 👥 Custom Claude Agents
+
+This workflow toolkit includes specialized Claude agents designed to provide expert-level feedback and development assistance for Ruby on Rails applications. These agents are automatically invoked by workflow commands or can be used directly for targeted assistance.
+
+### 🔍 Rails Code Reviewer (`rails-code-reviewer`)
+
+Expert Rails code reviewer focusing on conventions, POODR principles, and idiomatic Ruby practices.
+
+**Specializes in:**
+- Rails conventions and RESTful design patterns
+- POODR principles (Single Responsibility, dependency management, Tell Don't Ask)
+- Modern Rails patterns (Hotwire, Turbo, ViewComponent, service objects)
+- Performance optimization and N+1 query prevention
+- Controller/model design and proper separation of concerns
+
+**Used by:** `/full-code-review` command for Rails best practices analysis
+
+### 🛡️ Rails Security Reviewer (`rails-security-reviewer`)
+
+Security expert specializing in Rails applications with deep focus on multi-tenant architecture and ActsAsTenant implementation.
+
+**Specializes in:**
+- Multi-tenant data isolation and ActsAsTenant security
+- Authentication, authorization, and session management
+- XSS prevention and input validation (accounting for Rails auto-escaping)
+- SQL injection prevention and secure database queries
+- CSRF protection and Rails security features
+- Tenant boundary enforcement and data leakage prevention
+
+**Used by:** `/full-code-review` and `/linear-implement` commands for security analysis
+
+### ⚡ Rails Feature Developer (`rails-feature-developer`)
+
+Staff Rails engineer specializing in TDD-driven feature development with modern Rails and Hotwire integration.
+
+**Specializes in:**
+- Test-Driven Development with RSpec and FactoryBot
+- Clean architecture using service objects and the Result pattern
+- Hotwire integration (Turbo Streams, Turbo Frames, Stimulus)
+- SOLID principles and maintainable code design
+- Modern Rails 7+ patterns and conventions
+
+**Used by:** `/linear-implement` command for feature implementation
+
+### Integration with Workflow Commands
+
+These agents work seamlessly with the workflow commands:
+
+- **`/linear-implement`** uses both the security reviewer and feature developer agents to ensure secure, well-architected implementations
+- **`/full-code-review`** leverages both reviewer agents to provide comprehensive feedback on security and Rails best practices
+- Each agent maintains context and memory to avoid redundant suggestions across review cycles
+
+The agents follow the same structured approach as the main workflow commands, providing detailed, actionable feedback that helps maintain high code quality standards throughout the development process.
+
+---
+
 ## 🚀 Example
 
 ```bash
