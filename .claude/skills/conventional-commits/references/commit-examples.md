@@ -19,11 +19,11 @@ feat(auth): add two-factor authentication
 ### Feature with Body
 
 ```
-feat(dhf): add automatic traceability suggestions
+feat(search): add semantic similarity search
 
-Implement AI-based similarity detection between artifacts
-to automatically suggest traceability links. Uses vector
-embeddings with configurable similarity threshold.
+Implement AI-based similarity detection between documents
+to improve search relevance. Uses vector embeddings with
+configurable similarity threshold.
 ```
 
 ### Feature with Issue Reference
@@ -34,7 +34,7 @@ feat(api): add webhook signature verification
 Add HMAC-SHA256 signature verification for all incoming
 webhooks from external services.
 
-Closes TRA-456
+Closes #456
 ```
 
 ### Breaking Change Feature
@@ -326,13 +326,13 @@ Related to #567
 ### Issue References and Co-authors
 
 ```
-feat(dhf): add artifact classification
+feat(ml): add document classification
 
-Implement AI-based classification of GitHub artifacts
-into DHF categories using OpenAI embeddings.
+Implement AI-based classification of documents into
+predefined categories using machine learning embeddings.
 
-Closes TRA-123
-Related to TRA-100, TRA-101
+Closes #123
+Related to #100, #101
 Co-authored-by: Jane Doe <jane@example.com>
 ```
 
@@ -366,10 +366,10 @@ Migration steps:
 
 See: docs/webhook-migration.md
 
-Closes TRA-234
+Closes #234
 ```
 
-## Real-World Tracewell Examples
+## Real-World Examples
 
 ### Multi-Tenant Feature
 
@@ -383,37 +383,36 @@ using auto-generated slugs. Includes:
 - Automatic DNS verification
 - Admin approval workflow
 
-Closes TRA-789
+Closes #789
 ```
 
-### GitHub Integration
+### API Integration
 
 ```
-feat(github): add pull request synchronization
+feat(integrations): add third-party data synchronization
 
-Sync GitHub pull requests as artifacts for DHF traceability.
-Includes PR metadata, reviews, and linked issues.
+Sync data from external services via webhooks. Includes
+metadata extraction, validation, and transformation.
 
 The sync runs via webhook for real-time updates and has a
 daily batch job for catching any missed events.
 
-Closes TRA-456
-Related to TRA-400 (artifact sync architecture)
+Closes #456
+Related to #400 (sync architecture)
 ```
 
-### DHF Feature
+### AI Feature
 
 ```
-feat(dhf): add design input extraction
+feat(ai): add content extraction from documents
 
-Extract design inputs from GitHub issues using GPT-4.
-Classifies inputs by category (functional, safety,
-regulatory) and confidence level.
+Extract structured data from documents using LLM.
+Classifies content by category and confidence level.
 
 Extraction results are reviewed by users before being
-added to the official DHF.
+finalized and stored.
 
-Closes TRA-234
+Closes #234
 ```
 
 ### Security Fix
@@ -434,20 +433,20 @@ Fixes GHSA-2024-001
 ### Database Migration
 
 ```
-feat(db): add artifact embeddings for similarity search
+feat(db): add document embeddings for similarity search
 
-Add new artifact_embeddings table to store vector embeddings
+Add new document_embeddings table to store vector embeddings
 for semantic similarity search. Uses pgvector extension.
 
 Migration includes:
 - Creating embeddings table with vector columns
 - Adding indexes for efficient vector search
-- Backfilling embeddings for existing artifacts
+- Backfilling embeddings for existing documents
 
 Run with: bin/rails db:migrate
 Backfill with: bin/rails embeddings:backfill
 
-Closes TRA-567
+Closes #567
 ```
 
 ### Background Job
@@ -461,7 +460,7 @@ Retries up to 5 times with delays: 1s, 2s, 4s, 8s, 16s.
 After 5 failures, job is moved to dead queue and alerts
 are sent to ops team.
 
-Closes TRA-345
+Closes #345
 ```
 
 ### UI Component
@@ -469,34 +468,33 @@ Closes TRA-345
 ```
 feat(ui): add confidence badge component
 
-Add ViewComponent for displaying AI confidence scores
-with color-coded badges:
+Add component for displaying AI confidence scores with
+color-coded badges:
 - High (>0.8): Green
 - Medium (0.5-0.8): Yellow
 - Low (<0.5): Red
 
-Component is reusable across artifact classifications,
-traceability suggestions, and DHF extractions.
+Component is reusable across AI-powered features.
 
-Closes TRA-678
+Closes #678
 ```
 
 ### Test Coverage
 
 ```
-test(system): add end-to-end traceability workflow
+test(system): add end-to-end workflow test
 
 Add comprehensive system test covering:
 1. User creates project
-2. Imports GitHub artifacts
-3. AI suggests traceability links
-4. User reviews and approves suggestions
-5. Generates DHF report
+2. Imports external data
+3. AI processes and categorizes content
+4. User reviews and approves results
+5. Generates final report
 
-Ensures the complete traceability workflow functions
-correctly from end to end.
+Ensures the complete workflow functions correctly
+from end to end.
 
-Closes TRA-890
+Closes #890
 ```
 
 ### Performance Optimization
@@ -507,12 +505,12 @@ perf(api): optimize webhook processing
 Reduce webhook processing time from ~500ms to ~50ms by:
 - Moving AI analysis to background jobs
 - Batching database updates
-- Caching tenant configuration
+- Caching configuration
 - Using database transactions efficiently
 
 This prevents webhook timeout issues with external services.
 
-Closes TRA-456
+Closes #456
 ```
 
 ## Anti-Patterns (Avoid These)
@@ -588,7 +586,7 @@ Save to `.gitmessage`:
 # [optional footer(s)]
 #
 # Types: feat, fix, docs, style, refactor, perf, test, chore, build, ci, revert
-# Scopes: auth, api, dhf, traceability, github, linear, jira, ui, models, services, jobs, tests, deps
+# Scopes: auth, api, ui, database, services, jobs, tests, deps, config, docs
 #
 # Rules:
 # - Use imperative mood in description

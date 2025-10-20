@@ -9,17 +9,15 @@ This skill provides guidance for writing Git commits that follow the Conventiona
 
 ## Purpose
 
-Conventional Commits is a specification for adding human and machine-readable meaning to commit messages. It provides an easy set of rules for creating an explicit commit history, which makes it easier to write automated tools on top of, like automatic changelog generation, semantic versioning, and more.
+Conventional Commits is a specification for adding human and machine-readable meaning to commit messages. It provides an easy set of rules for creating an explicit commit history, which makes it easier to understand project changes and improve collaboration.
 
 ## When to Use This Skill
 
 Use this skill when:
 - Creating Git commits
 - Reviewing commit messages in PRs
-- Setting up commit message validation
-- Generating changelogs
-- Determining semantic version bumps
-- Writing release notes
+- Writing clear, structured commit messages
+- Collaborating on projects with multiple contributors
 
 ## Commit Message Structure
 
@@ -50,7 +48,7 @@ refactor(database): optimize user query performance
 **feat** - A new feature for the user
 ```
 feat: add export to PDF functionality
-feat(dhf): add traceability link suggestion
+feat(api): add webhook signature verification
 ```
 
 **fix** - A bug fix for the user
@@ -127,20 +125,19 @@ docs(contributing): update PR guidelines
 refactor(services): extract common validation logic
 ```
 
-**Common scopes for Tracewell:**
+**Common scope examples:**
 - `auth` - Authentication/authorization
 - `api` - API endpoints
-- `dhf` - DHF management features
-- `traceability` - Traceability links
-- `github` - GitHub integration
-- `linear` - Linear integration
-- `jira` - Jira integration
 - `ui` - User interface components
-- `models` - Database models
+- `database` or `db` - Database models/migrations
 - `services` - Service objects
 - `jobs` - Background jobs
 - `tests` - Test suite
 - `deps` - Dependencies
+- `config` - Configuration changes
+- `docs` - Documentation
+
+Choose scopes that match your project's architecture and domain areas.
 
 ## Description
 
@@ -259,7 +256,7 @@ feat: add password reset functionality
 ### Feature with Scope
 
 ```
-feat(dhf): add automatic traceability suggestions
+feat(api): add rate limiting for endpoints
 ```
 
 ### Bug Fix with Body
@@ -336,115 +333,13 @@ Reviewed-by: Jane Doe <jane@example.com>
 ❌ Use past tense ("added", "fixed")
 ❌ Commit broken code (each commit should work)
 
-## Tools and Automation
-
-### Commitlint (Optional)
-
-Validate commit messages with commitlint:
-
-```bash
-npm install --save-dev @commitlint/{cli,config-conventional}
-
-# .commitlintrc.json
-{
-  "extends": ["@commitlint/config-conventional"]
-}
-```
-
-### Git Hooks
-
-Validate commits before they're created:
-
-```bash
-# .husky/commit-msg
-npx --no -- commitlint --edit $1
-```
-
-### Conventional Changelog
-
-Generate changelogs automatically:
-
-```bash
-npm install -g conventional-changelog-cli
-conventional-changelog -p angular -i CHANGELOG.md -s
-```
-
-## Semantic Versioning Impact
-
-Conventional commits enable automated semantic versioning:
-
-- **feat:** → MINOR version bump (0.1.0 → 0.2.0)
-- **fix:** → PATCH version bump (0.1.0 → 0.1.1)
-- **BREAKING CHANGE:** → MAJOR version bump (0.1.0 → 1.0.0)
-
-## Integration with Tracewell
-
-### Linear/Jira Integration
-
-Reference Linear/Jira issues in commits:
-
-```
-feat(dhf): add artifact classification
-
-Implement AI-based classification of GitHub artifacts
-into DHF categories.
-
-Closes TRA-123
-```
-
-### PR Titles
-
-PR titles should also follow conventional commits:
-
-```
-feat(api): add webhook signature verification
-fix(auth): resolve session timeout issue
-docs: update deployment guide
-```
-
-This enables automatic release notes generation from merged PRs.
-
-## Common Patterns for Tracewell
-
-### Multi-tenant Features
-
-```
-feat(tenants): add subdomain customization
-fix(tenants): resolve cross-tenant data leak
-```
-
-### DHF/Regulatory Features
-
-```
-feat(dhf): add design input extraction
-fix(traceability): correct similarity threshold calculation
-docs(regulatory): update 510(k) submission guide
-```
-
-### Integration Work
-
-```
-feat(github): add pull request synchronization
-fix(linear): handle archived project edge case
-perf(jira): optimize webhook processing
-```
-
-### Database Changes
-
-```
-feat(db): add artifact embeddings table
-fix(migrations): handle null values in legacy data
-perf(db): add composite index for tenant queries
-```
-
 ## Summary
 
 Conventional Commits provide:
 - ✅ Clear, consistent commit history
-- ✅ Automated changelog generation
-- ✅ Semantic versioning automation
 - ✅ Better collaboration through explicit intent
 - ✅ Easier code review and git history navigation
+- ✅ Improved project documentation through structured messages
 
 **Key formula:**
 ```
