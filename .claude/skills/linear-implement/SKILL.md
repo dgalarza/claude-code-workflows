@@ -24,21 +24,22 @@ Examples:
 
 ## Core Workflow
 
-The skill follows a 13-step process:
+The skill follows a 14-step process:
 
 1. **Fetch Linear Issue** - Retrieve complete issue details via Linear MCP
-2. **Move to In Progress** - Update issue status to indicate active work
-3. **Create Feature Branch** - Use Linear's suggested git branch naming
-4. **Analyze & Plan** - Break down requirements and create implementation plan
-5. **Save to Memory** - Store plan in memory graph for tracking
-6. **Review Plan** - Present plan for user confirmation
-7. **TDD Implementation** - Invoke `tdd-workflow` skill for test-driven development
-8. **Parallel Code Reviews** - Invoke `parallel-code-review` skill for comprehensive analysis
-9. **Address Feedback** - Invoke `code-review-implementer` skill to systematically fix issues
-10. **Validation** - Ensure all tests and linters pass
-11. **Logical Commits** - Create meaningful commit history
-12. **Create PR** - Generate comprehensive pull request with Linear linking
-13. **Final Verification** - Confirm CI/CD pipeline and Linear integration
+2. **Gather Additional Context** - Search Obsidian, Sentry, and GitHub for related information
+3. **Move to In Progress** - Update issue status to indicate active work
+4. **Create Feature Branch** - Use Linear's suggested git branch naming
+5. **Analyze & Plan** - Break down requirements and create implementation plan
+6. **Save to Memory** - Store plan in memory graph for tracking
+7. **Review Plan** - Present plan for user confirmation
+8. **TDD Implementation** - Invoke `tdd-workflow` skill for test-driven development
+9. **Parallel Code Reviews** - Invoke `parallel-code-review` skill for comprehensive analysis
+10. **Address Feedback** - Invoke `code-review-implementer` skill to systematically fix issues
+11. **Validation** - Ensure all tests and linters pass
+12. **Logical Commits** - Create meaningful commit history
+13. **Create PR** - Generate comprehensive pull request with Linear linking
+14. **Final Verification** - Confirm CI/CD pipeline and Linear integration
 
 ## Workflow Implementation Details
 
@@ -58,7 +59,81 @@ Extract key information:
 - Attachments or related work
 - Labels and assigned team members
 
-### Step 2: Move Issue to In Progress
+### Step 2: Gather Additional Context
+
+Before planning, gather related context from multiple sources to inform the implementation approach.
+
+#### Search Obsidian Vault
+
+Search for any existing notes that might be related to this issue:
+
+```
+# Search by issue ID
+Search Obsidian vault for: "TRA-142"
+
+# Search by issue summary/keywords
+Search Obsidian vault for: "<keywords from issue title/description>"
+```
+
+Look for:
+- Previous meeting notes discussing this feature
+- Architecture decisions or technical notes
+- Related implementation notes from similar work
+- User research or requirements documentation
+
+#### Fetch Sentry Context (if referenced)
+
+If the Linear issue references any Sentry issues or error tracking:
+
+```
+mcp__sentry__get_issue(issue_id: <sentry-issue-id>)
+```
+
+Extract from Sentry:
+- Error stack traces and frequency
+- Affected users and environments
+- Related events and breadcrumbs
+- Any existing comments or assignments
+
+This context helps understand:
+- The root cause of bugs
+- Which code paths are affected
+- How frequently the issue occurs
+- Environmental factors to consider
+
+#### Fetch GitHub Context (if referenced)
+
+If the Linear issue references GitHub pull requests, issues, or discussions:
+
+```bash
+# View PR details and discussion
+gh pr view <pr-number>
+
+# View PR comments and review threads
+gh pr view <pr-number> --comments
+
+# View issue details
+gh issue view <issue-number>
+
+# View issue comments
+gh issue view <issue-number> --comments
+```
+
+Extract from GitHub:
+- Previous implementation attempts
+- Review feedback and concerns raised
+- Design discussions and decisions
+- Related code changes or context
+
+**Context Summary:**
+
+After gathering context, summarize:
+- Relevant information found in Obsidian
+- Sentry error details (if applicable)
+- GitHub discussion insights (if applicable)
+- How this context affects the implementation approach
+
+### Step 3: Move Issue to In Progress
 
 Update the issue status to reflect active development:
 
@@ -68,7 +143,7 @@ Update the issue status to reflect active development:
 
 This provides visibility to team members that work has begun.
 
-### Step 3: Create Feature Branch
+### Step 4: Create Feature Branch
 
 Use Linear's suggested branch name for consistency:
 
@@ -93,7 +168,7 @@ This pattern ensures:
 - Idempotent operations (safe to re-run)
 - Always working from latest main
 
-### Step 4: Analyze and Plan Solution
+### Step 5: Analyze and Plan Solution
 
 Break down the issue into an actionable implementation plan:
 
@@ -112,7 +187,7 @@ Break down the issue into an actionable implementation plan:
 - **Implementation Steps**: Ordered list of development tasks
 - **Acceptance Criteria**: Definition of done
 
-### Step 5: Save Plan to Memory
+### Step 6: Save Plan to Memory
 
 Store the implementation plan using memory MCP tools:
 
@@ -137,7 +212,7 @@ This creates permanent tracking of:
 - Progress throughout development
 - Lessons learned for future work
 
-### Step 6: Review Plan with User
+### Step 7: Review Plan with User
 
 Present the complete plan for confirmation:
 
@@ -154,7 +229,7 @@ Present the complete plan for confirmation:
 - Add requirements or constraints
 - Ask clarifying questions
 
-### Step 7: Test-Driven Development Implementation
+### Step 8: Test-Driven Development Implementation
 
 Upon approval, invoke the TDD workflow skill:
 
@@ -174,7 +249,7 @@ The TDD workflow skill enforces:
 - Result pattern for operations that can fail
 - Clean, maintainable code structure
 
-### Step 8: Parallel Subagent Code Reviews
+### Step 9: Parallel Subagent Code Reviews
 
 After implementation, invoke the parallel code review skill:
 
@@ -210,7 +285,7 @@ This launches specialized review subagents in parallel:
 - Decision tracking to prevent redundancy
 - Prioritized feedback by severity and impact
 
-### Step 9: Address Review Feedback
+### Step 10: Address Review Feedback
 
 Invoke the code review implementer skill:
 
@@ -235,7 +310,7 @@ This skill systematically addresses feedback:
 
 **Note:** Do NOT create PR until all architectural feedback is implemented.
 
-### Step 10: Validation and Quality Assurance
+### Step 11: Validation and Quality Assurance
 
 Before creating commits, ensure everything passes:
 
@@ -264,7 +339,7 @@ bin/lint
 - Warnings about `MigratedSchemaVersion` and `ContextCreatingMethods` are harmless
 - **Actual offenses must be addressed** (look for file paths and line numbers)
 
-### Step 11: Create Logical Commits
+### Step 12: Create Logical Commits
 
 Create meaningful commits that tell the implementation story:
 
@@ -303,7 +378,7 @@ EOF
 )"
 ```
 
-### Step 12: Create Pull Request
+### Step 13: Create Pull Request
 
 Generate comprehensive PR with Linear integration:
 
@@ -354,7 +429,7 @@ EOF
 - Include `Closes <Linear-issue-URL>` in PR body
 - Linear automatically links and updates issue status when PR merges
 
-### Step 13: Final Verification
+### Step 14: Final Verification
 
 Verify PR setup and completion:
 
@@ -482,20 +557,24 @@ Implement TRA-142
 
 **Skill Response:**
 1. Fetches TRA-142 from Linear
-2. Updates issue to "In Progress"
-3. Creates branch `dg/tra-142-user-notification-service`
-4. Analyzes requirements and creates plan
-5. Saves plan to memory graph
-6. Presents plan: "This will create a new service object for user notifications using the Result pattern..."
-7. **Waits for user approval**
-8. Upon approval, invokes `tdd-workflow` skill
-9. After implementation, invokes `parallel-code-review` skill
-10. Reviews identify: "Extract notification logic to service object, apply Result pattern"
-11. Invokes `code-review-implementer` skill to address feedback
-12. Runs validation: `bundle exec rspec` ✅, `bin/lint` ✅
-13. Creates logical commits with proper messages
-14. Creates PR with comprehensive description and Linear linking
-15. Presents completion checklist
+2. Gathers additional context:
+   - Searches Obsidian vault for "TRA-142" and related keywords
+   - Fetches Sentry issue details (if referenced in Linear issue)
+   - Retrieves GitHub PR discussions (if referenced in Linear issue)
+3. Updates issue to "In Progress"
+4. Creates branch `dg/tra-142-user-notification-service`
+5. Analyzes requirements and creates plan (informed by gathered context)
+6. Saves plan to memory graph
+7. Presents plan: "This will create a new service object for user notifications using the Result pattern..."
+8. **Waits for user approval**
+9. Upon approval, invokes `tdd-workflow` skill
+10. After implementation, invokes `parallel-code-review` skill
+11. Reviews identify: "Extract notification logic to service object, apply Result pattern"
+12. Invokes `code-review-implementer` skill to address feedback
+13. Runs validation: `bundle exec rspec` ✅, `bin/lint` ✅
+14. Creates logical commits with proper messages
+15. Creates PR with comprehensive description and Linear linking
+16. Presents completion checklist
 
 **Final Output:**
 - Working feature branch with complete implementation
