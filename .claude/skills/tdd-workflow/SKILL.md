@@ -9,6 +9,8 @@ The goal of this skill is to implement a true test driven development workflow. 
 2. Run the new test and verify that it fails as expected.
 3. Write the minimal amount of code needed to make the test pass.
 4. Run the test to verify it passes.
+5. Once tests pass, look for opportunities to refactor.
+6. Run tests once again to verify refactoring didn't break anything.
 
 Repeat this until you've completed the functionality desired.
 
