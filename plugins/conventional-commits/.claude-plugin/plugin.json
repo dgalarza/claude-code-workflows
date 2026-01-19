@@ -1,0 +1,12 @@
+{
+  "name": "conventional-commits",
+  "version": "1.0.0",
+  "description": "Structured commit messages following the Conventional Commits specification",
+  "author": {
+    "name": "Damian Galarza",
+    "url": "https://www.damiangalarza.com"
+  },
+  "repository": "https://github.com/dgalarza/claude-code-workflows",
+  "license": "MIT",
+  "keywords": ["git", "commits", "conventional-commits", "workflow"]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "rails-toolkit",
+  "version": "1.0.0",
+  "description": "Complete Rails development workflow with TDD, security reviews, and Linear integration",
+  "author": {
+    "name": "Damian Galarza",
+    "url": "https://www.damiangalarza.com"
+  },
+  "repository": "https://github.com/dgalarza/claude-code-workflows",
+  "license": "MIT",
+  "keywords": ["rails", "ruby", "tdd", "linear", "code-review", "security"]
+}

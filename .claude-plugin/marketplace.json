@@ -1,0 +1,51 @@
+{
+  "name": "dgalarza-workflows",
+  "owner": {
+    "name": "Damian Galarza",
+    "url": "https://www.damiangalarza.com"
+  },
+  "plugins": [
+    {
+      "name": "tdd-workflow",
+      "source": "./plugins/tdd-workflow",
+      "description": "Test-driven development skill that enforces red-green-refactor, one test at a time",
+      "version": "1.0.0"
+    },
+    {
+      "name": "conventional-commits",
+      "source": "./plugins/conventional-commits",
+      "description": "Structured commit messages following the Conventional Commits specification",
+      "version": "1.0.0"
+    },
+    {
+      "name": "parallel-code-review",
+      "source": "./plugins/parallel-code-review",
+      "description": "Run multiple code review agents in parallel for comprehensive feedback",
+      "version": "1.0.0"
+    },
+    {
+      "name": "meeting-transcript",
+      "source": "./plugins/meeting-transcript",
+      "description": "Process meeting transcripts into structured notes with action items",
+      "version": "1.0.0"
+    },
+    {
+      "name": "cybersecurity-reviewer",
+      "source": "./plugins/cybersecurity-reviewer",
+      "description": "Security analysis agent for vulnerability assessment and threat modeling",
+      "version": "1.0.0"
+    },
+    {
+      "name": "rails-toolkit",
+      "source": "./plugins/rails-toolkit",
+      "description": "Complete Rails development workflow with TDD, security reviews, and Linear integration",
+      "version": "1.0.0"
+    },
+    {
+      "name": "gridfinity-planner",
+      "source": "./plugins/gridfinity-planner",
+      "description": "Plan and design gridfinity baseplates for 3D printing with optimal grid layouts",
+      "version": "1.0.0"
+    }
+  ]
+}
