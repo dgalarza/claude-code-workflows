@@ -1,0 +1,12 @@
+{
+  "name": "tdd-workflow",
+  "version": "1.0.0",
+  "description": "Test-driven development skill that enforces red-green-refactor, one test at a time",
+  "author": {
+    "name": "Damian Galarza",
+    "url": "https://www.damiangalarza.com"
+  },
+  "repository": "https://github.com/dgalarza/claude-code-workflows",
+  "license": "MIT",
+  "keywords": ["tdd", "testing", "workflow", "development"]
+}

@@ -1,167 +1,293 @@
 # Claude Code Workflows
 
-**A Developer Workflow Toolkit Powered by Claude**
+A collection of skills, agents, and workflows for Claude Code.
 
-This repo contains a set of command-line tools powered by Claude, designed to automate and streamline developer workflows — from issue planning and implementation to review and pull request creation.
-
-Each command follows a structured pattern:
-- Uses Claude for planning and memory
-- Interfaces with dev tools like Linear, Git, and GitHub
-- Enforces quality through TDD and multi-agent review
-
-> These are common workflows I use in my day-to-day development, and they can be easily adapted to your own projects.
+> **[YouTube](https://youtube.com/@dgalarza86)** | **[Newsletter](https://www.damiangalarza.com/newsletter)** | **[Blog](https://www.damiangalarza.com)**
 
 ---
 
-## 🔧 Available Commands
-
-### `/linear-implement`
-
-Implements a Linear issue using Claude with full TDD flow, memory tracking, and subagent code reviews.
-
-- Fetches issue from Linear  
-- Plans solution with Claude  
-- Implements with system + unit tests  
-- Runs parallel reviews (security + Rails/OOP)  
-- Opens a PR with full context  
-
-→ [Detailed command documentation](.claude/commands/linear-implement.md)
-
-### `/linear-worktree`
-
-Sets up a new git worktree for a Linear issue, creating an isolated working directory for parallel development. Typically run from a parent directory containing your project repos.
-
-- Fetches Linear issue details for proper branch naming
-- Creates worktree in parallel directory structure
-- Copies configuration files (`.env`, `config/master.key`)
-- Runs setup process in new worktree
-- Leaves you ready to run `/linear-implement`
-
-→ [Detailed command documentation](linear-worktree.md)
-
-### `/full-code-review`
-
-This was extracted from a Ruby on Rails project I've been working on in my spare time. It triggers a full code review of the work on the current branch. Useful to have subagents review the work of another agent before creating a pull request.
-
-- Checks for security issues such as multi-tenancy enforcement, SQL injection prevention and OWASP top 10 compliance.
-- Ruby on Rails best practices such as RESTful design, POODR principles, service objects, and code clarity.
-- Idiomatic ruby
-- Proper testing
-
----
-
-## 🧠 Core Principles
-
-- **Structured Planning**  
-  Every command begins with Claude analyzing the task and generating an execution plan.
-
-- **Agent Memory**  
-  Plans and context are saved to persistent memory for traceability and later reference.
-
-- **Subagent Reviews**  
-  Claude spins up multiple role-specific subagents (security, architecture, conventions) for feedback.
-
-- **End-to-End Automation**  
-  Commands run through to completion, including testing, linting, and pull request creation.
-
----
-
-## 👥 Custom Claude Agents
-
-This workflow toolkit includes specialized Claude agents designed to provide expert-level feedback and development assistance for Ruby on Rails applications. These agents are automatically invoked by workflow commands or can be used directly for targeted assistance.
-
-### 🔍 Rails Code Reviewer (`rails-code-reviewer`)
-
-Expert Rails code reviewer focusing on conventions, POODR principles, and idiomatic Ruby practices.
-
-**Specializes in:**
-- Rails conventions and RESTful design patterns
-- POODR principles (Single Responsibility, dependency management, Tell Don't Ask)
-- Modern Rails patterns (Hotwire, Turbo, ViewComponent, service objects)
-- Performance optimization and N+1 query prevention
-- Controller/model design and proper separation of concerns
-
-**Used by:** `/full-code-review` command for Rails best practices analysis
-
-### 🛡️ Rails Security Reviewer (`rails-security-reviewer`)
-
-Security expert specializing in Rails applications with deep focus on multi-tenant architecture and ActsAsTenant implementation.
-
-**Specializes in:**
-- Multi-tenant data isolation and ActsAsTenant security
-- Authentication, authorization, and session management
-- XSS prevention and input validation (accounting for Rails auto-escaping)
-- SQL injection prevention and secure database queries
-- CSRF protection and Rails security features
-- Tenant boundary enforcement and data leakage prevention
-
-**Used by:** `/full-code-review` and `/linear-implement` commands for security analysis
-
-### ⚡ Rails Feature Developer (`rails-feature-developer`)
-
-Staff Rails engineer specializing in TDD-driven feature development with modern Rails and Hotwire integration.
-
-**Specializes in:**
-- Test-Driven Development with RSpec and FactoryBot
-- Clean architecture using service objects and the Result pattern
-- Hotwire integration (Turbo Streams, Turbo Frames, Stimulus)
-- SOLID principles and maintainable code design
-- Modern Rails 7+ patterns and conventions
-
-**Used by:** `/linear-implement` command for feature implementation
-
-### Integration with Workflow Commands
-
-These agents work seamlessly with the workflow commands:
-
-- **`/linear-implement`** uses both the security reviewer and feature developer agents to ensure secure, well-architected implementations
-- **`/full-code-review`** leverages both reviewer agents to provide comprehensive feedback on security and Rails best practices
-- Each agent maintains context and memory to avoid redundant suggestions across review cycles
-
-The agents follow the same structured approach as the main workflow commands, providing detailed, actionable feedback that helps maintain high code quality standards throughout the development process.
-
----
-
-## 🚀 Example
+## Quick Install
 
 ```bash
-/linear-implement TRA-9
+# Add the marketplace
+/plugin marketplace add dgalarza/claude-code-workflows
+
+# Install what you need
+/plugin install tdd-workflow@dgalarza-workflows
 ```
 
-Will:
-* Fetch Linear issue TRA-9
-* Move to “In Progress”
-* Create a branch
-* Generate plan with Claude
-* Implement with TDD
-* Run subagent reviews
-* Validate + open PR
-
-📦 Requirements
-* Git + [gh](https://cli.github.com/) GitHub CLI
-* [Linear MCP](https://linear.app/changelog/2025-05-01-mcp)
-
-```bash
-/full-code-review
-```
-
-Will:
-* Check memory for existing code review decisions to avoid redundant suggestions
-* Launch parallel subagents for security and Rails best practices reviews
-* Report back on the subagent findings to the user
-
-
-📦 Requirements
-
-* [Knowledge Graph Memory Server MCP](https://github.com/modelcontextprotocol/servers/tree/main/src/memory)
+See [INSTALL.md](INSTALL.md) for full installation options.
 
 ---
 
-## 🧱 MCP Servers I Use or Recommend
+## Table of Contents
 
-* [BrowserMCP](https://browsermcp.io/)
-* [Knowledge Graph Memory Server MCP](https://github.com/modelcontextprotocol/servers/tree/main/src/memory)
-* [Linear](https://linear.app/changelog/2025-05-01-mcp)
-* [Sentry](https://docs.sentry.io/product/sentry-mcp/) 
-* [Sequential Thinking](https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking)
-* [figma-dev-mode-mcp-server](https://www.figma.com/blog/introducing-figmas-dev-mode-mcp-server/)
+### Plugins
+- [TDD Workflow](#tdd-workflow) - Test-driven development, one test at a time
+- [Conventional Commits](#conventional-commits) - Structured commit messages
+- [Parallel Code Review](#parallel-code-review) - Multi-agent reviews
+- [Meeting Transcript](#meeting-transcript) - Process transcripts into notes
+- [Cybersecurity Reviewer](#cybersecurity-reviewer) - Security analysis agent
+- [Gridfinity Planner](#gridfinity-planner) - 3D printing baseplate planning
+- [Rails Toolkit](#rails-toolkit) - Complete Rails development workflow
+
+### Tips & Tricks
+- [Tip 1: Use worktrees for parallel work](#tip-1-use-worktrees-for-parallel-work)
+- [Tip 2: Customize your status bar](#tip-2-customize-your-status-bar)
+- [Tip 3: Compact context proactively](#tip-3-compact-context-proactively)
+- [Tip 4: Structure your CLAUDE.md files](#tip-4-structure-your-claudemd-files)
+- [Tip 5: Use subagents for focused tasks](#tip-5-use-subagents-for-focused-tasks)
+- [Tip 6: MCP servers worth installing](#tip-6-mcp-servers-worth-installing)
+
+### Configurations
+- [Status Bar Setup](configs/status-bar.md)
+- [MCP Server Recommendations](configs/mcp-servers.md)
+
+---
+
+## Plugins
+
+### TDD Workflow
+
+**Install:** `/plugin install tdd-workflow@dgalarza-workflows`
+
+A skill that enforces true test-driven development:
+
+1. Write ONE failing test
+2. Write minimal code to pass
+3. Refactor
+4. Repeat
+
+Claude follows the red-green-refactor cycle step by step instead of writing all tests upfront.
+
+**When it activates:** Automatically when implementing features with TDD.
+
+---
+
+### Conventional Commits
+
+**Install:** `/plugin install conventional-commits@dgalarza-workflows`
+
+Structured commit messages following the [Conventional Commits](https://www.conventionalcommits.org/) specification.
+
+```
+feat(api): add webhook signature verification
+fix: resolve login redirect loop
+docs: update README with setup instructions
+```
+
+Includes reference material for commit types, scopes, and examples.
+
+**When it activates:** When creating Git commits.
+
+---
+
+### Parallel Code Review
+
+**Install:** `/plugin install parallel-code-review@dgalarza-workflows`
+
+Run multiple specialized review agents in parallel for comprehensive feedback. Get security, architecture, and style feedback simultaneously.
+
+**When it activates:** During code review workflows.
+
+---
+
+### Meeting Transcript
+
+**Install:** `/plugin install meeting-transcript@dgalarza-workflows`
+
+Process raw meeting transcripts (from Granola, Otter, or manual notes) into structured notes with:
+
+- Summary
+- Action items with owners
+- Key decisions
+- Follow-up questions
+
+**When it activates:** When processing meeting transcripts.
+
+---
+
+### Cybersecurity Reviewer
+
+**Install:** `/plugin install cybersecurity-reviewer@dgalarza-workflows`
+
+Security analysis agent for:
+
+- Vulnerability assessment (OWASP Top 10)
+- Threat modeling
+- Authentication/authorization review
+- Data protection analysis
+
+Provides actionable remediation with code examples.
+
+**When to use:** Security reviews, penetration test prep, architecture review.
+
+---
+
+### Gridfinity Planner
+
+**Install:** `/plugin install gridfinity-planner@dgalarza-workflows`
+
+Plan and design gridfinity baseplates for 3D printing:
+
+- Calculate optimal grid sizes from measurements (metric or imperial)
+- Slice large grids into printable chunks based on printer bed size
+- Calculate padding for non-exact fits
+- Generate parameters for gridfinity.perplexinglabs.com
+
+**When to use:** Designing gridfinity storage systems for drawers, toolboxes, or shelves.
+
+---
+
+### Rails Toolkit
+
+**Install:** `/plugin install rails-toolkit@dgalarza-workflows`
+
+Complete Rails development workflow bundle. Includes:
+
+**Agents:**
+- Rails Code Reviewer - Conventions, POODR, idiomatic Ruby
+- Rails Security Reviewer - Multi-tenant security, ActsAsTenant
+- Rails Feature Developer - TDD-driven implementation
+- Rails Backend Expert - Architecture guidance
+
+**Commands:**
+- `/rails-toolkit:full-code-review` - Parallel security + Rails review
+- `/rails-toolkit:linear-worktree` - Set up worktree from Linear issue
+
+**Skills:**
+- Linear implementation workflow
+- RSpec testing patterns
+
+**Requirements:**
+- [Linear MCP](https://linear.app/changelog/2025-05-01-mcp) for Linear integration
+- [Memory MCP](https://github.com/modelcontextprotocol/servers/tree/main/src/memory) for persistent context
+
+---
+
+## Tips & Tricks
+
+### Tip 1: Use Worktrees for Parallel Work
+
+Git worktrees let you work on multiple features simultaneously without branch switching or stashing.
+
+```bash
+# Create a worktree for a new feature
+git worktree add ../myproject-feature-x -b feature-x
+
+# Work in isolation
+cd ../myproject-feature-x
+
+# When done, remove it
+git worktree remove ../myproject-feature-x
+```
+
+**Why it matters:** Each worktree has its own file state. No more "let me stash this first" when switching contexts.
+
+The `rails-toolkit` plugin includes `/rails-toolkit:linear-worktree` which automates this with Linear issue context.
+
+---
+
+### Tip 2: Customize Your Status Bar
+
+Claude Code's status bar can show useful context while you work.
+
+```bash
+claude config set --global statusLineTemplate '${cwd.basename} | ${model} | ${tokenUsage}'
+```
+
+This shows:
+- Current directory (which project you're in)
+- Model being used
+- Token usage (so you know when to compact)
+
+See [configs/status-bar.md](configs/status-bar.md) for more options.
+
+---
+
+### Tip 3: Compact Context Proactively
+
+Don't wait until Claude starts forgetting things. Compact when:
+
+- You finish a logical unit of work
+- You're about to start a different task
+- Token usage is getting high
+- Claude starts repeating itself or forgetting earlier context
+
+```bash
+/compact
+```
+
+Think of it like saving your game - do it at good checkpoints.
+
+---
+
+### Tip 4: Structure Your CLAUDE.md Files
+
+A well-structured `CLAUDE.md` helps Claude understand your project faster.
+
+```markdown
+# Project Name
+
+## Overview
+One paragraph on what this project does.
+
+## Tech Stack
+- Framework: Rails 7.2
+- Database: PostgreSQL
+- Background jobs: Sidekiq
+
+## Key Patterns
+- Service objects in app/services/
+- Result pattern for service returns
+- ActsAsTenant for multi-tenancy
+
+## Testing
+- RSpec with FactoryBot
+- Run tests: `bin/rspec`
+
+## Common Commands
+- Setup: `bin/setup`
+- Console: `bin/rails c`
+- Server: `bin/dev`
+```
+
+The goal: Give Claude the context it needs to make good decisions without overwhelming it.
+
+---
+
+### Tip 5: Use Subagents for Focused Tasks
+
+When Claude spawns subagents, each one gets focused context. Use this to your advantage:
+
+- Security review? Let it spawn a security-focused subagent
+- Code review? Multiple specialized reviewers in parallel
+- Complex implementation? Let it break down and delegate
+
+Subagents complete their task and return results - they don't pollute your main conversation with intermediate steps.
+
+---
+
+### Tip 6: MCP Servers Worth Installing
+
+Start with these:
+
+1. **Linear** - If you use Linear for project management
+2. **Memory** - Persistent context across sessions
+3. **Sentry** - Debug production errors without context-switching
+
+See [configs/mcp-servers.md](configs/mcp-servers.md) for setup instructions and configuration snippets.
+
+---
+
+## Contributing
+
+Found a bug? Have a workflow to share? PRs welcome.
+
+## License
+
+MIT
+
+---
+
+**Built by [Damian Galarza](https://www.damiangalarza.com)** - Former CTO, 15+ years in software. I make videos about Claude Code and AI development workflows.

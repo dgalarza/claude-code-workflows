@@ -1,0 +1,12 @@
+{
+  "name": "gridfinity-planner",
+  "version": "1.0.0",
+  "description": "Plan and design gridfinity baseplates for 3D printing with optimal grid layouts and print bed slicing",
+  "author": {
+    "name": "Damian Galarza",
+    "url": "https://www.damiangalarza.com"
+  },
+  "repository": "https://github.com/dgalarza/claude-code-workflows",
+  "license": "MIT",
+  "keywords": ["3d-printing", "gridfinity", "organization", "maker"]
+}
