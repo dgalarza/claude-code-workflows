@@ -30,6 +30,7 @@ See [INSTALL.md](INSTALL.md) for full installation options.
 - [Cybersecurity Reviewer](#cybersecurity-reviewer) - Security analysis agent
 - [Gridfinity Planner](#gridfinity-planner) - 3D printing baseplate planning
 - [Rails Toolkit](#rails-toolkit) - Complete Rails development workflow
+- [YouTube Strategy](#youtube-strategy) - Content strategy for YouTube videos
 
 ### Tips & Tricks
 - [Tip 1: Use worktrees for parallel work](#tip-1-use-worktrees-for-parallel-work)
@@ -162,6 +163,22 @@ Complete Rails development workflow bundle. Includes:
 **Requirements:**
 - [Linear MCP](https://linear.app/changelog/2025-05-01-mcp) for Linear integration
 - [Memory MCP](https://github.com/modelcontextprotocol/servers/tree/main/src/memory) for persistent context
+
+---
+
+### YouTube Strategy
+
+**Install:** `/plugin install youtube-strategy@dgalarza-workflows`
+
+Content strategy skill for YouTube videos covering the full workflow:
+
+- **Ideation** - Validate ideas, differentiation testing, audience avatar
+- **Packaging** - Title, thumbnail, and hook as a unified unit
+- **Post-Production** - Descriptions, pinned comments, viral checklist
+
+Key principle: Title + thumbnail + hook form a contract with the viewer. The promise made must be delivered in the first 20 seconds.
+
+**When it activates:** When working on YouTube content strategy.
 
 ---
 
