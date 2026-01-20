@@ -1,6 +1,6 @@
 {
   "name": "youtube-strategy",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "YouTube content strategy skill for generating titles, descriptions, hooks, thumbnails, and pinned comments",
   "author": {
     "name": "Damian Galarza",

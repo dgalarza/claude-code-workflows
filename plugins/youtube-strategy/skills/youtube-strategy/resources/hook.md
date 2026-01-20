@@ -50,6 +50,76 @@ Developers have strong opinions about "the right way." Challenging conventional 
 
 ---
 
+## The 6 Hook Power Words (Building Blocks)
+
+Every effective hook contains a combination of six component "power words." These are the building blocks you can use to construct any hook from first principles. Four are essential; two are optional intensifiers.
+
+### Core Components (Required)
+
+| Component | What It Does | Examples |
+|-----------|--------------|----------|
+| **Subject** | WHO the hook is about | I, we, you, "this pattern", "Claude" |
+| **Action** | WHAT happens (the verb) | grow, cut, deploy, discover, build |
+| **Objective** | The RESULT achieved | 100K subs, 80% cost reduction, zero config |
+| **Contrast** | Base state vs new state | 0 → 100K, hours → minutes, complex → simple |
+
+### Optional Intensifiers
+
+| Component | What It Does | Examples |
+|-----------|--------------|----------|
+| **Proof** | WHY to trust you | "again" (implies done before), credentials, specific numbers |
+| **Time** | URGENCY/speed constraint | "in 10 minutes", "this week", "before your next deploy" |
+
+### How These Map to the 20-Second Formula
+
+```
+[0-5s Hook]     = Subject + Action + Objective + Contrast
+[5-12s Common]  = Sets up the base state (what Contrast compares against)
+[12-20s Take]   = Reinforces Objective + optional Proof/Time intensifiers
+```
+
+### Example Breakdown
+
+**Hook:** "If I had to grow from zero to 100K subs on YouTube again, here's how I'd do it in 5 months."
+
+| Component | Word/Phrase |
+|-----------|-------------|
+| Subject | I |
+| Action | grow |
+| Objective | 100K subs on YouTube |
+| Contrast | zero → 100K |
+| Proof | "again" (implies done it before) |
+| Time | "in 5 months" |
+
+**Technical Example:** "I cut my Claude API costs by 80% with this one caching pattern."
+
+| Component | Word/Phrase |
+|-----------|-------------|
+| Subject | I |
+| Action | cut |
+| Objective | Claude API costs by 80% |
+| Contrast | full price → 80% reduction |
+| Proof | Implied by specific number (80%) |
+| Time | Not used (could add "this week") |
+
+### Strengthening Weak Hooks
+
+When a hook feels flat, check which components are missing:
+
+**Weak:** "How to use pgvector in Rails"
+- Missing: Contrast, Objective (what outcome?), Proof
+
+**Stronger:** "I replaced Pinecone with Postgres pgvector and cut my vector DB costs to $0"
+- Subject: I
+- Action: replaced
+- Objective: cut costs to $0
+- Contrast: Pinecone → Postgres, costs → $0
+- Proof: Implied by "I" (personal experience)
+
+**Even Stronger (add Time):** "I replaced Pinecone with Postgres pgvector in 30 minutes and cut my vector DB costs to $0"
+
+---
+
 ## Complete Opening Examples
 
 ### Example 1: Vector Database Alternative
@@ -137,6 +207,8 @@ Each template includes the full 20-second structure for maximum retention.
 **Example:**
 "Everyone says you need webhooks for real-time AI. Most apps set up complex webhook handlers, manage retries, and deal with out-of-order events. But Server-Sent Events with Turbo Streams give you real-time updates with 10 lines of code."
 
+**Power Words Used:** Subject (you), Action (need/set up), Objective (real-time updates), Contrast (webhooks → SSE, complex → 10 lines)
+
 **Why It Works:** Challenges conventional wisdom, creates curiosity about your alternative approach.
 
 ---
@@ -168,6 +240,8 @@ Each template includes the full 20-second structure for maximum retention.
 
 **Example:**
 "I'm going to add AI chat to a Rails app in under 10 minutes. Everyone thinks you need days of setup—API configuration, streaming logic, frontend complexity. But with Claude's SDK and Hotwire, it's three files. Let me show you."
+
+**Power Words Used:** Subject (I), Action (add), Objective (AI chat to Rails app), Contrast (days → 10 minutes, complex → three files), Time (10 minutes)
 
 **Why It Works:** Sets clear, bold expectations. Creates urgency to see if you can actually do it.
 
@@ -232,6 +306,8 @@ Each template includes the full 20-second structure for maximum retention.
 
 **Example:**
 "Here's the caching strategy that dropped my Claude API costs by 80%. Most people pay full price for every request because they cache by exact prompt match. This semantic similarity approach caches near-matches too. Let me show you the numbers."
+
+**Power Words Used:** Subject (implied: I/my), Action (dropped), Objective (API costs by 80%), Contrast (full price → 80% reduction, exact match → semantic), Proof (80% = specific number, "the numbers")
 
 **Why It Works:** Promises concrete, measurable improvement with a specific technique.
 
@@ -321,6 +397,55 @@ Ask yourself:
 5. **Is it specific enough?** "Better RAG" is vague. "RAG with 80% lower latency using Postgres" is specific.
 
 6. **Do I deliver on the promise within 30 seconds?** Don't make them wait. Show the code, demo, or result immediately.
+
+7. **Does it have all 4 core power words?** Subject, Action, Objective, Contrast. If any are missing, the hook is probably weak.
+
+8. **Could Proof or Time make it stronger?** These optional intensifiers can significantly boost curiosity.
+
+---
+
+## Hook Analysis Template
+
+Use this template to reverse-engineer any successful hook:
+
+```
+HOOK TEXT: "[paste the hook here]"
+
+COMPONENT BREAKDOWN:
+- Subject:    [who/what is the hook about?]
+- Action:     [what verb drives the hook?]
+- Objective:  [what outcome/result?]
+- Contrast:   [base state vs new state?]
+- Proof:      [credentials or evidence?] (optional)
+- Time:       [urgency or speed?] (optional)
+
+WHAT MAKES IT WORK:
+[Why does this hook create curiosity? What's the tension?]
+
+HOW TO ADAPT:
+[What would this look like for your topic?]
+```
+
+### Example Analysis
+
+**Hook:** "I tested Claude vs GPT-4 for Rails code generation. Here are the benchmarks."
+
+```
+COMPONENT BREAKDOWN:
+- Subject:    I
+- Action:     tested
+- Objective:  determine which is better for Rails code generation
+- Contrast:   Claude vs GPT-4 (comparison = inherent contrast)
+- Proof:      "benchmarks" (data = proof)
+- Time:       Not used
+
+WHAT MAKES IT WORK:
+Developers have strong opinions about AI models. The comparison
+format + promise of benchmarks creates curiosity about the winner.
+
+HOW TO ADAPT:
+"I tested [Tool A] vs [Tool B] for [specific use case]. Here's what won."
+```
 
 ---
 
