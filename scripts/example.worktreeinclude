@@ -1,0 +1,21 @@
+# .worktreeinclude
+# Specifies which gitignored files should be included in new worktrees.
+# Uses .gitignore-style patterns.
+# Only files matching BOTH this file AND .gitignore will be included.
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+
+# Node/npm config
+.npmrc
+
+# Rails credentials
+config/master.key
+config/credentials.yml.enc
+config/credentials/*.yml.enc
+
+# Claude Code local settings
+**/.claude/settings.local.json

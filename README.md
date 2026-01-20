@@ -50,9 +50,16 @@ See [INSTALL.md](INSTALL.md) for full details.
 
 ## Tips & Tricks
 
-### Tip 1: Use Worktrees for Parallel Work
+### Tip 1: Use Worktrees for Parallel Agents
 
-Git worktrees let you work on multiple features simultaneously without branch switching or stashing.
+Git worktrees let you run multiple Claude Code agents on the same codebase without conflicts.
+
+**The problem:** If you run 2+ agents on the same repo, you get:
+- Unrelated changes in one branch
+- Agents overwriting each other's files
+- Test suites colliding on the same database
+
+**The solution:** Each agent gets its own worktree.
 
 ```bash
 git worktree add ../myproject-feature-x -b feature-x
@@ -61,7 +68,35 @@ cd ../myproject-feature-x
 git worktree remove ../myproject-feature-x
 ```
 
-The `rails-toolkit` includes `/rails-toolkit:linear-worktree` which automates this with Linear issue context.
+**But wait** - your app won't run because `.env` and other secrets don't copy over. And if both agents run tests, they'll fight over the same database.
+
+**For Rails apps**, use the setup script that handles everything:
+
+```bash
+# From your project root
+./scripts/setup-rails-worktree.sh feature-branch
+
+# This will:
+# 1. Create worktree at ../yourproject-feature-branch
+# 2. Symlink files from .worktreeinclude (or defaults)
+# 3. Create .env.local with isolated DB_DATABASE and DB_TEST_DATABASE
+# 4. Run bin/setup
+```
+
+**Configure with `.worktreeinclude`** - create this file in your repo root to specify which gitignored files to include:
+
+```
+.env
+.env.local
+.npmrc
+config/master.key
+```
+
+Uses the same pattern as [Claude Code Desktop](https://code.claude.com/docs/en/desktop) - only files matching both `.worktreeinclude` AND `.gitignore` are included.
+
+Get the script: [scripts/setup-rails-worktree.sh](scripts/setup-rails-worktree.sh) | [example.worktreeinclude](scripts/example.worktreeinclude)
+
+The `rails-toolkit` plugin also includes `/rails-toolkit:linear-worktree` which automates this with Linear issue context.
 
 ---
 
