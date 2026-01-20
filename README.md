@@ -2,7 +2,7 @@
 
 A collection of skills, agents, and workflows for Claude Code.
 
-> **[YouTube](https://youtube.com/@dgalarza86)** | **[Newsletter](https://www.damiangalarza.com/newsletter)** | **[Blog](https://www.damiangalarza.com)**
+> **[YouTube](https://youtube.com/@damian.galarza)** | **[Newsletter](https://www.damiangalarza.com/newsletter)** | **[Blog](https://www.damiangalarza.com)**
 
 ---
 
