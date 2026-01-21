@@ -1,52 +1,87 @@
 # Installation
 
-## Quick Start
+## Installation Methods
 
-Add this marketplace to Claude Code, then install any plugin you want.
+There are two ways to install from this repository:
 
-### Step 1: Add the Marketplace
+### npx skills (Skills only)
 
 ```bash
-/plugin marketplace add dgalarza/claude-code-workflows
+npx skills add dgalarza/claude-code-workflows --skill "tdd-workflow"
 ```
 
-### Step 2: Install Plugins
-
-Install individual plugins:
+### Claude Marketplace (Skills, Agents, Bundles)
 
 ```bash
+# Add the marketplace (one time)
+/plugin marketplace add dgalarza/claude-code-workflows
+
+# Install plugins
 /plugin install tdd-workflow@dgalarza-workflows
-/plugin install conventional-commits@dgalarza-workflows
+```
+
+---
+
+## Available Plugins
+
+### Skills
+
+*Installable via npx or marketplace*
+
+| Skill | Description |
+|-------|-------------|
+| `tdd-workflow` | Red-green-refactor TDD workflow |
+| `conventional-commits` | Structured commit messages |
+| `parallel-code-review` | Multi-agent code reviews |
+| `meeting-transcript` | Process transcripts into notes |
+| `youtube-strategy` | YouTube content strategy |
+
+```bash
+# Via npx
+npx skills add dgalarza/claude-code-workflows --skill "tdd-workflow"
+
+# Via marketplace
+/plugin install tdd-workflow@dgalarza-workflows
+```
+
+### Agents
+
+*Marketplace only*
+
+| Agent | Description |
+|-------|-------------|
+| `cybersecurity-reviewer` | Security vulnerability analysis |
+| `gridfinity-planner` | 3D printing baseplate planning |
+
+```bash
 /plugin install cybersecurity-reviewer@dgalarza-workflows
 ```
 
-Or install the Rails bundle (includes multiple agents, commands, and skills):
+### Bundles
+
+*Marketplace only*
+
+| Bundle | Description |
+|--------|-------------|
+| `rails-toolkit` | Complete Rails dev workflow (agents + commands + skills) |
 
 ```bash
 /plugin install rails-toolkit@dgalarza-workflows
 ```
 
-### Step 3: Use Them
+---
 
-Skills are automatically activated when relevant. Commands use the plugin namespace:
+## Using Plugins
+
+Skills and agents activate automatically when relevant. Commands use the plugin namespace:
 
 ```bash
 # Rails toolkit commands
 /rails-toolkit:full-code-review
-/rails-toolkit:linear-worktree tracewell2 TRA-9
+/rails-toolkit:linear-worktree myproject TRA-9
 ```
 
-## Available Plugins
-
-| Plugin | Type | Description |
-|--------|------|-------------|
-| `tdd-workflow` | Skill | Red-green-refactor TDD workflow |
-| `conventional-commits` | Skill | Structured commit messages |
-| `parallel-code-review` | Skill | Multi-agent code reviews |
-| `meeting-transcript` | Skill | Process transcripts into notes |
-| `cybersecurity-reviewer` | Agent | Security vulnerability analysis |
-| `gridfinity-planner` | Agent | 3D printing baseplate planning |
-| `rails-toolkit` | Bundle | Complete Rails dev workflow |
+---
 
 ## Manual Installation
 
@@ -60,22 +95,14 @@ If you prefer to copy files manually:
 cp -r plugins/tdd-workflow/skills/tdd-workflow ~/.claude/skills/
 ```
 
-## Updating Plugins
+---
 
-To update to the latest version:
+## Updating & Uninstalling
 
 ```bash
+# Update a plugin
 /plugin update tdd-workflow@dgalarza-workflows
-```
 
-Or update all plugins from this marketplace:
-
-```bash
-/plugin update --marketplace dgalarza-workflows
-```
-
-## Uninstalling
-
-```bash
+# Uninstall a plugin
 /plugin uninstall tdd-workflow@dgalarza-workflows
 ```
