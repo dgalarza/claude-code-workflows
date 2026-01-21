@@ -17,6 +17,7 @@ Before pulling in resources, determine where the user is in their process:
 |-------|--------------|-------------------|
 | **Ideation** | "I have an idea", "thinking about making a video", "should I make this?" | `ideation.md` |
 | **Packaging** | "help with title", "thumbnail ideas", "working on my hook" | `titles.md`, `thumbnail.md`, `hook.md` (use together) |
+| **Scripting** | "help with script", "structure the video", "how to keep viewers engaged" | `scripting.md`, `hook.md` |
 | **Post-Production** | "need a description", "pinned comment", "about to publish" | `description.md`, `pinned-comment.md` |
 
 If unclear, ask: "Are you still exploring the idea, or do you have a video ready to package?"
@@ -68,6 +69,12 @@ All videos should target the same precise audience avatar. If a video idea would
 - Click confirmation principle
 - Hook templates by type
 
+**Scripting** `resources/scripting.md`
+- Anticipation-validation loops (the "seesaw" pattern)
+- Head fakes and misdirection techniques
+- Script structures for technical content
+- Pacing and retention strategies
+
 **Description** `resources/description.md`
 - SEO structure
 - Template for technical content
@@ -93,6 +100,12 @@ PACKAGING (as one unit)
   ↓
   Title + Thumbnail + Hook must form a coherent contract
   The promise made must be delivered in first 20 seconds
+  ↓
+SCRIPTING
+  ↓
+  Structure using anticipation-validation loops
+  Use head fakes to maintain engagement
+  Every ~3 min should have tension or release
   ↓
 POST-PRODUCTION
   ↓

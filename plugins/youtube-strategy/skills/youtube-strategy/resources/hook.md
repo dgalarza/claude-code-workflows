@@ -472,6 +472,20 @@ HOW TO ADAPT:
 
 ---
 
+## Beyond the Hook: The Seesaw Pattern
+
+Once your hook lands, the rest of your video should follow an **anticipation-validation loop**—building tension toward answers, using head fakes to extend engagement, then delivering satisfying payoffs.
+
+This "seesaw" between tension and release keeps viewers watching throughout the video, not just the first 20 seconds.
+
+**See `scripting.md` for:**
+- The full anticipation-validation loop structure
+- Head fake and misdirection techniques
+- Script templates for technical content
+- Pacing guidelines (something new every ~3 minutes)
+
+---
+
 ## The Golden Rule
 
 Your opening should answer one question: **"Why should a busy developer stop scrolling and watch this?"**
