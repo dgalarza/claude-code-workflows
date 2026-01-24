@@ -21,6 +21,25 @@ Here's what makes a good YouTube description:
 - **Use relevant hashtags** - 3-5 max, aligned with your content (#RubyOnRails #AIEngineering)
 - **Link to related videos** - YouTube favors creators who keep viewers on platform
 
+**UTM Parameters for Link Tracking:**
+
+Add UTM parameters to newsletter and external links to track which videos drive traffic:
+
+```
+www.damiangalarza.com/newsletter?utm_source=youtube&utm_medium=video&utm_campaign=[video-slug]
+```
+
+| Parameter | Value | Purpose |
+|-----------|-------|---------|
+| `utm_source` | `youtube` | Identifies YouTube as the traffic source |
+| `utm_medium` | `video` | Distinguishes from shorts, community posts, etc. |
+| `utm_campaign` | `[video-slug]` | Tracks the specific video (e.g., `claude-code-tutorial`) |
+
+**Tips:**
+- Use lowercase, hyphenated video slugs for consistency
+- Keep campaign names short but descriptive
+- Use the same slug as your video file name for easy correlation
+
 **For Technical Content:**
 
 - **Prerequisites** - "You should know basic Rails and have API keys ready"
@@ -59,7 +78,7 @@ In this video, I [walk you through / show you / break down] [specific topic/skil
 - [Resource 2 with link]
 
 **Get the files + my full collection of Claude workflows:**
-→ www.damiangalarza.com/newsletter
+→ www.damiangalarza.com/newsletter?utm_source=youtube&utm_medium=video&utm_campaign=[video-slug]
 
 ---
 
@@ -75,7 +94,7 @@ In this video, I [walk you through / show you / break down] [specific topic/skil
 I'm Damian Galarza, a software engineering leader and former CTO with 15+ years building SaaS products. I make practical AI tutorials and share what I'm learning about tools like Claude Code.
 
 **Connect:**
-- Newsletter: www.damiangalarza.com/newsletter
+- Newsletter: www.damiangalarza.com/newsletter?utm_source=youtube&utm_medium=video&utm_campaign=[video-slug]
 - LinkedIn: [your LinkedIn URL]
 - Blog: www.damiangalarza.com
 
