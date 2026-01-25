@@ -2,7 +2,7 @@
 
 A collection of skills, agents, and workflows for Claude Code.
 
-> **[YouTube](https://youtube.com/@damian.galarza)** | **[Newsletter](https://www.damiangalarza.com/newsletter)** | **[Blog](https://www.damiangalarza.com)**
+> **[YouTube](https://youtube.com/@damian.galarza)** | **[Newsletter](https://www.damiangalarza.com/newsletter?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)** | **[Blog](https://www.damiangalarza.com)**
 
 ---
 
@@ -94,7 +94,7 @@ config/master.key
 
 Uses the same pattern as [Claude Code Desktop](https://code.claude.com/docs/en/desktop) - only files matching both `.worktreeinclude` AND `.gitignore` are included.
 
-Get the script: [scripts/setup-rails-worktree.sh](scripts/setup-rails-worktree.sh) | [example.worktreeinclude](scripts/example.worktreeinclude)
+Get the script: [scripts/setup-rails-worktree.sh](scripts/setup-rails-worktree.sh) | [example.worktreeinclude](scripts/example.worktreeinclude) | [Git Worktrees Cheat Sheet](https://www.damiangalarza.com/downloads/git-worktree-cheatsheet?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)
 
 The `rails-toolkit` plugin also includes `/rails-toolkit:linear-worktree` which automates this with Linear issue context.
 
