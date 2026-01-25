@@ -2,7 +2,7 @@
 
 A collection of skills, agents, and workflows for Claude Code.
 
-> **[YouTube](https://youtube.com/@damian.galarza)** | **[Newsletter](https://www.damiangalarza.com/newsletter?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)** | **[Blog](https://www.damiangalarza.com)**
+> **[YouTube](https://youtube.com/@damian.galarza)** | **[Newsletter](https://www.damiangalarza.com/newsletter?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)** | **[Blog](https://www.damiangalarza.com?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)**
 
 ---
 
@@ -176,4 +176,4 @@ MIT
 
 ---
 
-**Built by [Damian Galarza](https://www.damiangalarza.com)** - Former CTO, 15+ years in software. I make videos about Claude Code and AI development workflows.
+**Built by [Damian Galarza](https://www.damiangalarza.com?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)** - Former CTO, 15+ years in software. I make videos about Claude Code and AI development workflows.
