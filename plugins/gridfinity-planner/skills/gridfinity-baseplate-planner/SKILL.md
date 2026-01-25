@@ -9,21 +9,6 @@ description: Use this skill when planning and designing gridfinity baseplates fo
 
 This skill provides comprehensive guidance for planning gridfinity baseplates optimized for 3D printing. It handles the complete workflow from raw measurements to printable configurations, including unit conversion, grid optimization, multi-part slicing strategies, and padding calculations.
 
-## When to Use This Skill
-
-Use this skill when:
-- User wants to create a gridfinity baseplate for a specific space (drawer, shelf, toolbox, etc.)
-- User needs to calculate how many grid units fit in given dimensions
-- User's desired baseplate is larger than their printer bed and needs slicing
-- User needs help with padding calculations for non-exact fits
-- User wants parameters for gridfinity.perplexinglabs.com
-
-Examples:
-- "I have a drawer that's 350mm x 250mm and my printer bed is 220mm x 220mm"
-- "Help me make a gridfinity base for a 14 inch by 8.5 inch toolbox"
-- "I need a gridfinity base that's 180mm wide using 35mm grid units instead of the standard 42mm"
-- "How many gridfinity units fit in a 400mm x 300mm space?"
-
 ## Core Workflow
 
 Follow these steps when planning a gridfinity baseplate:
