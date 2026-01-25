@@ -1,6 +1,6 @@
 {
   "name": "gridfinity-planner",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Plan and design gridfinity baseplates for 3D printing with optimal grid layouts and print bed slicing",
   "author": {
     "name": "Damian Galarza",
