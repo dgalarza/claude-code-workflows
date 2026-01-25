@@ -1,6 +1,6 @@
 {
   "name": "tdd-workflow",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Test-driven development skill that enforces red-green-refactor, one test at a time",
   "author": {
     "name": "Damian Galarza",

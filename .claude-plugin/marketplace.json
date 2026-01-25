@@ -9,7 +9,7 @@
       "name": "tdd-workflow",
       "source": "./plugins/tdd-workflow",
       "description": "Test-driven development skill that enforces red-green-refactor, one test at a time",
-      "version": "1.0.0"
+      "version": "1.1.0"
     },
     {
       "name": "conventional-commits",
