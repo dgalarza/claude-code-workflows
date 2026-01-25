@@ -1,0 +1,15 @@
+{
+  "description": "Auto-activate TDD workflow when prompts mention testing-related terms",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/tdd-prompt-hook.py"
+          }
+        ]
+      }
+    ]
+  }
+}

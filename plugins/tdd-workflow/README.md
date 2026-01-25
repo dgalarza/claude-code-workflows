@@ -54,6 +54,26 @@ Claude (with TDD skill):
 - Skipping the refactor step
 - Not running tests between steps
 
+## Auto-Activation Hook
+
+This plugin includes a `UserPromptSubmit` hook that helps Claude find the TDD skill when your prompt mentions testing-related terms. While Claude can discover skills through their descriptions, this hook acts as a backup to ensure the skill activates reliably. The hook is automatically loaded when the plugin is installed - no manual configuration needed.
+
+**Note**: Plugin hooks don't appear in the `/hooks` UI, but you can verify they're working by running `claude --debug` and looking for "Registered X hooks from X plugins" in the output.
+
+### What It Detects
+
+The hook looks for these patterns in your prompts:
+- `tdd` (as a word)
+- `test-driven` or `test driven`
+- `test-first` or `test first`
+- `red-green-refactor`
+- `write a test` or `add a test`
+- `testing`
+- `unit test`
+- `spec`
+
+When matched, it injects "Use tdd-workflow" into the conversation context.
+
 ## Works Well With
 
 - [Rails Toolkit](../rails-toolkit/README.md) - Uses TDD workflow for feature implementation
