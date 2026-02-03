@@ -34,7 +34,6 @@ npx skills add dgalarza/claude-code-workflows --skill "tdd-workflow"
 | `conventional-commits` | Structured commit messages |
 | `parallel-code-review` | Multi-agent code reviews |
 | `meeting-transcript` | Process transcripts into notes |
-| `youtube-strategy` | YouTube content strategy |
 
 ```bash
 # Via npx

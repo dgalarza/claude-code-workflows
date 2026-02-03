@@ -31,7 +31,6 @@ See [INSTALL.md](INSTALL.md) for full details.
 | [Conventional Commits](plugins/conventional-commits/README.md) | Structured commit messages |
 | [Parallel Code Review](plugins/parallel-code-review/README.md) | Multi-agent code reviews |
 | [Meeting Transcript](plugins/meeting-transcript/README.md) | Process transcripts into structured notes |
-| [YouTube Strategy](plugins/youtube-strategy/README.md) | Content strategy for YouTube videos |
 
 ## Agents
 
