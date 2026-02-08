@@ -34,6 +34,7 @@ npx skills add dgalarza/claude-code-workflows --skill "tdd-workflow"
 | `conventional-commits` | Structured commit messages |
 | `parallel-code-review` | Multi-agent code reviews |
 | `meeting-transcript` | Process transcripts into notes |
+| `gridfinity-planner` | 3D printing baseplate planning |
 
 ```bash
 # Via npx
@@ -50,7 +51,6 @@ npx skills add dgalarza/claude-code-workflows --skill "tdd-workflow"
 | Agent | Description |
 |-------|-------------|
 | `cybersecurity-reviewer` | Security vulnerability analysis |
-| `gridfinity-planner` | 3D printing baseplate planning |
 
 ```bash
 /plugin install cybersecurity-reviewer@dgalarza-workflows

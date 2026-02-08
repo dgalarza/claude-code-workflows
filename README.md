@@ -31,13 +31,13 @@ See [INSTALL.md](INSTALL.md) for full details.
 | [Conventional Commits](plugins/conventional-commits/README.md) | Structured commit messages |
 | [Parallel Code Review](plugins/parallel-code-review/README.md) | Multi-agent code reviews |
 | [Meeting Transcript](plugins/meeting-transcript/README.md) | Process transcripts into structured notes |
+| [Gridfinity Planner](plugins/gridfinity-planner/README.md) | 3D printing baseplate planning |
 
 ## Agents
 
 | Agent | Description |
 |-------|-------------|
 | [Cybersecurity Reviewer](plugins/cybersecurity-reviewer/README.md) | Security analysis and threat modeling |
-| [Gridfinity Planner](plugins/gridfinity-planner/README.md) | 3D printing baseplate planning |
 
 ## Bundles
 
