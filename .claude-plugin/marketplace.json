@@ -46,6 +46,12 @@
       "source": "./plugins/gridfinity-planner",
       "description": "Plan and design gridfinity baseplates for 3D printing with optimal grid layouts",
       "version": "1.1.0"
+    },
+    {
+      "name": "worktree-sync",
+      "source": "./plugins/worktree-sync",
+      "description": "Augmented git worktree creation with .worktreeinclude syncing and custom setup scripts",
+      "version": "1.1.0"
     }
   ]
 }

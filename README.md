@@ -39,6 +39,12 @@ See [INSTALL.md](INSTALL.md) for full details.
 |-------|-------------|
 | [Cybersecurity Reviewer](plugins/cybersecurity-reviewer/README.md) | Security analysis and threat modeling |
 
+## Hooks
+
+| Plugin | Description |
+|--------|-------------|
+| [Worktree Sync](plugins/worktree-sync/README.md) | Automated `.worktreeinclude` syncing for `claude --worktree` |
+
 ## Bundles
 
 | Bundle | Description |
@@ -58,40 +64,30 @@ Git worktrees let you run multiple Claude Code agents on the same codebase witho
 - Agents overwriting each other's files
 - Test suites colliding on the same database
 
-**The solution:** Each agent gets its own worktree.
-
-```bash
-git worktree add ../myproject-feature-x -b feature-x
-cd ../myproject-feature-x
-# When done
-git worktree remove ../myproject-feature-x
-```
+**The solution:** Each agent gets its own worktree via `claude --worktree`.
 
 **But wait** - your app won't run because `.env` and other secrets don't copy over. And if both agents run tests, they'll fight over the same database.
 
-**For Rails apps**, use the setup script that handles everything:
+**Automate it with [worktree-sync](plugins/worktree-sync/README.md)** - uses Claude Code's `WorktreeCreate` hook to automatically symlink gitignored files into new worktrees:
 
-```bash
-# From your project root
-./scripts/setup-rails-worktree.sh feature-branch
-
-# This will:
-# 1. Create worktree at ../yourproject-feature-branch
-# 2. Symlink files from .worktreeinclude (or defaults)
-# 3. Create .env.local with isolated DB_DATABASE and DB_TEST_DATABASE
-# 4. Run bin/setup
-```
-
-**Configure with `.worktreeinclude`** - create this file in your repo root to specify which gitignored files to include:
-
+1. Add a `.worktreeinclude` to your project root:
 ```
 .env
 .env.local
-.npmrc
 config/master.key
 ```
 
-Uses the same pattern as [Claude Code Desktop](https://code.claude.com/docs/en/desktop) - only files matching both `.worktreeinclude` AND `.gitignore` are included.
+2. Configure the hooks in `.claude/settings.json` (see [setup instructions](plugins/worktree-sync/README.md#setup))
+
+3. Run `claude --worktree` and your secrets are there automatically.
+
+Only files matching both `.worktreeinclude` AND `.gitignore` are synced. You can also configure a post-create script via `.worktreesync` for project-specific setup like database isolation.
+
+**For Rails apps**, there's also a standalone setup script for manual worktree creation:
+
+```bash
+./scripts/setup-rails-worktree.sh feature-branch
+```
 
 Get the script: [scripts/setup-rails-worktree.sh](scripts/setup-rails-worktree.sh) | [example.worktreeinclude](scripts/example.worktreeinclude) | [Git Worktrees Cheat Sheet](https://www.damiangalarza.com/downloads/git-worktree-cheatsheet?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)
 
