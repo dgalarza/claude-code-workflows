@@ -1,0 +1,14 @@
+[Unit]
+Description=Vault QMD Embed — run every 30 minutes
+Requires=vault-embed.service
+
+[Timer]
+# Run 2 minutes after login (initial catch-up)
+OnBootSec=2min
+# Then every 30 minutes
+OnUnitActiveSec=30min
+# If a run was missed (machine asleep), run immediately on wake
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,17 @@
+[Unit]
+Description=Vault QMD Sync — watchman trigger setup
+Documentation=https://github.com/dgalarza/claude-code-workflows
+# Run after the user session is fully up
+After=default.target
+
+[Service]
+Type=oneshot
+# Re-registers the watchman trigger on login (watchman loses watches after reboot)
+ExecStart=SETUP_TRIGGER_SCRIPT
+Environment="QMD_VAULT=QMD_VAULT_VALUE"
+Environment="QMD_SETTLE=QMD_SETTLE_VALUE"
+# Keep the service "active" so systemctl status shows it ran
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target
