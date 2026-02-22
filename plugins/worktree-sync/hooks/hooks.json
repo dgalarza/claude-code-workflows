@@ -1,0 +1,27 @@
+{
+  "description": "Augmented git worktree creation with .worktreeinclude syncing and custom setup scripts",
+  "hooks": {
+    "WorktreeCreate": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/worktree-create.sh",
+            "timeout": 120
+          }
+        ]
+      }
+    ],
+    "WorktreeRemove": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/worktree-remove.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
