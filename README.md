@@ -63,6 +63,8 @@ See [INSTALL.md](INSTALL.md) for full details.
 | [Structure Your CLAUDE.md Files](tips/structure-claude-md-files.md) | Give Claude the project context it needs |
 | [Use Subagents for Focused Tasks](tips/use-subagents-for-focused-tasks.md) | Spawn specialized subagents for reviews, research, and more |
 | [MCP Servers Worth Installing](tips/mcp-servers-worth-installing.md) | Linear, Memory, and Sentry integrations |
+| [Plugins Worth Installing](tips/plugins-worth-installing.md) | Claudit configuration auditor and more |
+| [Skills Worth Installing](tips/skills-worth-installing.md) | Frontend Design, Remotion video creation, and more |
 
 ---
 
