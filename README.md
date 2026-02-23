@@ -55,102 +55,14 @@ See [INSTALL.md](INSTALL.md) for full details.
 
 ## Tips & Tricks
 
-### Tip 1: Use Worktrees for Parallel Agents
-
-Git worktrees let you run multiple Claude Code agents on the same codebase without conflicts.
-
-**The problem:** If you run 2+ agents on the same repo, you get:
-- Unrelated changes in one branch
-- Agents overwriting each other's files
-- Test suites colliding on the same database
-
-**The solution:** Each agent gets its own worktree via `claude --worktree`.
-
-**But wait** - your app won't run because `.env` and other secrets don't copy over. And if both agents run tests, they'll fight over the same database.
-
-**Automate it with [worktree-sync](plugins/worktree-sync/README.md)** - uses Claude Code's `WorktreeCreate` hook to automatically symlink gitignored files into new worktrees:
-
-1. Add a `.worktreeinclude` to your project root:
-```
-.env
-.env.local
-config/master.key
-```
-
-2. Configure the hooks in `.claude/settings.json` (see [setup instructions](plugins/worktree-sync/README.md#setup))
-
-3. Run `claude --worktree` and your secrets are there automatically.
-
-Only files matching both `.worktreeinclude` AND `.gitignore` are synced. You can also configure a post-create script via `.worktreesync` for project-specific setup like database isolation.
-
-**For Rails apps**, there's also a standalone setup script for manual worktree creation:
-
-```bash
-./scripts/setup-rails-worktree.sh feature-branch
-```
-
-Get the script: [scripts/setup-rails-worktree.sh](scripts/setup-rails-worktree.sh) | [example.worktreeinclude](scripts/example.worktreeinclude) | [Git Worktrees Cheat Sheet](https://www.damiangalarza.com/downloads/git-worktree-cheatsheet?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)
-
-The `rails-toolkit` plugin also includes `/rails-toolkit:linear-worktree` which automates this with Linear issue context.
-
----
-
-### Tip 2: Customize Your Status Bar
-
-```bash
-claude config set --global statusLineTemplate '${cwd.basename} | ${model} | ${tokenUsage}'
-```
-
-See [configs/status-bar.md](configs/status-bar.md) for more options.
-
----
-
-### Tip 3: Compact Context Proactively
-
-Don't wait until Claude starts forgetting things. Compact when you finish a logical unit of work, switch tasks, or token usage gets high.
-
-```bash
-/compact
-```
-
----
-
-### Tip 4: Structure Your CLAUDE.md Files
-
-```markdown
-# Project Name
-
-## Overview
-One paragraph on what this project does.
-
-## Tech Stack
-- Framework: Rails 7.2
-- Database: PostgreSQL
-
-## Key Patterns
-- Service objects in app/services/
-- Result pattern for service returns
-
-## Testing
-- RSpec with FactoryBot
-- Run tests: `bin/rspec`
-```
-
----
-
-### Tip 5: Use Subagents for Focused Tasks
-
-When Claude spawns subagents, each one gets focused context. Security review? Let it spawn a security-focused subagent. Code review? Multiple specialized reviewers in parallel.
-
----
-
-### Tip 6: MCP Servers Worth Installing
-
-1. **Linear** - Project management integration
-2. **Memory** - Persistent context across sessions
-3. **Sentry** - Debug production errors
-
-See [configs/mcp-servers.md](configs/mcp-servers.md) for setup instructions.
+| Tip | Description |
+|-----|-------------|
+| [Use Worktrees for Parallel Agents](tips/worktrees-for-parallel-agents.md) | Run multiple Claude Code agents on the same codebase without conflicts |
+| [Customize Your Status Bar](tips/customize-status-bar.md) | Configure the status bar to show model, tokens, and more |
+| [Compact Context Proactively](tips/compact-context-proactively.md) | Keep Claude effective by compacting at the right times |
+| [Structure Your CLAUDE.md Files](tips/structure-claude-md-files.md) | Give Claude the project context it needs |
+| [Use Subagents for Focused Tasks](tips/use-subagents-for-focused-tasks.md) | Spawn specialized subagents for reviews, research, and more |
+| [MCP Servers Worth Installing](tips/mcp-servers-worth-installing.md) | Linear, Memory, and Sentry integrations |
 
 ---
 
