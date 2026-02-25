@@ -1,0 +1,9 @@
+[Unit]
+Description=Vault QMD Embed — generate vector embeddings for pending chunks
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=VAULT_EMBED_SCRIPT
+Environment="QMD_VAULT=QMD_VAULT_VALUE"
+Environment="QMD_LOG=QMD_LOG_VALUE"

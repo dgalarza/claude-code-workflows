@@ -1,0 +1,12 @@
+{
+  "name": "memory-system",
+  "version": "1.0.0",
+  "description": "OpenClaw-inspired file-based memory system with auto-loading daily logs, pre-compaction flush, and session save hooks",
+  "author": {
+    "name": "Damian Galarza",
+    "url": "https://www.damiangalarza.com"
+  },
+  "repository": "https://github.com/dgalarza/claude-code-workflows",
+  "license": "MIT",
+  "keywords": ["memory", "context", "persistence", "sessions"]
+}

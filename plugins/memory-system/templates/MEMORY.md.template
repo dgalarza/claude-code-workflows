@@ -1,0 +1,49 @@
+# Memory - {project_name}
+
+> Auto-loaded into every session. Keep under 200 lines total.
+> Lines after 200 are truncated from context.
+
+## Identity
+
+<!-- 10 lines: Who you're working with -->
+
+
+## Active Projects
+
+<!-- 20 lines: Current focus areas, goals, deadlines -->
+
+
+## Key Decisions
+
+<!-- 30 lines: Important decisions made, with dates and rationale -->
+
+
+## Preferences
+
+<!-- 15 lines: Coding style, tools, communication preferences -->
+
+
+## Relationships
+
+<!-- 10 lines: Key people, roles, how they connect -->
+
+
+## Conventions
+
+<!-- 20 lines: Project-specific patterns, naming, architecture -->
+
+
+## Quick Reference
+
+<!-- 15 lines: Frequently needed links, IDs, credentials (no secrets!) -->
+
+
+## Memory Index
+
+<!-- 10 lines: Links to topic files for deeper context -->
+<!-- Format: - [topic-name](topics/topic-name.md) - brief description -->
+
+
+---
+*Last reviewed: {date}*
+*Line count: ~50/200 (room for 150 lines of content)*
