@@ -63,9 +63,11 @@ npx skills add dgalarza/claude-code-workflows --skill "tdd-workflow"
 | Bundle | Description |
 |--------|-------------|
 | `rails-toolkit` | Complete Rails dev workflow (agents + commands + skills) |
+| `codebase-readiness` | Agent-Ready Codebase Assessment — scored report across 8 dimensions |
 
 ```bash
 /plugin install rails-toolkit@dgalarza-workflows
+/plugin install codebase-readiness@dgalarza-workflows
 ```
 
 ---

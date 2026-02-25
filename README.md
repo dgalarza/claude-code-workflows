@@ -23,10 +23,28 @@ See [INSTALL.md](INSTALL.md) for full details.
 
 ---
 
+## Featured: Agent-Ready Codebase Assessment
+
+**Does your codebase support AI agent work — or fight against it?**
+
+The [Codebase Readiness](plugins/codebase-readiness/README.md) plugin scores your repo across 8 dimensions (0-100) and tells you exactly where you stand — framed against teams shipping 1,000+ AI-generated PRs per week.
+
+```bash
+/plugin install codebase-readiness@dgalarza-workflows
+/codebase-readiness
+```
+
+You get a band rating (Agent-Ready → Not Agent-Ready), a concrete improvement roadmap, and an optional saved report to share with your team. Not opinions — evidence gathered from your actual codebase.
+
+[Learn more →](plugins/codebase-readiness/README.md) | [Want help improving your score?](https://www.damiangalarza.com/services/ai-enablement/?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)
+
+---
+
 ## Skills
 
 | Skill | Description |
 |-------|-------------|
+| [Codebase Readiness](plugins/codebase-readiness/README.md) | Score your repo's readiness for autonomous AI agent work |
 | [TDD Workflow](plugins/tdd-workflow/README.md) | Test-driven development, one test at a time |
 | [Conventional Commits](plugins/conventional-commits/README.md) | Structured commit messages |
 | [Parallel Code Review](plugins/parallel-code-review/README.md) | Multi-agent code reviews |
