@@ -46,6 +46,12 @@
       "source": "./plugins/gridfinity-planner",
       "description": "Plan and design gridfinity baseplates for 3D printing with optimal grid layouts",
       "version": "1.1.0"
+    },
+    {
+      "name": "codebase-readiness",
+      "source": "./plugins/codebase-readiness",
+      "description": "Score your codebase's readiness for autonomous AI agent work across 8 dimensions, framed around the Stripe benchmark of 1k+ AI-generated PRs per week",
+      "version": "1.0.0"
     }
   ]
 }
