@@ -4,7 +4,7 @@ Plugins extend Claude Code with specialized behaviors, audit tools, and domain e
 
 ## Recommended Plugins
 
-1. **[Claudit](https://github.com/acostanzo/quickstop/tree/main/plugins/claudit)** - Configuration auditor that evaluates your Claude Code setup against Anthropic's best practices. Scores six categories (over-engineering, CLAUDE.md quality, security, MCP config, plugin health, context efficiency) with letter grades and actionable recommendations. Uses subagents to fetch current docs before auditing, so results stay up to date.
+1. **[Claudit](https://github.com/acostanzo/quickstop/tree/main/plugins/claudit)** - Configuration auditor that evaluates your Claude Code setup against Anthropic's best practices. Scores six categories (over-engineering, CLAUDE.md quality, security, MCP config, plugin health, context efficiency) with letter grades and actionable recommendations. Uses subagents to fetch current docs before auditing, so results stay up to date. [Watch video introduction](https://youtu.be/HJvtgldlzDI?si=xHfXaGRZ8Bt7GpHQ)
 
 ## Setup
 
