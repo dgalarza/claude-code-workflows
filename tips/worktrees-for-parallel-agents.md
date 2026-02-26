@@ -15,9 +15,9 @@ Each agent gets its own worktree via `claude --worktree`.
 
 **But wait** - your app won't run because `.env` and other secrets don't copy over. And if both agents run tests, they'll fight over the same database.
 
-## Automate It with Worktree Sync
+## Automate It with .worktreeinclude
 
-The [worktree-sync](../plugins/worktree-sync/README.md) plugin uses Claude Code's `WorktreeCreate` hook to automatically symlink gitignored files into new worktrees.
+Claude Code natively supports `.worktreeinclude` when using `--worktree`. Add a `.worktreeinclude` to your project root and Claude Code will automatically symlink those files into new worktrees.
 
 ### Setup
 
@@ -28,11 +28,9 @@ The [worktree-sync](../plugins/worktree-sync/README.md) plugin uses Claude Code'
 config/master.key
 ```
 
-2. Configure the hooks in `.claude/settings.json` (see [setup instructions](../plugins/worktree-sync/README.md#setup))
+2. Run `claude --worktree` and your secrets are there automatically.
 
-3. Run `claude --worktree` and your secrets are there automatically.
-
-Only files matching both `.worktreeinclude` AND `.gitignore` are synced. You can also configure a post-create script via `.worktreesync` for project-specific setup like database isolation.
+Only files matching both `.worktreeinclude` AND `.gitignore` are synced.
 
 ## Rails Apps
 
