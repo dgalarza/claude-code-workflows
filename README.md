@@ -39,12 +39,6 @@ See [INSTALL.md](INSTALL.md) for full details.
 |-------|-------------|
 | [Cybersecurity Reviewer](plugins/cybersecurity-reviewer/README.md) | Security analysis and threat modeling |
 
-## Hooks
-
-| Plugin | Description |
-|--------|-------------|
-| [Worktree Sync](plugins/worktree-sync/README.md) | Automated `.worktreeinclude` syncing for `claude --worktree` |
-
 ## Bundles
 
 | Bundle | Description |
