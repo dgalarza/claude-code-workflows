@@ -149,9 +149,9 @@ In dynamic languages, tests are the type system. Test Foundation carries more we
 | Documentation & Context   | documentation-assessor   | 15%    | XX/100      | XX       |
 | Code Clarity              | code-clarity-assessor    | 15%    | XX/100      | XX       |
 | Architecture Clarity      | architecture-assessor    | 15%    | XX/100      | XX       |
+| Feedback Loops            | test-coverage-assessor   | 10%    | XX/100      | XX       |
 | Type Safety*              | architecture-assessor    | 10%    | XX/100      | XX       |
-| Consistency & Conventions | code-clarity-assessor    | 10%    | XX/100      | XX       |
-| Feedback Loops            | test-coverage-assessor   | 5%     | XX/100      | XX       |
+| Consistency & Conventions | code-clarity-assessor    | 5%     | XX/100      | XX       |
 | Change Safety             | architecture-assessor    | 5%     | XX/100      | XX       |
 
 *Type Safety for dynamic languages = contracts (dry-rb, Pydantic), ActiveRecord validations, Result pattern consistency. NOT penalized for absence of a type checker.
@@ -165,8 +165,8 @@ In dynamic languages, tests are the type system. Test Foundation carries more we
 | Documentation & Context   | documentation-assessor   | 15%    | XX/100      | XX       |
 | Code Clarity              | code-clarity-assessor    | 15%    | XX/100      | XX       |
 | Architecture Clarity      | architecture-assessor    | 15%    | XX/100      | XX       |
-| Consistency & Conventions | code-clarity-assessor    | 10%    | XX/100      | XX       |
-| Feedback Loops            | test-coverage-assessor   | 5%     | XX/100      | XX       |
+| Feedback Loops            | test-coverage-assessor   | 10%    | XX/100      | XX       |
+| Consistency & Conventions | code-clarity-assessor    | 5%     | XX/100      | XX       |
 | Change Safety             | architecture-assessor    | 5%     | XX/100      | XX       |
 
 **Overall Score** = sum of (agent score × weight)
@@ -225,14 +225,30 @@ A **Type Safety score of 30-50 paired with a Test Foundation score of 75+** is a
 
 ## The Stripe Benchmark
 
-Stripe's engineering team merged 1,000+ AI-generated pull requests in a single week — making it one of the clearest public benchmarks for what "agent-ready" means at scale. The difference between Stripe and most codebases isn't just tooling: it's the structural properties that let agents make changes confidently without breaking things.
+Stripe's engineering team merged 1,000+ AI-generated pull requests in a single week. This is possible because Stripe's codebase satisfies what researchers call the **asymmetry of verification**: generating a PR is hard, but *verifying* one — with fast CI, strict types, and comprehensive tests — takes minutes. Every dimension in this assessment measures how well your codebase satisfies that asymmetry.
 
-This assessment scores those structural properties. A score of 70+ means agents can do meaningful, autonomous work. Below 50 means the foundational work of making the codebase navigable, testable, and documented needs to come first.
+The goal is to make agent output cheaply verifiable: the cost of a wrong answer is low, the feedback loop is fast, and the automated verification layer catches mistakes before humans need to. A score of 70+ means that condition is largely met. Below 50 means the verification infrastructure needs to be built before agents can work reliably.
 
 ---
 
 ## Critical Findings
 [List any dimensions scoring below 40, with the specific gap and why it blocks agent work]
+
+---
+
+## Verification Cost Profile
+
+> How expensive is it to confirm an agent's change is correct in this codebase?
+
+| Signal | Status | What it means |
+|--------|--------|----------------|
+| Tests run in < 10 min | ✓ / ✗ | Fast verification enables agent iteration cycles |
+| Security scanning automated | ✓ / ✗ | Non-functional correctness covered without manual review |
+| Property-based tests present | ✓ / ✗ | Oracle generates adversarial inputs, not just happy paths |
+| Reproducible dev state (seeds/factories) | ✓ / ✗ | Agents can set up verifiable scenarios independently |
+| Coverage reported on PRs | ✓ / ✗ | Regression signal visible before human review |
+
+**Verification bottleneck:** [The single biggest barrier to confirming agent-produced changes — e.g., "No security scanning means agent-introduced vulnerabilities only surface in manual review or production" or "45-min CI limits agents to ~10 verification cycles per day"]
 
 ---
 
@@ -269,14 +285,18 @@ This assessment scores those structural properties. A score of 70+ means agents 
 
 ## What "Agent-Ready" Means
 
-AI agents are most effective in codebases where:
-- **Tests catch mistakes** — an agent can make a change and know immediately if something broke
-- **Docs reduce guessing** — CLAUDE.md and architecture docs mean agents don't have to infer intent
-- **Small files reduce context pressure** — agents work best when a change fits in a single focused file
-- **Types prevent silent failures** — strict types make agent mistakes compile errors, not runtime surprises
-- **Conventions are automated** — agents can't accidentally violate style rules that are enforced by tooling
+AI agent work doesn't eliminate verification — it relocates it. Before agents, developers split time between writing, reading, and checking code. With agents, writing is offloaded. But every line an agent produces still needs to be verified against human intent, either by automated systems or by humans reading code.
 
-The score above reflects where this codebase stands today. Each point in the Improvement Roadmap is a concrete step toward the kind of codebase where agents ship production-quality code autonomously.
+An agent-ready codebase maximizes automated verification and minimizes the cost per change:
+
+- **Tests are the oracle** — when an agent makes a change, the test suite tells it immediately whether that change matches intent. Without tests, every agent change requires a human to read and reason about correctness manually — which destroys scalability. A noisy oracle (flaky tests, heavily mocked suites) is nearly as bad as no tests.
+- **Type systems reduce verifier noise** — a type-checked build that passes is a higher-confidence signal than an untyped build that passes. Types convert silent runtime failures into loud compile-time failures, so agent mistakes are caught before a human ever reviews them.
+- **Documentation makes intent verifiable** — CLAUDE.md and ADRs give agents the context to produce changes that match business intent, not just syntactic correctness. Without documented intent, an agent's change can pass every automated check and still be wrong in ways only a human reviewer can catch.
+- **Small files bound the verification surface** — when a change is contained to one focused file, a test failure is attributable and precise. Large files and high coupling produce noisy feedback: a failure could be caused by any of a dozen interacting concerns.
+- **Fast feedback enables iteration** — a 45-minute CI pipeline limits agents to ~10 verification cycles per day. A 5-minute pipeline enables ~100. Pipeline speed is a structural prerequisite for agent work at scale, not a convenience.
+- **Security and vulnerability scanning extends coverage** — functional tests verify behavior; security scanners verify a different correctness dimension that agents can silently violate.
+
+Each point in the Improvement Roadmap raises your verification limit — reducing manual review burden while increasing confidence in every agent-produced change.
 
 ---
 *Generated by codebase-readiness skill — claude-code-workflows*
@@ -291,3 +311,17 @@ After presenting the report, ask:
 > "Would you like me to save this assessment as `AGENT_READY_ASSESSMENT.md` in the project root? It can serve as a baseline for tracking improvements over time and is useful for sharing with your team."
 
 If the user confirms, write the full report to `AGENT_READY_ASSESSMENT.md` in the current directory.
+
+---
+
+## Phase 6: CI Integration Recommendation
+
+After saving (or if the user declines), mention:
+
+> **For continuous tracking:** Consider adding [`btar`](https://github.com/btahq/btar) to your CI pipeline. It provides fast, deterministic measurement of your verification infrastructure (type errors, lint violations, test coverage) and can gate PRs when scores regress. This assessment gives you a strategic baseline; btar gives you daily CI enforcement of the most critical metrics.
+>
+> ```bash
+> npm install -g btar
+> btar analyze .          # Quick score: types + lint + coverage
+> btar context generate agents-md  # Auto-generates AGENTS.md with your build/test commands
+> ```
