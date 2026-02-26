@@ -57,6 +57,10 @@ After running these commands, output a formatted **Codebase Snapshot**:
 ## Codebase Snapshot: [Project Name]
 
 - **Primary language/framework**: [detected]
+- **Language tier**: [statically-typed | dynamically-typed | gradually-typed]
+  - Statically-typed: TypeScript, Go, Java, Rust, C#, Kotlin
+  - Dynamically-typed: Ruby, Python (unannotated), JavaScript/Node.js
+  - Gradually-typed: Python with mypy/Pydantic, TypeScript with strict:false
 - **Commit count**: [X]
 - **Contributors**: [X]
 - **Source files**: [X]
@@ -66,6 +70,8 @@ After running these commands, output a formatted **Codebase Snapshot**:
 - **Linting config**: [tools found or none]
 - **README**: [present, X lines / absent]
 ```
+
+Pass `LANGUAGE_TIER` and `PRIMARY_LANGUAGE` explicitly to each agent so they apply the correct language-specific rubrics.
 
 ---
 
@@ -80,6 +86,9 @@ You are assessing codebase readiness. Here is the Codebase Snapshot gathered by 
 
 [INSERT FULL CODEBASE SNAPSHOT]
 
+LANGUAGE_TIER: [static | dynamic | gradual]
+PRIMARY_LANGUAGE: [Ruby | Python | TypeScript | Go | etc.]
+
 Assess Test Foundation (0-100) and Feedback Loops (0-100) following your rubric. Run the shell commands in your instructions to gather evidence. Return the full scored assessment in the required output format.
 ```
 
@@ -89,6 +98,9 @@ Prompt template:
 You are assessing codebase readiness. Here is the Codebase Snapshot gathered by the orchestrator:
 
 [INSERT FULL CODEBASE SNAPSHOT]
+
+LANGUAGE_TIER: [static | dynamic | gradual]
+PRIMARY_LANGUAGE: [Ruby | Python | TypeScript | Go | etc.]
 
 Assess Documentation & Context (0-100) following your rubric. Run the shell commands in your instructions to gather evidence. Return the full scored assessment in the required output format.
 ```
@@ -100,6 +112,9 @@ You are assessing codebase readiness. Here is the Codebase Snapshot gathered by 
 
 [INSERT FULL CODEBASE SNAPSHOT]
 
+LANGUAGE_TIER: [static | dynamic | gradual]
+PRIMARY_LANGUAGE: [Ruby | Python | TypeScript | Go | etc.]
+
 Assess Code Clarity (0-100) and Consistency & Conventions (0-100) following your rubric. Run the shell commands in your instructions to gather evidence. Return the full scored assessment in the required output format.
 ```
 
@@ -110,7 +125,10 @@ You are assessing codebase readiness. Here is the Codebase Snapshot gathered by 
 
 [INSERT FULL CODEBASE SNAPSHOT]
 
-Assess Type Safety (0-100), Architecture Clarity (0-100), and Change Safety (0-100) following your rubric. Run the shell commands in your instructions to gather evidence. Return the full scored assessment in the required output format.
+LANGUAGE_TIER: [static | dynamic | gradual]
+PRIMARY_LANGUAGE: [Ruby | Python | TypeScript | Go | etc.]
+
+Assess Type Safety (0-100), Architecture Clarity (0-100), and Change Safety (0-100) following your rubric. Apply the language-appropriate Type Safety rubric based on LANGUAGE_TIER. Run the shell commands in your instructions to gather evidence. Return the full scored assessment in the required output format.
 ```
 
 Wait for all 4 agents to complete before proceeding.
@@ -119,14 +137,33 @@ Wait for all 4 agents to complete before proceeding.
 
 ## Phase 3: Score Calculation
 
-Collect the dimension scores from the agent reports and apply the weighted formula:
+Weights are **language-adaptive**. Select the appropriate table based on `LANGUAGE_TIER` from the Codebase Snapshot.
+
+### Dynamically-typed languages (Ruby, Python, JavaScript)
+
+In dynamic languages, tests are the type system. Test Foundation carries more weight; Type Safety reflects contracts and interface clarity, not a type checker.
 
 | Dimension                 | Agent                    | Weight | Agent Score | Weighted |
 |---------------------------|--------------------------|--------|-------------|----------|
-| Test Foundation           | test-coverage-assessor   | 20%    | XX/100      | XX       |
+| Test Foundation           | test-coverage-assessor   | 25%    | XX/100      | XX       |
 | Documentation & Context   | documentation-assessor   | 15%    | XX/100      | XX       |
 | Code Clarity              | code-clarity-assessor    | 15%    | XX/100      | XX       |
-| Type Safety               | architecture-assessor    | 15%    | XX/100      | XX       |
+| Architecture Clarity      | architecture-assessor    | 15%    | XX/100      | XX       |
+| Type Safety*              | architecture-assessor    | 10%    | XX/100      | XX       |
+| Consistency & Conventions | code-clarity-assessor    | 10%    | XX/100      | XX       |
+| Feedback Loops            | test-coverage-assessor   | 5%     | XX/100      | XX       |
+| Change Safety             | architecture-assessor    | 5%     | XX/100      | XX       |
+
+*Type Safety for dynamic languages = contracts (dry-rb, Pydantic), ActiveRecord validations, Result pattern consistency. NOT penalized for absence of a type checker.
+
+### Statically-typed languages (TypeScript, Go, Java, Rust)
+
+| Dimension                 | Agent                    | Weight | Agent Score | Weighted |
+|---------------------------|--------------------------|--------|-------------|----------|
+| Type Safety               | architecture-assessor    | 20%    | XX/100      | XX       |
+| Test Foundation           | test-coverage-assessor   | 15%    | XX/100      | XX       |
+| Documentation & Context   | documentation-assessor   | 15%    | XX/100      | XX       |
+| Code Clarity              | code-clarity-assessor    | 15%    | XX/100      | XX       |
 | Architecture Clarity      | architecture-assessor    | 15%    | XX/100      | XX       |
 | Consistency & Conventions | code-clarity-assessor    | 10%    | XX/100      | XX       |
 | Feedback Loops            | test-coverage-assessor   | 5%     | XX/100      | XX       |
@@ -168,6 +205,21 @@ Assemble and output the full report:
 | Feedback Loops            | 5%     | XX/100  | XX.X     |
 | Change Safety             | 5%     | XX/100  | XX.X     |
 | **TOTAL**                 | 100%   |         | **XX/100** |
+
+---
+
+## Language Context: [Primary Language]
+
+> **For dynamically-typed languages (Ruby, Python, JavaScript) only — omit for TypeScript/Go/Java.**
+
+This codebase is written in **[Language]**, a dynamically-typed language. The scoring framework adapts for this:
+
+| Signal | [Language] equivalent |
+|--------|----------------------|
+| Type Safety (10%) | Contract systems ([dry-rb/Pydantic/etc.]), validated interfaces, Result pattern |
+| Test Foundation (25%) | [Language]'s primary safety mechanism — comprehensive tests catch what type checkers catch in TypeScript |
+
+A **Type Safety score of 30-50 paired with a Test Foundation score of 75+** is a healthy Ruby/Python codebase — not a gap. The combined 35% weight (10% + 25%) provides the same safety signal as TypeScript's Type Safety at 20%.
 
 ---
 
