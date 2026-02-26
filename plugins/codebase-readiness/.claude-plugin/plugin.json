@@ -1,6 +1,6 @@
 {
   "name": "codebase-readiness",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Agent-Ready Codebase Assessment — scores your codebase across 8 dimensions and generates an actionable improvement roadmap framed around the Stripe AI benchmark",
   "author": {
     "name": "Damian Galarza",
