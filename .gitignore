@@ -1,1 +1,2 @@
 .claude/**/*.local.*
+.claude/worktrees

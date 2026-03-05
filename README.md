@@ -95,7 +95,21 @@ The `rails-toolkit` plugin also includes `/rails-toolkit:linear-worktree` which 
 
 ---
 
-### Tip 2: Customize Your Status Bar
+### Tip 2: Add Claude Code Entries to `.gitignore`
+
+Add these to your project's `.gitignore` to keep Claude Code artifacts out of version control:
+
+```gitignore
+.claude/**/*.local.*
+.claude/worktrees
+```
+
+- **`.claude/**/*.local.*`** - Local overrides for settings and CLAUDE.md (e.g., `settings.local.json`, `CLAUDE.local.md`). These are personal preferences that shouldn't be shared.
+- **`.claude/worktrees`** - Created by `claude --worktree` to track active worktrees. Machine-specific state.
+
+---
+
+### Tip 3: Customize Your Status Bar
 
 ```bash
 claude config set --global statusLineTemplate '${cwd.basename} | ${model} | ${tokenUsage}'
@@ -105,7 +119,7 @@ See [configs/status-bar.md](configs/status-bar.md) for more options.
 
 ---
 
-### Tip 3: Compact Context Proactively
+### Tip 4: Compact Context Proactively
 
 Don't wait until Claude starts forgetting things. Compact when you finish a logical unit of work, switch tasks, or token usage gets high.
 
@@ -115,7 +129,7 @@ Don't wait until Claude starts forgetting things. Compact when you finish a logi
 
 ---
 
-### Tip 4: Structure Your CLAUDE.md Files
+### Tip 5: Structure Your CLAUDE.md Files
 
 ```markdown
 # Project Name
@@ -138,13 +152,13 @@ One paragraph on what this project does.
 
 ---
 
-### Tip 5: Use Subagents for Focused Tasks
+### Tip 6: Use Subagents for Focused Tasks
 
 When Claude spawns subagents, each one gets focused context. Security review? Let it spawn a security-focused subagent. Code review? Multiple specialized reviewers in parallel.
 
 ---
 
-### Tip 6: MCP Servers Worth Installing
+### Tip 7: MCP Servers Worth Installing
 
 1. **Linear** - Project management integration
 2. **Memory** - Persistent context across sessions
