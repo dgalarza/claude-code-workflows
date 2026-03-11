@@ -1,0 +1,100 @@
+name: Validate Skills
+
+on:
+  pull_request:
+    paths:
+      - 'plugins/*/skills/**'
+      - 'plugins/*/.claude-plugin/plugin.json'
+      - '.claude-plugin/marketplace.json'
+
+jobs:
+  validate-skills:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Find and validate changed skills
+        run: |
+          VALIDATE_SCRIPT=".agents/skills/skill-creator/scripts/quick_validate.py"
+          FAILED=0
+
+          # Get unique skill directories from changed files
+          SKILL_DIRS=$(git diff --name-only origin/${{ github.base_ref }}...HEAD \
+            | grep '^plugins/.*/skills/' \
+            | sed 's|\(plugins/[^/]*/skills/[^/]*\)/.*|\1|' \
+            | sort -u)
+
+          if [ -z "$SKILL_DIRS" ]; then
+            echo "No skill directories changed."
+            exit 0
+          fi
+
+          for dir in $SKILL_DIRS; do
+            if [ -f "$dir/SKILL.md" ]; then
+              echo "Validating $dir..."
+              if python3 "$VALIDATE_SCRIPT" "$dir"; then
+                echo "  PASS"
+              else
+                echo "  FAIL"
+                FAILED=1
+              fi
+            fi
+          done
+
+          if [ "$FAILED" -eq 1 ]; then
+            echo "::error::One or more skills failed validation."
+            exit 1
+          fi
+
+          echo "All skills passed validation."
+
+  validate-json:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate JSON files
+        run: |
+          FAILED=0
+
+          # Validate marketplace.json
+          if [ -f ".claude-plugin/marketplace.json" ]; then
+            echo "Validating .claude-plugin/marketplace.json..."
+            if python3 -m json.tool .claude-plugin/marketplace.json > /dev/null 2>&1; then
+              echo "  PASS"
+            else
+              echo "  FAIL"
+              python3 -m json.tool .claude-plugin/marketplace.json 2>&1 || true
+              FAILED=1
+            fi
+          fi
+
+          # Validate all plugin.json files
+          for f in plugins/*/.claude-plugin/plugin.json; do
+            if [ -f "$f" ]; then
+              echo "Validating $f..."
+              if python3 -m json.tool "$f" > /dev/null 2>&1; then
+                echo "  PASS"
+              else
+                echo "  FAIL"
+                python3 -m json.tool "$f" 2>&1 || true
+                FAILED=1
+              fi
+            fi
+          done
+
+          if [ "$FAILED" -eq 1 ]; then
+            echo "::error::One or more JSON files are invalid."
+            exit 1
+          fi
+
+          echo "All JSON files are valid."
