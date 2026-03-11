@@ -1,7 +1,5 @@
 # Go — Language-Specific Assessment Criteria
 
-> **Note:** This is a thinner reference file with room for expansion as more Go-specific patterns are identified in practice.
-
 ## Language Classification
 - **Tier:** statically-typed
 - **Primary safety mechanism:** Compile-time type checking with explicit error handling via return values

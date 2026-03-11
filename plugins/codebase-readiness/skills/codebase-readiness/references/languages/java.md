@@ -1,7 +1,5 @@
 # Java — Language-Specific Assessment Criteria
 
-> **Note:** This is a thinner reference file with room for expansion as more Java-specific patterns are identified in practice.
-
 ## Language Classification
 - **Tier:** statically-typed
 - **Primary safety mechanism:** Compile-time type checking with strong generics, annotation-based validation, and null safety annotations
