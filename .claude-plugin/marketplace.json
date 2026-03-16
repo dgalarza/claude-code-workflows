@@ -52,6 +52,12 @@
       "source": "./plugins/codebase-readiness",
       "description": "Score your codebase's readiness for autonomous AI agent work across 8 dimensions, framed around the Stripe benchmark of 1k+ AI-generated PRs per week",
       "version": "1.5.0"
+    },
+    {
+      "name": "agent-ready",
+      "source": "./plugins/agent-ready",
+      "description": "Make a codebase agent-ready by scaffolding CLAUDE.md, ARCHITECTURE.md, and docs/ structure following progressive disclosure patterns",
+      "version": "1.0.0"
     }
   ]
 }

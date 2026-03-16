@@ -36,6 +36,8 @@ The [Codebase Readiness](plugins/codebase-readiness/README.md) plugin scores you
 
 You get a band rating (Agent-Ready → Not Agent-Ready), a concrete improvement roadmap, and an optional saved report to share with your team. Not opinions — evidence gathered from your actual codebase.
 
+Once you have your score, the [agent-ready](plugins/agent-ready/README.md) plugin fixes the documentation gaps automatically: CLAUDE.md, ARCHITECTURE.md, and docs/ structure following progressive disclosure patterns.
+
 [Learn more →](plugins/codebase-readiness/README.md) | [See the full assessment details](https://www.damiangalarza.com/codebase-readiness/?utm_source=github&utm_medium=readme&utm_campaign=codebase-readiness) | [Want help improving your score?](https://www.damiangalarza.com/services/ai-enablement/?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)
 
 ---
@@ -45,6 +47,7 @@ You get a band rating (Agent-Ready → Not Agent-Ready), a concrete improvement 
 | Skill | Description |
 |-------|-------------|
 | [Codebase Readiness](plugins/codebase-readiness/README.md) | Score your repo's readiness for autonomous AI agent work |
+| [Agent Ready](plugins/agent-ready/README.md) | Fix documentation gaps: scaffold CLAUDE.md, ARCHITECTURE.md, and docs/ |
 | [TDD Workflow](plugins/tdd-workflow/README.md) | Test-driven development, one test at a time |
 | [Conventional Commits](plugins/conventional-commits/README.md) | Structured commit messages |
 | [Parallel Code Review](plugins/parallel-code-review/README.md) | Multi-agent code reviews |

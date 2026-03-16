@@ -65,6 +65,14 @@ The score measures how well your codebase satisfies that condition. The improvem
 
 Benchmarks show agentic coding can deliver 20x+ productivity — but only when the setup is right. This assessment tells you where your setup stands.
 
+## Start Fixing: agent-ready
+
+If Documentation & Context is one of your weaker dimensions, the [agent-ready](../agent-ready/README.md) companion plugin scaffolds CLAUDE.md, ARCHITECTURE.md, and a docs/ structure automatically. It reads your assessment results and suggests where to start.
+
+```
+/plugin install agent-ready@dgalarza-workflows
+```
+
 ## Want Help Improving Your Score?
 
 Built by [Damian Galarza](https://www.damiangalarza.com?utm_source=github&utm_medium=readme&utm_campaign=codebase-readiness), a Claude Code specialist who helps engineering teams close the gap between having AI tools and actually using them well.

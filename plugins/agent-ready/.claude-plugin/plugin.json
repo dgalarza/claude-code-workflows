@@ -1,0 +1,20 @@
+{
+  "name": "agent-ready",
+  "version": "1.0.0",
+  "description": "Make a codebase agent-ready by scaffolding CLAUDE.md, ARCHITECTURE.md, and docs/ structure following progressive disclosure patterns",
+  "author": {
+    "name": "Damian Galarza",
+    "url": "https://www.damiangalarza.com"
+  },
+  "repository": "https://github.com/dgalarza/claude-code-workflows",
+  "license": "MIT",
+  "keywords": [
+    "ai",
+    "agents",
+    "documentation",
+    "architecture",
+    "claude-md",
+    "progressive-disclosure",
+    "scaffolding"
+  ]
+}
