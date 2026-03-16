@@ -80,6 +80,18 @@ The goal is to make agent output cheaply verifiable: the cost of a wrong answer 
 
 ---
 
+## Start Fixing: agent-ready
+
+If Documentation & Context scored below 60, the **agent-ready** companion plugin can close that gap now. It scaffolds CLAUDE.md, ARCHITECTURE.md, and a docs/ structure following progressive disclosure patterns, built on your actual codebase.
+
+```
+/plugin install agent-ready@dgalarza-workflows
+```
+
+It reads this assessment report and suggests which mode to run first based on your weakest dimensions.
+
+---
+
 ## Want Help Moving the Needle?
 
 This assessment was built by [Damian Galarza](https://www.damiangalarza.com?utm_source=codebase-readiness&utm_medium=report&utm_campaign=codebase-readiness) — a Claude Code specialist who helps engineering teams close the gap between having AI tools and actually using them well.
