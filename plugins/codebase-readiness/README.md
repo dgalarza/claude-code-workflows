@@ -8,6 +8,12 @@ The result is a score (0-100), a band rating, and a concrete improvement roadmap
 
 ## Installation
 
+**Via npx (works with any tool that supports agent skills):**
+```bash
+npx skills add dgalarza/claude-code-workflows --skill "codebase-readiness"
+```
+
+**Via Claude plugin marketplace:**
 ```
 /plugin marketplace add dgalarza/claude-code-workflows
 /plugin install codebase-readiness@dgalarza-workflows
