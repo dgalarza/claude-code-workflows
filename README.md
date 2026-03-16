@@ -36,7 +36,7 @@ The [Codebase Readiness](plugins/codebase-readiness/README.md) plugin scores you
 
 You get a band rating (Agent-Ready → Not Agent-Ready), a concrete improvement roadmap, and an optional saved report to share with your team. Not opinions — evidence gathered from your actual codebase.
 
-[Learn more →](plugins/codebase-readiness/README.md) | [Want help improving your score?](https://www.damiangalarza.com/services/ai-enablement/?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)
+[Learn more →](plugins/codebase-readiness/README.md) | [See the full assessment details](https://www.damiangalarza.com/codebase-readiness/?utm_source=github&utm_medium=readme&utm_campaign=codebase-readiness) | [Want help improving your score?](https://www.damiangalarza.com/services/ai-enablement/?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)
 
 ---
 

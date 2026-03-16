@@ -67,6 +67,8 @@ Benchmarks show agentic coding can deliver 20x+ productivity — but only when t
 
 ## Want Help Improving Your Score?
 
-Built by [Damian Galarza](https://www.damiangalarza.com), a Claude Code specialist who helps engineering teams close the gap between having AI tools and actually using them well.
+Built by [Damian Galarza](https://www.damiangalarza.com?utm_source=github&utm_medium=readme&utm_campaign=codebase-readiness), a Claude Code specialist who helps engineering teams close the gap between having AI tools and actually using them well.
 
-If your assessment surfaces gaps you want to fix faster, the [AI Workflow Enablement Program](https://www.damiangalarza.com/services/ai-enablement/) is a structured engagement that works through exactly this.
+[See the full assessment details and what each dimension means →](https://www.damiangalarza.com/codebase-readiness/?utm_source=github&utm_medium=readme&utm_campaign=codebase-readiness)
+
+If your assessment surfaces gaps you want to fix faster, the [AI Workflow Enablement Program](https://www.damiangalarza.com/services/ai-enablement/?utm_source=github&utm_medium=readme&utm_campaign=codebase-readiness) is a structured engagement that works through exactly this.
