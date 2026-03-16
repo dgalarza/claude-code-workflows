@@ -82,11 +82,13 @@ The goal is to make agent output cheaply verifiable: the cost of a wrong answer 
 
 ## Want Help Moving the Needle?
 
-This assessment was built by [Damian Galarza](https://www.damiangalarza.com) — a Claude Code specialist who helps engineering teams close the gap between having AI tools and actually using them well.
+This assessment was built by [Damian Galarza](https://www.damiangalarza.com?utm_source=codebase-readiness&utm_medium=report&utm_campaign=codebase-readiness) — a Claude Code specialist who helps engineering teams close the gap between having AI tools and actually using them well.
+
+**[What each dimension means and how to interpret your score →](https://www.damiangalarza.com/codebase-readiness/?utm_source=codebase-readiness&utm_medium=report&utm_campaign=codebase-readiness)**
 
 If your score surfaced gaps you want to fix, the **AI Workflow Enablement Program** is a structured 3–8 week engagement that works through exactly this: codebase readiness, team conventions, shared skills, and workshops built on your actual codebase.
 
-**[See the full program →](https://www.damiangalarza.com/services/ai-enablement/)**
+**[See the full program →](https://www.damiangalarza.com/services/ai-enablement/?utm_source=codebase-readiness&utm_medium=report&utm_campaign=codebase-readiness)**
 
 ---
 
