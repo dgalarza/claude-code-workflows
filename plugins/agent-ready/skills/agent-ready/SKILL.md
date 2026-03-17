@@ -1,6 +1,6 @@
 ---
 name: agent-ready
-description: Make a codebase agent-ready by scaffolding CLAUDE.md, ARCHITECTURE.md, and docs/ structure. Analyzes codebase structure, generates documentation artifacts following progressive disclosure patterns, and audits existing artifacts for staleness and coherence. Use when improving a codebase for AI agent work.
+description: Make a codebase agent-ready by scaffolding AGENTS.md, ARCHITECTURE.md, and docs/ structure. Analyzes codebase structure, generates documentation artifacts following progressive disclosure patterns, and audits existing artifacts for staleness and coherence. Use when improving a codebase for AI agent work.
 ---
 
 # Agent-Ready
@@ -33,7 +33,7 @@ Determine which mode to run based on user intent:
 |-------------|------|-----------------|
 | Full documentation setup | **scaffold** | "make this agent-ready", "full setup", "scaffold docs" |
 | Generate architecture doc | **architecture** | "create ARCHITECTURE.md", "architecture doc", "codemap" |
-| Create/refactor CLAUDE.md | **claude-md** | "set up CLAUDE.md", "create CLAUDE.md", "refactor CLAUDE.md" |
+| Create/refactor AGENTS.md | **agents-md** | "set up AGENTS.md", "create AGENTS.md", "refactor AGENTS.md" |
 | Check existing artifacts | **audit** | "audit docs", "are my docs up to date", "check agent readiness" |
 
 If intent is ambiguous, ask the user which mode they want.
@@ -56,7 +56,7 @@ ls package.json Gemfile requirements*.txt pyproject.toml go.mod Cargo.toml build
 find . -maxdepth 3 -type d 2>/dev/null | grep -v node_modules | grep -v .git | grep -v vendor | grep -v ".bundle" | grep -v __pycache__ | sort | head -50
 
 # Existing documentation
-find . -maxdepth 2 -name "CLAUDE.md" -o -name "ARCHITECTURE.md" -o -name "README.md" -o -name "CONTRIBUTING.md" 2>/dev/null | grep -v node_modules | grep -v .git
+find . -maxdepth 2 -name "AGENTS.md" -o -name "CLAUDE.md" -o -name "ARCHITECTURE.md" -o -name "README.md" -o -name "CONTRIBUTING.md" 2>/dev/null | grep -v node_modules | grep -v .git
 ls -la docs/ doc/ 2>/dev/null
 find docs/ doc/ -name "*.md" 2>/dev/null | head -20
 
@@ -90,7 +90,8 @@ Present a clear inventory to the user:
 - docs/ directory structure
 - docs/README.md (documentation index)
 - ARCHITECTURE.md (codemap, invariants, boundaries)
-- CLAUDE.md (progressive disclosure entry point) [or refactor if exists]
+- AGENTS.md (progressive disclosure entry point)
+- CLAUDE.md (symlink to AGENTS.md for Claude Code compatibility)
 - docs/decisions/001-agent-ready-documentation.md (starter ADR)
 ```
 
@@ -109,9 +110,9 @@ Create `docs/README.md` as an index. Populate it based on what documentation exi
 
 Execute the **architecture** mode logic (see below) inline. Do not launch a separate agent.
 
-### Step 5: Generate CLAUDE.md
+### Step 5: Generate AGENTS.md
 
-Execute the **claude-md** mode logic (see below) inline. Do not launch a separate agent.
+Execute the **agents-md** mode logic (see below) inline. Do not launch a separate agent.
 
 ### Step 6: Create Starter ADR
 
@@ -128,26 +129,27 @@ This codebase is being prepared for AI agent work. Agents need structured, disco
 
 ## Decision
 Adopt a progressive disclosure documentation structure:
-- CLAUDE.md as a concise entry point (~100 lines) with markdown links to detailed docs
+- AGENTS.md as a concise entry point (~100 lines) with markdown links to detailed docs
+- CLAUDE.md as a symlink to AGENTS.md for Claude Code compatibility
 - ARCHITECTURE.md as a codemap with invariants and boundaries
 - docs/ directory for guides, references, and decision records
-- Nested CLAUDE.md files for major domain directories (as needed)
+- Nested AGENTS.md files for major domain directories (as needed)
 
 ## Consequences
 - All project knowledge must live in-repo (not in Slack, Confluence, or heads)
 - Documentation changes should be reviewed like code changes
-- CLAUDE.md must stay concise; bloat gets extracted to docs/
+- AGENTS.md must stay concise; bloat gets extracted to docs/
 - ADRs should be written for significant architectural decisions going forward
 
 ## Alternatives Considered
-- Single large CLAUDE.md -- rejected because it crowds agent context and rots quickly
+- Single large AGENTS.md -- rejected because it crowds agent context and rots quickly
 - No structured docs, rely on code comments -- rejected because agents need navigational aids beyond inline comments
 ```
 
 ### Step 7: Summary
 
 Present everything created with file paths, and suggest next steps:
-- Add domain-specific nested CLAUDE.md files for major directories
+- Add domain-specific nested AGENTS.md files for major directories
 - Start writing ADRs for future architectural decisions
 - Set up CI checks for documentation freshness
 - Run `agent-ready audit` periodically to check for drift
@@ -210,48 +212,50 @@ Show the draft to the user. Write to `ARCHITECTURE.md` in the project root on co
 
 ---
 
-## Mode: claude-md
+## Mode: agents-md
 
-Create a new CLAUDE.md or refactor an existing one for progressive disclosure.
+Create a new AGENTS.md or refactor an existing one for progressive disclosure. Also creates CLAUDE.md as a symlink for Claude Code compatibility.
 
 ### Step 1: Assess Current State
 
-Check if CLAUDE.md exists:
+Check if AGENTS.md or CLAUDE.md exists:
 
 ```bash
-find . -name "CLAUDE.md" 2>/dev/null | grep -v node_modules | grep -v .git
+find . -name "AGENTS.md" -o -name "CLAUDE.md" 2>/dev/null | grep -v node_modules | grep -v .git
 ```
 
-**If CLAUDE.md exists**, analyze it:
+**If AGENTS.md exists**, analyze it:
 ```bash
-wc -l CLAUDE.md
+wc -l AGENTS.md
 # Code block percentage
-echo "Code block lines: $(sed -n '/^```/,/^```/p' CLAUDE.md | wc -l)"
+echo "Code block lines: $(sed -n '/^```/,/^```/p' AGENTS.md | wc -l)"
 # Directive density
-echo "Directive keywords: $(grep -ci 'must\|never\|always\|avoid\|prefer' CLAUDE.md)"
+echo "Directive keywords: $(grep -ci 'must\|never\|always\|avoid\|prefer' AGENTS.md)"
 # Doc links
-echo "Doc links: $(grep -coE '\[.*\]\([^)]+\.md\)' CLAUDE.md)"
+echo "Doc links: $(grep -coE '\[.*\]\([^)]+\.md\)' AGENTS.md)"
 # Section count
-echo "Sections: $(grep -c '^##' CLAUDE.md)"
+echo "Sections: $(grep -c '^##' AGENTS.md)"
 ```
 
-Read the existing CLAUDE.md fully. Identify:
+Read the existing AGENTS.md fully. Identify:
 - Sections that are bloated (>30 lines on one topic)
 - Code examples that are too long (>10 lines)
-- Content that belongs in topic docs, not CLAUDE.md
+- Content that belongs in topic docs, not AGENTS.md
 - Missing directives (build, test, lint commands)
 - Missing links to supporting docs
 
-**If CLAUDE.md does not exist**, proceed to generation.
+**If CLAUDE.md exists but not AGENTS.md**, analyze CLAUDE.md the same way and plan to migrate it to AGENTS.md.
+
+**If neither exists**, proceed to generation.
 
 ### Step 2: Load References
 
 Read `references/progressive-disclosure.md` for Harness Engineering principles.
-Read `assets/claude-md-template.md` for the output template.
+Read `assets/claude-md-template.md` for the output template (note: template is called claude-md-template but generates AGENTS.md content).
 
 ### Step 3: Detect Project Signals
 
-Gather the information needed to populate CLAUDE.md:
+Gather the information needed to populate AGENTS.md:
 
 ```bash
 # Build/test/lint commands
@@ -269,8 +273,8 @@ ls ARCHITECTURE.md CONTRIBUTING.md 2>/dev/null
 
 ### Step 4: Generate or Refactor
 
-**New CLAUDE.md:**
-Using the template, generate a CLAUDE.md that:
+**New AGENTS.md:**
+Using the template, generate an AGENTS.md that:
 - Stays under ~100 lines
 - Leads with project identity and build/test/lint one-liners
 - Uses directives (must/never/always/avoid/prefer) for conventions
@@ -278,7 +282,7 @@ Using the template, generate a CLAUDE.md that:
 - Lists max 5 known gotchas
 - Avoids code examples longer than 5 lines
 
-**Refactoring existing CLAUDE.md:**
+**Refactoring existing AGENTS.md or migrating from CLAUDE.md:**
 1. Identify bloated sections
 2. Extract content to appropriate docs/ files (create them)
 3. Replace extracted content with markdown links
@@ -288,9 +292,38 @@ Using the template, generate a CLAUDE.md that:
    - Content moved to which files
    - New doc links added
 
-### Step 5: Present and Confirm
+### Step 5: Create Symlink
 
-Show the draft (or before/after diff for refactoring). Write on confirmation.
+After creating or updating AGENTS.md, create a symlink from CLAUDE.md to AGENTS.md for Claude Code compatibility:
+
+```bash
+# Remove CLAUDE.md if it exists and is a regular file (not already a symlink)
+if [ -f CLAUDE.md ] && [ ! -L CLAUDE.md ]; then
+  # If CLAUDE.md exists and AGENTS.md doesn't exist yet, this was already migrated in step 4
+  # Otherwise, back it up first
+  if [ ! -f AGENTS.md ]; then
+    echo "CLAUDE.md will be migrated to AGENTS.md"
+  else
+    echo "Backing up existing CLAUDE.md to CLAUDE.md.backup before creating symlink"
+    mv CLAUDE.md CLAUDE.md.backup
+  fi
+fi
+
+# Create the symlink
+ln -sf AGENTS.md CLAUDE.md
+
+# Verify the symlink
+ls -la CLAUDE.md
+```
+
+Inform the user that:
+- AGENTS.md is the canonical documentation file that works with any AI coding agent
+- CLAUDE.md is a symlink to AGENTS.md for backward compatibility with Claude Code
+- Both files now point to the same content
+
+### Step 6: Present and Confirm
+
+Show the draft (or before/after diff for refactoring). Write AGENTS.md and create the CLAUDE.md symlink on confirmation.
 
 ---
 
@@ -303,8 +336,13 @@ Check health of existing agent-readiness artifacts.
 Find all agent-readiness artifacts:
 
 ```bash
-# CLAUDE.md files (root and nested)
-find . -name "CLAUDE.md" 2>/dev/null | grep -v node_modules | grep -v .git
+# AGENTS.md and CLAUDE.md files (root and nested)
+find . -name "AGENTS.md" -o -name "CLAUDE.md" 2>/dev/null | grep -v node_modules | grep -v .git
+
+# Check if CLAUDE.md is a symlink to AGENTS.md
+if [ -L CLAUDE.md ]; then
+  echo "CLAUDE.md is a symlink to: $(readlink CLAUDE.md)"
+fi
 
 # ARCHITECTURE.md
 find . -name "ARCHITECTURE.md" 2>/dev/null | grep -v node_modules | grep -v .git
@@ -326,13 +364,16 @@ find . -path "*/decisions/*.md" -o -path "*/adr/*.md" -o -path "*/adrs/*.md" 2>/
 
 **Linked doc resolution:**
 ```bash
-if [ -f CLAUDE.md ]; then
-  grep -oE '\[.*\]\([^)]+\.md\)' CLAUDE.md 2>/dev/null | grep -oE '\([^)]+\)' | tr -d '()' | while read -r ref; do
-    if [ ! -f "$ref" ]; then
-      echo "BROKEN: $ref not found"
-    fi
-  done
-fi
+# Check both AGENTS.md and CLAUDE.md for broken links
+for doc in AGENTS.md CLAUDE.md; do
+  if [ -f "$doc" ]; then
+    grep -oE '\[.*\]\([^)]+\.md\)' "$doc" 2>/dev/null | grep -oE '\([^)]+\)' | tr -d '()' | while read -r ref; do
+      if [ ! -f "$ref" ]; then
+        echo "BROKEN in $doc: $ref not found"
+      fi
+    done
+  fi
+done
 ```
 
 **ADR recency:**
@@ -345,45 +386,63 @@ find . -path "*/decisions/*.md" -o -path "*/adr/*.md" 2>/dev/null | grep -v node
 Run the coherence analysis from the codebase-readiness documentation dimension:
 
 ```bash
-# CLAUDE.md content type analysis
-if [ -f CLAUDE.md ]; then
-  echo "Total lines: $(wc -l < CLAUDE.md)"
-  echo "Code block lines: $(sed -n '/^```/,/^```/p' CLAUDE.md | wc -l)"
-  echo "Directive keywords (must/never/always/avoid/prefer): $(grep -ci 'must\|never\|always\|avoid\|prefer' CLAUDE.md)"
-  TOTAL=$(wc -l < CLAUDE.md)
-  CODE=$(sed -n '/^```/,/^```/p' CLAUDE.md | wc -l)
+# AGENTS.md content type analysis (use AGENTS.md as primary, fall back to CLAUDE.md if it's not a symlink)
+DOC="AGENTS.md"
+if [ ! -f "$DOC" ] && [ -f "CLAUDE.md" ] && [ ! -L "CLAUDE.md" ]; then
+  DOC="CLAUDE.md"
+fi
+
+if [ -f "$DOC" ]; then
+  echo "Analyzing: $DOC"
+  echo "Total lines: $(wc -l < "$DOC")"
+  echo "Code block lines: $(sed -n '/^```/,/^```/p' "$DOC" | wc -l)"
+  echo "Directive keywords (must/never/always/avoid/prefer): $(grep -ci 'must\|never\|always\|avoid\|prefer' "$DOC")"
+  TOTAL=$(wc -l < "$DOC")
+  CODE=$(sed -n '/^```/,/^```/p' "$DOC" | wc -l)
   if [ "$TOTAL" -gt 0 ]; then
     PCT=$(( CODE * 100 / TOTAL ))
     echo "Code example percentage: ${PCT}%"
   fi
 fi
 
+# Check symlink status
+if [ -L CLAUDE.md ]; then
+  echo "✓ CLAUDE.md is correctly symlinked to $(readlink CLAUDE.md)"
+elif [ -f CLAUDE.md ] && [ -f AGENTS.md ]; then
+  echo "⚠ WARNING: Both CLAUDE.md and AGENTS.md exist as separate files. CLAUDE.md should be a symlink to AGENTS.md"
+fi
+
 # Topic overlap
+DOC="AGENTS.md"
+if [ ! -f "$DOC" ] && [ -f "CLAUDE.md" ] && [ ! -L "CLAUDE.md" ]; then
+  DOC="CLAUDE.md"
+fi
+
 for doc in $(find docs/ doc/ -name "*.md" -maxdepth 2 2>/dev/null | grep -v node_modules); do
   TOPIC=$(basename "$doc" .md | tr '[:upper:]' '[:lower:]' | sed 's/_/ /g')
-  if grep -qi "$TOPIC" CLAUDE.md 2>/dev/null; then
-    CLAUDE_LINES=$(grep -ci "$TOPIC" CLAUDE.md 2>/dev/null)
+  if [ -f "$DOC" ] && grep -qi "$TOPIC" "$DOC" 2>/dev/null; then
+    DOC_MENTIONS=$(grep -ci "$TOPIC" "$DOC" 2>/dev/null)
     DOC_LINES=$(wc -l < "$doc" 2>/dev/null | tr -d ' ')
-    echo "Overlap: '$TOPIC' -- CLAUDE.md mentions ${CLAUDE_LINES}x, dedicated doc is ${DOC_LINES} lines"
+    echo "Overlap: '$TOPIC' -- $DOC mentions ${DOC_MENTIONS}x, dedicated doc is ${DOC_LINES} lines"
   fi
 done
 
 # Broken references
-if [ -f CLAUDE.md ]; then
-  grep -oE '\[.*\]\(\./[^)]+\)' CLAUDE.md 2>/dev/null | grep -oE '\./[^)]+' | while read -r ref; do
+if [ -f "$DOC" ]; then
+  grep -oE '\[.*\]\(\./[^)]+\)' "$DOC" 2>/dev/null | grep -oE '\./[^)]+' | while read -r ref; do
     if [ ! -f "$ref" ]; then
-      echo "BROKEN link: $ref not found"
+      echo "BROKEN link in $DOC: $ref not found"
     fi
   done
 fi
 
 # Source of truth declarations
-grep -rn "source of truth\|authoritative\|canonical\|definitive" CLAUDE.md docs/ 2>/dev/null | grep -v node_modules | grep -v .git
+find AGENTS.md CLAUDE.md docs/ -type f 2>/dev/null | xargs grep -rn "source of truth\|authoritative\|canonical\|definitive" 2>/dev/null | grep -v node_modules | grep -v .git
 ```
 
 ### Step 4: Coverage Checks
 
-- **Domain directories without nested CLAUDE.md:** Find major source directories that could benefit from domain-specific CLAUDE.md files
+- **Domain directories without nested AGENTS.md:** Find major source directories that could benefit from domain-specific AGENTS.md files
 - **Unlisted directories in ARCHITECTURE.md:** Find top-level source directories not mentioned in the codemap
 - **Missing docs/ categories:** Check if guides/, references/, decisions/ exist and have content
 
@@ -397,25 +456,27 @@ Present an actionable report:
 ### Artifact Inventory
 | Artifact | Status | Location | Lines |
 |----------|--------|----------|-------|
-| CLAUDE.md (root) | [Present/Missing] | ./CLAUDE.md | [N] |
+| AGENTS.md (root) | [Present/Missing] | ./AGENTS.md | [N] |
+| CLAUDE.md (symlink) | [Correct symlink/Regular file/Missing] | ./CLAUDE.md | — |
 | ARCHITECTURE.md | [Present/Missing] | ./ARCHITECTURE.md | [N] |
 | docs/ index | [Present/Missing] | ./docs/README.md | [N] |
 | ADRs | [N found] | ./docs/decisions/ | — |
-| Nested CLAUDE.md | [N found] | [locations] | — |
+| Nested AGENTS.md | [N found] | [locations] | — |
 
 ### Staleness Issues
 - [List stale items with specific file paths and what's wrong]
 
 ### Coherence Issues
-- CLAUDE.md line count: [N] [OK if <150 / WARNING if >150 / CRITICAL if >300]
+- Primary doc (AGENTS.md or CLAUDE.md) line count: [N] [OK if <150 / WARNING if >150 / CRITICAL if >300]
 - Code example %: [N]% [OK if <20% / WARNING if >20%]
 - Directive density: [N] directives in [M] lines
+- CLAUDE.md symlink status: [Correct/Needs fix]
 - Topic overlaps: [list]
 - Broken references: [list]
 - Cross-document conflicts: [list]
 
 ### Coverage Gaps
-- Directories without CLAUDE.md: [list]
+- Directories without AGENTS.md: [list]
 - Directories not in ARCHITECTURE.md: [list]
 - Missing docs/ categories: [list]
 
@@ -427,6 +488,7 @@ Present an actionable report:
 
 After presenting the report, offer to auto-fix issues:
 - Broken doc links: remove or create the missing file
-- CLAUDE.md bloat: offer to run claude-md mode to refactor
+- Primary doc bloat: offer to run agents-md mode to refactor
 - Missing ARCHITECTURE.md entries: offer to run architecture mode to regenerate
-- Missing nested CLAUDE.md: offer to create starter files for uncovered domains
+- Missing nested AGENTS.md: offer to create starter files for uncovered domains
+- CLAUDE.md not a symlink: offer to convert it to a symlink to AGENTS.md

@@ -1,7 +1,7 @@
 {
   "name": "agent-ready",
-  "version": "1.0.0",
-  "description": "Make a codebase agent-ready by scaffolding CLAUDE.md, ARCHITECTURE.md, and docs/ structure following progressive disclosure patterns",
+  "version": "1.1.0",
+  "description": "Make a codebase agent-ready by scaffolding AGENTS.md, ARCHITECTURE.md, and docs/ structure following progressive disclosure patterns. Creates CLAUDE.md as a symlink for Claude Code compatibility.",
   "author": {
     "name": "Damian Galarza",
     "url": "https://www.damiangalarza.com"
@@ -13,6 +13,7 @@
     "agents",
     "documentation",
     "architecture",
+    "agents-md",
     "claude-md",
     "progressive-disclosure",
     "scaffolding"

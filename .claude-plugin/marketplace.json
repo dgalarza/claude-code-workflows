@@ -56,8 +56,8 @@
     {
       "name": "agent-ready",
       "source": "./plugins/agent-ready",
-      "description": "Make a codebase agent-ready by scaffolding CLAUDE.md, ARCHITECTURE.md, and docs/ structure following progressive disclosure patterns",
-      "version": "1.0.0"
+      "description": "Make a codebase agent-ready by scaffolding AGENTS.md, ARCHITECTURE.md, and docs/ structure following progressive disclosure patterns. Creates CLAUDE.md as a symlink for Claude Code compatibility.",
+      "version": "1.1.0"
     }
   ]
 }

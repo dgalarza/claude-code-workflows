@@ -1,6 +1,6 @@
 # agent-ready
 
-Make a codebase agent-ready by scaffolding CLAUDE.md, ARCHITECTURE.md, and docs/ structure following progressive disclosure patterns.
+Make a codebase agent-ready by scaffolding AGENTS.md, ARCHITECTURE.md, and docs/ structure following progressive disclosure patterns.
 
 This is the **remediation companion** to [codebase-readiness](../codebase-readiness/). While codebase-readiness *scores* how agent-ready your codebase is, agent-ready *fixes* the gaps by generating the documentation and structural artifacts that make a codebase legible to AI agents.
 
@@ -15,17 +15,26 @@ This is the **remediation companion** to [codebase-readiness](../codebase-readin
 
 | Mode | What It Does | Example Prompt |
 |------|-------------|----------------|
-| **scaffold** | Full documentation setup: docs/ structure, ARCHITECTURE.md, CLAUDE.md, starter ADR | "Make this codebase agent-ready" |
+| **scaffold** | Full documentation setup: docs/ structure, ARCHITECTURE.md, AGENTS.md, CLAUDE.md symlink, starter ADR | "Make this codebase agent-ready" |
 | **architecture** | Generate ARCHITECTURE.md from actual codebase analysis | "Create an ARCHITECTURE.md" |
-| **claude-md** | Create or refactor CLAUDE.md for progressive disclosure | "Set up CLAUDE.md" |
+| **agents-md** | Create or refactor AGENTS.md for progressive disclosure, create CLAUDE.md symlink | "Set up AGENTS.md" |
 | **audit** | Check existing agent-readiness artifacts for staleness and coherence | "Are my agent docs up to date?" |
 
 ## Principles
 
 Built on two key sources:
 
-- **Harness Engineering (OpenAI)** -- repository as system of record, progressive disclosure, CLAUDE.md as table of contents not encyclopedia, enforce invariants not implementations
+- **Harness Engineering (OpenAI)** -- repository as system of record, progressive disclosure, AGENTS.md as table of contents not encyclopedia, enforce invariants not implementations
 - **matklad's ARCHITECTURE.md** -- bird's-eye codemap, name important modules, call out invariants (especially absences), point out boundaries
+
+## AGENTS.md vs CLAUDE.md
+
+This plugin generates **AGENTS.md** as the primary documentation file, which works with any AI coding agent that supports the AGENTS.md convention. For backward compatibility with Claude Code, it also creates **CLAUDE.md as a symlink** to AGENTS.md.
+
+This approach ensures:
+- Your documentation works with any AI coding agent
+- Claude Code users have seamless compatibility
+- You maintain a single source of truth (AGENTS.md)
 
 ## Integration with codebase-readiness
 

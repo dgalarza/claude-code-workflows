@@ -1,11 +1,13 @@
-# CLAUDE.md Template
+# AGENTS.md Template
 
-Use this template when generating a new CLAUDE.md. Fill in sections based on actual codebase analysis. Remove sections that do not apply. Target ~100 lines.
+Use this template when generating a new AGENTS.md. Fill in sections based on actual codebase analysis. Remove sections that do not apply. Target ~100 lines.
+
+Note: This file will be created as AGENTS.md, and CLAUDE.md will be a symlink to it for Claude Code compatibility.
 
 ---
 
 ```markdown
-# CLAUDE.md
+# AGENTS.md
 
 ## Project
 [Project name] -- [One-two sentence description of what it does and why it exists]
@@ -60,9 +62,11 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full codemap.
 
 **Linked docs:** Use markdown links (`[path](path)`) to point to docs that exist or will be created. Each link is a promise that the file contains useful detail the agent can read on demand. Do NOT use `@file` syntax -- that eagerly loads files into context on every conversation, defeating progressive disclosure.
 
+**AGENTS.md vs CLAUDE.md:** AGENTS.md is the canonical file that works with any AI coding agent. CLAUDE.md should be a symlink to AGENTS.md for backward compatibility with Claude Code.
+
 **What NOT to include:**
 - Code examples longer than 5 lines (put in a guide)
 - API inventories or module lists (put in ARCHITECTURE.md)
 - Setup tutorials (put in docs/guides/setup.md)
 - Historical context or decision rationale (put in ADRs)
-- Anything that changes frequently (will rot in CLAUDE.md)
+- Anything that changes frequently (will rot in AGENTS.md)
