@@ -44,6 +44,17 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full codemap.
 - Deployment: [docs/guides/deployment.md](docs/guides/deployment.md)
 - Adding a new feature: [docs/guides/new-feature.md](docs/guides/new-feature.md)
 
+## Architecture Decision Records
+When making significant architectural decisions, create an ADR in [docs/decisions/](docs/decisions/).
+
+Write an ADR when:
+- Choosing between competing architectural approaches
+- Adopting or rejecting a major technology or framework
+- Establishing cross-cutting patterns (auth, logging, error handling)
+- Making trade-offs that affect system design
+
+Use the [ADR template](docs/decisions/) to document context, the decision, consequences, and alternatives considered.
+
 ## Known Gotchas
 - [Gotcha 1 -- e.g., "The `users` table has a trigger that auto-updates `updated_at`; do not set it manually"]
 - [Gotcha 2 -- e.g., "Environment variable X must be set even in test; use the .env.test file"]

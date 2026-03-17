@@ -265,6 +265,9 @@ ls .github/workflows/*.yml 2>/dev/null
 # Existing docs to link
 find docs/ doc/ -name "*.md" 2>/dev/null | head -20
 ls ARCHITECTURE.md CONTRIBUTING.md 2>/dev/null
+
+# ADRs (check if decision records exist)
+find . -path "*/decisions/*.md" -o -path "*/adr/*.md" -o -path "*/adrs/*.md" 2>/dev/null | grep -v node_modules | grep -v .git | head -5
 ```
 
 ### Step 4: Generate or Refactor
@@ -275,6 +278,7 @@ Using the template, generate a CLAUDE.md that:
 - Leads with project identity and build/test/lint one-liners
 - Uses directives (must/never/always/avoid/prefer) for conventions
 - Markdown links to existing docs or docs that should be created
+- Includes ADR section if docs/decisions/ or other ADR directories exist
 - Lists max 5 known gotchas
 - Avoids code examples longer than 5 lines
 
