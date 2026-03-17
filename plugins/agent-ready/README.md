@@ -6,8 +6,10 @@ This is the **remediation companion** to [codebase-readiness](../codebase-readin
 
 ## Install
 
-```
-/plugin marketplace add dgalarza/claude-code-workflows
+```bash
+npx skills add dgalarza/claude-code-workflows --skill "agent-ready"
+
+# Or via Claude marketplace
 /plugin install agent-ready@dgalarza-workflows
 ```
 
