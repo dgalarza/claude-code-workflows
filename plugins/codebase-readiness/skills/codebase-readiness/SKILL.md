@@ -1,6 +1,6 @@
 ---
 name: codebase-readiness
-description: This skill should be used to run an Agent-Ready Codebase Assessment — scoring a codebase across 8 dimensions with parallel agents, producing a weighted score (0-100), band rating, and improvement roadmap. Supports Ruby, Python, TypeScript, JavaScript, Go, Java, and Scala.
+description: This skill should be used to run an Agent-Ready Codebase Assessment — scoring a codebase across 8 dimensions with parallel agents, producing a weighted score (0-100), band rating, and improvement roadmap. Supports Ruby, Python, TypeScript, JavaScript, Go, Java, Scala, and Rust.
 ---
 
 # Codebase Readiness Assessment
@@ -43,7 +43,7 @@ After reviewing the output, format a **Codebase Snapshot**:
 
 Determine `PRIMARY_LANGUAGE` and `LANGUAGE_TIER` from the snapshot. These values drive which language reference file to load.
 
-**Supported languages:** ruby, python, typescript, javascript, go, java, scala.
+**Supported languages:** ruby, python, typescript, javascript, go, java, scala, rust.
 
 If the primary language is not in the supported list, inform the user which languages are supported. Offer to proceed with the closest supported language file if the user agrees, or assess dimensions generically without language-specific criteria.
 

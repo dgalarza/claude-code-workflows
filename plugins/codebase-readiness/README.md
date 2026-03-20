@@ -35,7 +35,7 @@ The assessment spawns 4 parallel agents, scores all 8 dimensions using language-
 
 ## What Gets Scored
 
-8 dimensions, weighted by language (dynamic languages like Ruby and Python weight tests higher; static languages like TypeScript and Go weight type safety higher):
+8 dimensions, weighted by language (dynamic languages like Ruby and Python weight tests higher; static languages like TypeScript, Go, and Rust weight type safety higher):
 
 | Dimension                 | What it measures                                                        |
 |---------------------------|-------------------------------------------------------------------------|
