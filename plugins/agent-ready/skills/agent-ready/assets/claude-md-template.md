@@ -28,6 +28,7 @@ Note: This file will be created as AGENTS.md, and CLAUDE.md will be a symlink to
 
 ## Architecture
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full codemap.
+- [Domain Knowledge](docs/DOMAIN.md) -- business concepts, terminology, and workflows
 
 - [Key architectural fact 1 -- e.g., "Monorepo with packages/ for shared code and apps/ for deployables"]
 - [Key architectural fact 2 -- e.g., "Domain logic lives in src/domains/, each domain is self-contained"]
