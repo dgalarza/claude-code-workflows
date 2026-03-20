@@ -7,6 +7,7 @@ Recommended documentation layout for agent-ready codebases. Adapt based on proje
 ```
 docs/
 ├── README.md                          # Documentation index -- start here
+├── DOMAIN.md                          # Business domain knowledge, terminology, workflows
 ├── architecture/                      # Design documents
 │   ├── [feature-name].md              # Design doc for a specific feature or system
 │   └── ...
@@ -36,6 +37,9 @@ Index of project documentation. Start here to find what you need.
 
 ## Architecture
 - [ARCHITECTURE.md](../ARCHITECTURE.md) -- System overview, codemap, invariants, and boundaries
+
+## Domain Knowledge
+- [DOMAIN.md](./DOMAIN.md) -- Business concepts, terminology, and workflows the code implements
 
 ## Design Documents
 - [docs/architecture/[name].md](./architecture/[name].md) -- [Brief description]

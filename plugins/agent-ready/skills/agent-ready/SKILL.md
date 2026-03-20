@@ -90,6 +90,7 @@ Present a clear inventory to the user:
 - docs/ directory structure
 - docs/README.md (documentation index)
 - ARCHITECTURE.md (codemap, invariants, boundaries)
+- docs/DOMAIN.md (business domain knowledge, terminology, workflows)
 - AGENTS.md (progressive disclosure entry point)
 - CLAUDE.md (symlink to AGENTS.md for Claude Code compatibility)
 - docs/decisions/001-agent-ready-documentation.md (starter ADR)
@@ -110,11 +111,38 @@ Create `docs/README.md` as an index. Populate it based on what documentation exi
 
 Execute the **architecture** mode logic (see below) inline. Do not launch a separate agent.
 
-### Step 5: Generate AGENTS.md
+### Step 5: Generate docs/DOMAIN.md
+
+Read `assets/domain-knowledge-template.md` for the template.
+
+Seed the template by scanning the codebase:
+
+```bash
+# Find model/entity/type names
+find . -type f \( -name "*.rb" -o -name "*.py" -o -name "*.ts" -o -name "*.js" -o -name "*.go" -o -name "*.java" \) 2>/dev/null \
+  | grep -v node_modules | grep -v .git | grep -v vendor \
+  | xargs grep -lE "class |model |entity |type |interface |struct " 2>/dev/null | head -20
+
+# Look for model directories
+find . -type d \( -name "models" -o -name "entities" -o -name "types" -o -name "schemas" -o -name "domain" \) 2>/dev/null \
+  | grep -v node_modules | grep -v .git | grep -v vendor
+
+# Read README for business context
+cat README.md 2>/dev/null | head -80
+```
+
+Using the discovered model/entity names and README context:
+1. Populate the glossary with discovered terms, even if definitions are thin -- mark them with `<!-- TODO: needs domain expert review -->`
+2. Sketch domain relationships based on model associations or naming patterns
+3. Leave workflow and regulatory sections as template placeholders if not enough context exists
+
+Write the result to `docs/DOMAIN.md`. Note in the output that this file should be reviewed and filled in by domain experts on the team -- it is seeded from code analysis and will have gaps.
+
+### Step 6: Generate AGENTS.md
 
 Execute the **agents-md** mode logic (see below) inline. Do not launch a separate agent.
 
-### Step 6: Create Starter ADR
+### Step 7: Create Starter ADR
 
 Create `docs/decisions/001-agent-ready-documentation.md`:
 
@@ -132,6 +160,7 @@ Adopt a progressive disclosure documentation structure:
 - AGENTS.md as a concise entry point (~100 lines) with markdown links to detailed docs
 - CLAUDE.md as a symlink to AGENTS.md for Claude Code compatibility
 - ARCHITECTURE.md as a codemap with invariants and boundaries
+- docs/DOMAIN.md for business domain knowledge, terminology, and workflows
 - docs/ directory for guides, references, and decision records
 - Nested AGENTS.md files for major domain directories (as needed)
 
@@ -146,9 +175,10 @@ Adopt a progressive disclosure documentation structure:
 - No structured docs, rely on code comments -- rejected because agents need navigational aids beyond inline comments
 ```
 
-### Step 7: Summary
+### Step 8: Summary
 
 Present everything created with file paths, and suggest next steps:
+- Review `docs/DOMAIN.md` and add business domain definitions -- this is the most valuable file for human and AI onboarding
 - Add domain-specific nested AGENTS.md files for major directories
 - Start writing ADRs for future architectural decisions
 - Set up CI checks for documentation freshness
@@ -446,6 +476,7 @@ find AGENTS.md CLAUDE.md docs/ -type f 2>/dev/null | xargs grep -rn "source of t
 
 ### Step 4: Coverage Checks
 
+- **Domain knowledge documentation:** Check if `docs/DOMAIN.md` exists. If it exists, check whether it is populated (has content beyond the template placeholders) or is still a stub. If missing, flag it as a coverage gap with the recommendation: "Create docs/DOMAIN.md to document business domain concepts -- this is the most valuable file for human and AI onboarding."
 - **Domain directories without nested AGENTS.md:** Find major source directories that could benefit from domain-specific AGENTS.md files
 - **Unlisted directories in ARCHITECTURE.md:** Find top-level source directories not mentioned in the codemap
 - **Missing docs/ categories:** Check if guides/, references/, decisions/ exist and have content
@@ -463,6 +494,7 @@ Present an actionable report:
 | AGENTS.md (root) | [Present/Missing] | ./AGENTS.md | [N] |
 | CLAUDE.md (symlink) | [Correct symlink/Regular file/Missing] | ./CLAUDE.md | — |
 | ARCHITECTURE.md | [Present/Missing] | ./ARCHITECTURE.md | [N] |
+| DOMAIN.md | [Present/Stub/Missing] | ./docs/DOMAIN.md | [N] |
 | docs/ index | [Present/Missing] | ./docs/README.md | [N] |
 | ADRs | [N found] | ./docs/decisions/ | — |
 | Nested AGENTS.md | [N found] | [locations] | — |
