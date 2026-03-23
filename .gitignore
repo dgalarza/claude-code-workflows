@@ -1,1 +1,8 @@
+# Claude Code — local overrides (any nesting level)
+CLAUDE.local.md
+
+# Claude Code — local settings and credentials
 .claude/**/*.local.*
+
+# Claude Code — worktree state
+.claude/worktrees
