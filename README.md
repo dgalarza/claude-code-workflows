@@ -2,6 +2,8 @@
 
 A collection of skills, agents, and workflows for Claude Code.
 
+If this helped you, give it a star — it helps others find it.
+
 > **[YouTube](https://youtube.com/@damian.galarza)** | **[Newsletter](https://www.damiangalarza.com/newsletter?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)** | **[Blog](https://www.damiangalarza.com?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)**
 
 ---
