@@ -29,7 +29,7 @@ find . -maxdepth 4 -type d \( -name "domain" -o -name "domains" -o -name "bounde
 find . -type d \( -name "services" -o -name "domain" -o -name "use_cases" -o -name "interactors" \) 2>/dev/null | grep -v node_modules | grep -v .git
 
 # God objects / large shared files
-find . -name "*.rb" -o -name "*.ts" -o -name "*.tsx" -o -name "*.py" -o -name "*.go" -o -name "*.js" -o -name "*.scala" -o -name "*.java" 2>/dev/null \
+find . -name "*.rb" -o -name "*.ts" -o -name "*.tsx" -o -name "*.py" -o -name "*.go" -o -name "*.js" -o -name "*.scala" -o -name "*.java" -o -name "*.php" 2>/dev/null \
   | grep -v node_modules | grep -v .git | grep -v vendor | grep -v spec | grep -v test \
   | xargs wc -l 2>/dev/null | sort -rn | head -15
 
@@ -37,7 +37,7 @@ find . -name "*.rb" -o -name "*.ts" -o -name "*.tsx" -o -name "*.py" -o -name "*
 find . -name "CLAUDE.md" 2>/dev/null | grep -v node_modules | grep -v .git
 
 # Dependency management files
-ls package.json Gemfile requirements*.txt pyproject.toml go.mod 2>/dev/null
+ls package.json Gemfile requirements*.txt pyproject.toml go.mod composer.json 2>/dev/null
 ```
 
 ### Domain Grouping Consistency Check

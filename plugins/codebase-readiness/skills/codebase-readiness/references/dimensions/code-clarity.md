@@ -17,22 +17,22 @@ Code clarity determines whether an agent can understand and modify individual fi
 
 ```bash
 # Top 20 largest source files (across common languages)
-find . -name "*.rb" -o -name "*.ts" -o -name "*.tsx" -o -name "*.py" -o -name "*.go" -o -name "*.js" -o -name "*.scala" -o -name "*.java" 2>/dev/null \
+find . -name "*.rb" -o -name "*.ts" -o -name "*.tsx" -o -name "*.py" -o -name "*.go" -o -name "*.js" -o -name "*.scala" -o -name "*.java" -o -name "*.php" 2>/dev/null \
   | grep -v node_modules | grep -v .git | grep -v vendor | grep -v spec | grep -v test \
   | xargs wc -l 2>/dev/null | sort -rn | head -21
 
 # Average file size
-find . -name "*.rb" -o -name "*.ts" -o -name "*.tsx" -o -name "*.py" -o -name "*.go" -o -name "*.js" -o -name "*.scala" -o -name "*.java" 2>/dev/null \
+find . -name "*.rb" -o -name "*.ts" -o -name "*.tsx" -o -name "*.py" -o -name "*.go" -o -name "*.js" -o -name "*.scala" -o -name "*.java" -o -name "*.php" 2>/dev/null \
   | grep -v node_modules | grep -v .git | grep -v vendor | grep -v spec | grep -v test \
   | xargs wc -l 2>/dev/null | awk '{sum+=$1; count++} END {if(count>1) print "Average:", sum/(count-1), "lines"}'
 
 # Files over 500 lines
-find . -name "*.rb" -o -name "*.ts" -o -name "*.tsx" -o -name "*.py" -o -name "*.go" -o -name "*.js" -o -name "*.scala" -o -name "*.java" 2>/dev/null \
+find . -name "*.rb" -o -name "*.ts" -o -name "*.tsx" -o -name "*.py" -o -name "*.go" -o -name "*.js" -o -name "*.scala" -o -name "*.java" -o -name "*.php" 2>/dev/null \
   | grep -v node_modules | grep -v .git | grep -v vendor | grep -v spec | grep -v test \
   | xargs wc -l 2>/dev/null | awk '$1 > 500' | sort -rn | head -10
 
 # Files over 1000 lines (god files)
-find . -name "*.rb" -o -name "*.ts" -o -name "*.tsx" -o -name "*.py" -o -name "*.go" -o -name "*.js" -o -name "*.scala" -o -name "*.java" 2>/dev/null \
+find . -name "*.rb" -o -name "*.ts" -o -name "*.tsx" -o -name "*.py" -o -name "*.go" -o -name "*.js" -o -name "*.scala" -o -name "*.java" -o -name "*.php" 2>/dev/null \
   | grep -v node_modules | grep -v .git | grep -v vendor | grep -v spec | grep -v test \
   | xargs wc -l 2>/dev/null | awk '$1 > 1000' | sort -rn | head -10
 

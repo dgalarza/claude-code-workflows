@@ -11,7 +11,7 @@ basename "$(pwd)"
 echo ""
 echo "=== LANGUAGE/FRAMEWORK DETECTION ==="
 manifests=""
-for f in package.json Gemfile pyproject.toml go.mod requirements.txt pom.xml build.sbt Cargo.toml; do
+for f in package.json Gemfile pyproject.toml go.mod requirements.txt pom.xml build.sbt Cargo.toml composer.json; do
   [ -f "$f" ] && manifests="$manifests $f"
 done
 if [ -n "$manifests" ]; then
@@ -25,6 +25,7 @@ head -5 pyproject.toml 2>/dev/null || true
 head -3 go.mod 2>/dev/null || true
 head -5 build.sbt 2>/dev/null || true
 head -5 Cargo.toml 2>/dev/null || true
+grep '"name"\|"description"\|laravel' composer.json 2>/dev/null | head -5 || true
 
 echo ""
 echo "=== SIZE METRICS ==="
@@ -33,14 +34,14 @@ git rev-list --count HEAD 2>/dev/null || echo "Not a git repo or no commits"
 echo -n "Contributors: "
 git shortlog -sn HEAD 2>/dev/null | wc -l
 echo -n "Source files: "
-find . -name "*.rb" -o -name "*.ts" -o -name "*.tsx" -o -name "*.py" -o -name "*.go" -o -name "*.js" -o -name "*.scala" -o -name "*.java" -o -name "*.rs" 2>/dev/null \
+find . -name "*.rb" -o -name "*.ts" -o -name "*.tsx" -o -name "*.py" -o -name "*.go" -o -name "*.js" -o -name "*.scala" -o -name "*.java" -o -name "*.rs" -o -name "*.php" 2>/dev/null \
   | grep -v node_modules | grep -v .git | grep -v vendor | grep -v target | grep -v spec | grep -v test | wc -l
 
 echo ""
 echo "=== TEST FILES ==="
 echo -n "Test file count: "
-find . -name "*_spec*" -o -name "*_test*" -o -name "*.spec.*" -o -name "*.test.*" -o -name "test_*.py" -o -name "*Spec.scala" -o -name "*Test.scala" -o -name "*Suite.scala" -o -path "*/tests/*.rs" 2>/dev/null \
-  | grep -v node_modules | grep -v .git | grep -v target | wc -l
+find . -name "*_spec*" -o -name "*_test*" -o -name "*.spec.*" -o -name "*.test.*" -o -name "test_*.py" -o -name "*Spec.scala" -o -name "*Test.scala" -o -name "*Suite.scala" -o -path "*/tests/*.rs" -o -name "*Test.php" -o -path "*/tests/*.php" 2>/dev/null \
+  | grep -v node_modules | grep -v .git | grep -v target | grep -v vendor | wc -l
 
 echo ""
 echo "=== CI/CD ==="
@@ -63,7 +64,7 @@ find . -name "CLAUDE.md" -exec wc -l {} \; 2>/dev/null | grep -v node_modules ||
 echo ""
 echo "=== LINTING/FORMATTING ==="
 linters=""
-for f in .eslintrc* .rubocop.yml .flake8 ruff.toml .golangci.yml .prettierrc* .scalafmt.conf .scalafix.conf clippy.toml rustfmt.toml; do
+for f in .eslintrc* .rubocop.yml .flake8 ruff.toml .golangci.yml .prettierrc* .scalafmt.conf .scalafix.conf clippy.toml rustfmt.toml phpstan.neon phpstan.neon.dist pint.json .php-cs-fixer.php; do
   # Use compgen to handle globs that don't match
   compgen -G "$f" > /dev/null 2>&1 && linters="$linters $f"
 done

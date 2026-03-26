@@ -25,13 +25,13 @@ Use the weight table matching the codebase's LANGUAGE_TIER from Phase 3. Fill in
 
 ## Language Context: [Primary Language]
 
-> **For dynamically-typed languages (Ruby, Python, JavaScript) only — omit for TypeScript/Go/Java/Scala.**
+> **For dynamically-typed languages (Ruby, Python, JavaScript, PHP) only — omit for TypeScript/Go/Java/Scala.**
 
 This codebase is written in **[Language]**, a dynamically-typed language. The scoring framework adapts for this:
 
 | Signal | [Language] equivalent |
 |--------|----------------------|
-| Type Safety (10%) | Contract systems ([dry-rb/Pydantic/etc.]), validated interfaces, Result pattern |
+| Type Safety (10%) | Contract systems ([dry-rb/Pydantic/PHPStan+Larastan/etc.]), validated interfaces, Form Requests, Result pattern |
 | Test Foundation (25%) | [Language]'s primary safety mechanism — comprehensive tests catch what type checkers catch in TypeScript |
 
 A **Type Safety score of 30-50 paired with a Test Foundation score of 75+** is a healthy Ruby/Python codebase — not a gap. The combined 35% weight (10% + 25%) provides the same safety signal as TypeScript's Type Safety at 20%.
