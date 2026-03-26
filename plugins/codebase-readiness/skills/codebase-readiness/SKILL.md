@@ -1,6 +1,6 @@
 ---
 name: codebase-readiness
-description: This skill should be used to run an Agent-Ready Codebase Assessment — scoring a codebase across 8 dimensions with parallel agents, producing a weighted score (0-100), band rating, and improvement roadmap. Supports Ruby, Python, TypeScript, JavaScript, Go, Java, Scala, and Rust.
+description: This skill should be used to run an Agent-Ready Codebase Assessment — scoring a codebase across 8 dimensions with parallel agents, producing a weighted score (0-100), band rating, and improvement roadmap. Supports Ruby, Python, PHP, TypeScript, JavaScript, Go, Java, Scala, and Rust.
 ---
 
 # Codebase Readiness Assessment
@@ -29,7 +29,7 @@ After reviewing the output, format a **Codebase Snapshot**:
 - **Primary language/framework**: [detected]
 - **Language tier**: [statically-typed | dynamically-typed | gradually-typed]
   - Statically-typed: TypeScript, Go, Java, Scala, Rust, C#, Kotlin
-  - Dynamically-typed: Ruby, Python (unannotated), JavaScript/Node.js
+  - Dynamically-typed: Ruby, Python (unannotated), JavaScript/Node.js, PHP
   - Gradually-typed: Python with mypy/Pydantic, TypeScript with strict:false
 - **Commit count**: [X]
 - **Contributors**: [X]
@@ -43,7 +43,7 @@ After reviewing the output, format a **Codebase Snapshot**:
 
 Determine `PRIMARY_LANGUAGE` and `LANGUAGE_TIER` from the snapshot. These values drive which language reference file to load.
 
-**Supported languages:** ruby, python, typescript, javascript, go, java, scala, rust.
+**Supported languages:** ruby, python, php, typescript, javascript, go, java, scala, rust.
 
 If the primary language is not in the supported list, inform the user which languages are supported. Offer to proceed with the closest supported language file if the user agrees, or assess dimensions generically without language-specific criteria.
 
@@ -235,7 +235,7 @@ Wait for all 4 agents to complete before proceeding.
 
 Weights are **language-adaptive**. Select the appropriate table based on `LANGUAGE_TIER` from the Codebase Snapshot.
 
-### Dynamically-typed languages (Ruby, Python, JavaScript)
+### Dynamically-typed languages (Ruby, Python, JavaScript, PHP)
 
 In dynamic languages, tests are the type system. Test Foundation carries more weight; Type Safety reflects contracts and interface clarity, not a type checker.
 
@@ -250,7 +250,7 @@ In dynamic languages, tests are the type system. Test Foundation carries more we
 | Consistency & Conventions | 5%     | XX/100      | XX       |
 | Change Safety             | 5%     | XX/100      | XX       |
 
-*Type Safety for dynamic languages = contracts (dry-rb, Pydantic), ActiveRecord validations, Result pattern consistency. NOT penalized for absence of a type checker.
+*Type Safety for dynamic languages = contracts (dry-rb, Pydantic), ActiveRecord/Eloquent validations, Form Requests, PHPStan/Larastan, Result pattern consistency. NOT penalized for absence of a compiled type checker.
 
 ### Statically-typed languages (TypeScript, Go, Java, Scala, Rust)
 

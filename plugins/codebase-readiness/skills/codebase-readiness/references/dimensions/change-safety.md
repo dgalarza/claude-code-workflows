@@ -24,18 +24,18 @@ git log --name-only --format="" 2>/dev/null | grep -v "^$" | sort | uniq -c | so
 
 # Feature flags (generic patterns across languages)
 grep -r "feature_flag\|feature_enabled\|featureFlag\|feature_toggle\|FeatureFlag\|FEATURE_" \
-  --include="*.rb" --include="*.ts" --include="*.tsx" --include="*.py" --include="*.go" --include="*.java" --include="*.js" \
+  --include="*.rb" --include="*.ts" --include="*.tsx" --include="*.py" --include="*.go" --include="*.java" --include="*.js" --include="*.php" \
   . 2>/dev/null | grep -v node_modules | grep -v .git | grep -v spec | grep -v test | wc -l
 
 # Database migrations
-find . -name "*.rb" -path "*/migrations/*" -o -name "*.py" -path "*/migrations/*" -o -name "*.sql" 2>/dev/null | grep -v .git | wc -l
+find . -name "*.rb" -path "*/migrations/*" -o -name "*.py" -path "*/migrations/*" -o -name "*.php" -path "*/migrations/*" -o -name "*.sql" 2>/dev/null | grep -v .git | grep -v vendor | wc -l
 
 # Migration safety patterns — look for irreversible operations
-grep -r "drop_table\|drop_column\|remove_column\|DROP TABLE\|DROP COLUMN\|rename_table\|rename_column" \
-  db/migrate/ migrations/ 2>/dev/null | grep -v .git | head -10
+grep -r "drop_table\|drop_column\|remove_column\|dropTable\|dropColumn\|DROP TABLE\|DROP COLUMN\|rename_table\|rename_column\|renameColumn" \
+  db/migrate/ migrations/ database/migrations/ 2>/dev/null | grep -v .git | grep -v vendor | head -10
 
 # Rollback patterns
-grep -r "reversible\|def down\|def change\|rollback\|downgrade" db/migrate/ migrations/ 2>/dev/null | grep -v .git | wc -l
+grep -r "reversible\|def down\|def change\|function down\|rollback\|downgrade" db/migrate/ migrations/ database/migrations/ 2>/dev/null | grep -v .git | grep -v vendor | wc -l
 ```
 
 ## Scoring Bands
