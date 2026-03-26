@@ -38,7 +38,7 @@ You get a band rating (Agent-Ready → Not Agent-Ready), a concrete improvement 
 
 Once you have your score, the [agent-ready](plugins/agent-ready/README.md) plugin fixes the documentation gaps automatically: CLAUDE.md, ARCHITECTURE.md, and docs/ structure following progressive disclosure patterns.
 
-[Learn more →](plugins/codebase-readiness/README.md) | [See the full assessment details](https://www.damiangalarza.com/codebase-readiness/?utm_source=github&utm_medium=readme&utm_campaign=codebase-readiness) | [Want help improving your score?](https://www.damiangalarza.com/services/ai-enablement/?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)
+[Learn more →](plugins/codebase-readiness/README.md) | [See the full assessment details](https://www.damiangalarza.com/codebase-readiness/?utm_source=github&utm_medium=readme&utm_campaign=codebase-readiness) | [Get the Agent-Ready Codebase Playbook](https://www.damiangalarza.com/newsletter?utm_source=github&utm_medium=readme&utm_campaign=codebase-playbook) | [Want help improving your score?](https://www.damiangalarza.com/services/ai-enablement/?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)
 
 ---
 
@@ -65,6 +65,8 @@ Once you have your score, the [agent-ready](plugins/agent-ready/README.md) plugi
 | Bundle | Description |
 |--------|-------------|
 | [Rails Toolkit](plugins/rails-toolkit/README.md) | Complete Rails workflow with TDD, reviews, Linear integration |
+
+If this helped you, give it a star — it helps others find it.
 
 ---
 

@@ -29,7 +29,7 @@ find . -name "*.test.*" -o -name "*.spec.*" 2>/dev/null \
   | grep -v node_modules | grep -v .git | grep -v target | wc -l
 
 # Source file count (for ratio calculation — adjust extensions per language)
-find . -name "*.rb" -o -name "*.ts" -o -name "*.tsx" -o -name "*.py" -o -name "*.go" -o -name "*.js" -o -name "*.scala" -o -name "*.java" 2>/dev/null \
+find . -name "*.rb" -o -name "*.ts" -o -name "*.tsx" -o -name "*.py" -o -name "*.go" -o -name "*.js" -o -name "*.scala" -o -name "*.java" -o -name "*.php" 2>/dev/null \
   | grep -v node_modules | grep -v .git | grep -v target | grep -v vendor | grep -v spec | grep -v test | grep -v __tests__ | wc -l
 
 # Test organization — how tests are structured
@@ -40,7 +40,7 @@ find . -type d \( -name "spec" -o -name "test" -o -name "tests" -o -name "__test
 git log --oneline 2>/dev/null | grep -i "flak\|intermit\|flakey\|skip test\|disable test" | wc -l
 
 # Coverage configuration presence
-find . -name ".coveragerc" -o -name "coverage.config*" -o -name ".nycrc*" -o -name "jest.config*" -o -name "codecov.yml" -o -name ".simplecov" 2>/dev/null \
+find . -name ".coveragerc" -o -name "coverage.config*" -o -name ".nycrc*" -o -name "jest.config*" -o -name "codecov.yml" -o -name ".simplecov" -o -name "phpunit.xml" -o -name "phpunit.xml.dist" 2>/dev/null \
   | grep -v node_modules | grep -v .git | head -5
 
 # CI coverage enforcement

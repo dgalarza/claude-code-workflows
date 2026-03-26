@@ -18,8 +18,8 @@ Type safety determines what mechanisms prevent agent mistakes from silently pass
 
 ```bash
 # Database constraints (works for any language with migrations)
-grep -r "check\|constraint\|NOT NULL\|UNIQUE\|REFERENCES\|trigger" db/migrate/ migrations/ 2>/dev/null | grep -v node_modules | grep -v .git | wc -l
-grep -r "CREATE TRIGGER\|CREATE TYPE\|CREATE DOMAIN" db/ 2>/dev/null | head -5
+grep -r "check\|constraint\|NOT NULL\|UNIQUE\|REFERENCES\|trigger\|nullable\|unique\|foreign\|constrained" db/migrate/ migrations/ database/migrations/ 2>/dev/null | grep -v node_modules | grep -v .git | grep -v vendor | wc -l
+grep -r "CREATE TRIGGER\|CREATE TYPE\|CREATE DOMAIN" db/ database/ 2>/dev/null | grep -v vendor | head -5
 
 # OpenAPI / generated typed clients
 find . -name "openapi*" -o -name "swagger*" 2>/dev/null | grep -v node_modules | grep -v .git | head -5
