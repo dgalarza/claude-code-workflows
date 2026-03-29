@@ -1,0 +1,12 @@
+{
+  "name": "doc-audit",
+  "version": "1.0.0",
+  "description": "Audit codebase documentation for accuracy, completeness, and freshness against actual code. Auto-fixes small discrepancies, reports structural changes. Companion to agent-ready.",
+  "author": {
+    "name": "Damian Galarza",
+    "url": "https://www.damiangalarza.com"
+  },
+  "repository": "https://github.com/dgalarza/claude-code-workflows",
+  "license": "MIT",
+  "keywords": ["ai", "agents", "documentation", "audit", "freshness", "accuracy", "maintenance"]
+}

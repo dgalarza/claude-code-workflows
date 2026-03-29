@@ -58,6 +58,12 @@
       "source": "./plugins/agent-ready",
       "description": "Make a codebase agent-ready by scaffolding AGENTS.md, ARCHITECTURE.md, and docs/ structure following progressive disclosure patterns. Creates CLAUDE.md as a symlink for Claude Code compatibility.",
       "version": "1.1.0"
+    },
+    {
+      "name": "doc-audit",
+      "source": "./plugins/doc-audit",
+      "description": "Audit codebase documentation for accuracy, completeness, and freshness against actual code. Auto-fixes small discrepancies, reports structural changes. Companion to agent-ready.",
+      "version": "1.0.0"
     }
   ]
 }
