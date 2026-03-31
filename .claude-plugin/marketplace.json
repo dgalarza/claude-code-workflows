@@ -51,13 +51,13 @@
       "name": "codebase-readiness",
       "source": "./plugins/codebase-readiness",
       "description": "Score your codebase's readiness for autonomous AI agent work across 8 dimensions, framed around the Stripe benchmark of 1k+ AI-generated PRs per week",
-      "version": "1.6.0"
+      "version": "1.7.0"
     },
     {
       "name": "agent-ready",
       "source": "./plugins/agent-ready",
       "description": "Make a codebase agent-ready by scaffolding AGENTS.md, ARCHITECTURE.md, and docs/ structure following progressive disclosure patterns. Creates CLAUDE.md as a symlink for Claude Code compatibility.",
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "doc-audit",
