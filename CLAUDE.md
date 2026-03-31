@@ -38,6 +38,37 @@ scripts/                        # Utility scripts
 3. CI validates skills and JSON on PRs automatically
 4. Bump version in both plugin.json and marketplace.json before merging
 
+## Releasing
+
+This repo uses **calendar-based release tags** (`YYYY.MM.DD`) for the marketplace as a whole, and **semantic versioning** for individual plugins.
+
+### When to Release
+
+Cut a release when one or more of these land on `main`:
+- New plugin added
+- New feature or language support added to an existing plugin
+- Bug fix that affects plugin behavior
+
+Documentation-only changes (README updates, tips, configs) don't need a release.
+
+### Release Checklist
+
+1. **Bump plugin version** in `plugins/<name>/.claude-plugin/plugin.json` — follow semver (patch for fixes, minor for features, major for breaking changes)
+2. **Sync version** in `.claude-plugin/marketplace.json` — must match the plugin.json version
+3. **Commit** the version bumps with the feature/fix commit (or as a separate `chore: bump <plugin> to X.Y.Z` commit)
+4. **Tag the release** after merging to `main`:
+   ```bash
+   git tag YYYY.MM.DD
+   git push origin YYYY.MM.DD
+   ```
+5. **Create a GitHub release** from the tag with a brief summary of what changed
+
+### Versioning Rules
+
+- **Release tags** are calendar dates (`YYYY.MM.DD`). If multiple releases happen on the same day, append a suffix: `YYYY.MM.DD.2`
+- **Plugin versions** are semver (`X.Y.Z`). The plugin version reflects changes to that specific plugin, not the overall repo
+- Version must be bumped in **both** plugin.json and marketplace.json before merging — CI doesn't enforce sync yet, so this is a manual check
+
 ## Adding a New Plugin
 
 1. Create `plugins/<name>/.claude-plugin/plugin.json` with name, version, description, author

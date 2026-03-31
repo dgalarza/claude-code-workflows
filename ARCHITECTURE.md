@@ -79,6 +79,10 @@ Plugins are independently installable and versionable. A user who only needs TDD
 
 Context is a scarce resource. A 2,000-line SKILL.md crowds out the actual task. Reference files let agents load only what's relevant — a Ruby assessment doesn't need to read the Scala rubric. This follows the same principle described in OpenAI's [Harness Engineering](https://openai.com/index/harness-engineering/) post: "give the agent a map, not a 1,000-page instruction manual."
 
+### Why two layers of versioning?
+
+The repo uses calendar-based tags (`YYYY.MM.DD`) for marketplace-wide releases and semver (`X.Y.Z`) per plugin. Calendar tags answer "what's the latest snapshot of the marketplace?" — useful for users installing from the marketplace. Semver per plugin answers "did this specific plugin change?" — useful for users who installed a single plugin and want to know if they should update. Decoupling these lets plugins evolve at their own pace without forcing artificial version bumps on unrelated plugins.
+
 ### Why enforce structure in CI?
 
 Documentation alone doesn't keep a growing plugin ecosystem coherent. Mechanical enforcement catches drift before it compounds — the same principle behind custom linters in agent-first codebases. A broken frontmatter field means the skill won't trigger correctly; catching it in CI is cheaper than debugging it in production.
