@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-commit-queue.sh",
+            "timeout": 5000,
+            "statusMessage": "doc-sync: checking for doc tasks..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/stop-process-queue.sh",
+            "timeout": 5000,
+            "statusMessage": "doc-sync: checking doc queue..."
+          }
+        ]
+      }
+    ]
+  }
+}

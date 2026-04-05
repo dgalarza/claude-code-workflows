@@ -1,0 +1,21 @@
+{
+  "name": "doc-sync",
+  "version": "1.0.0",
+  "description": "Continuous documentation synchronization engine. Detects code changes via hooks, queues documentation tasks, and processes them at session boundaries. Bridges agent-ready scaffolding and doc-audit maintenance with automated, queue-based updates.",
+  "author": {
+    "name": "Damian Galarza",
+    "url": "https://www.damiangalarza.com"
+  },
+  "repository": "https://github.com/dgalarza/claude-code-workflows",
+  "license": "MIT",
+  "keywords": [
+    "documentation",
+    "auto-docs",
+    "changelog",
+    "agent-ready",
+    "doc-sync",
+    "hooks",
+    "queue",
+    "continuous-docs"
+  ]
+}

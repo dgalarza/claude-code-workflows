@@ -64,6 +64,12 @@
       "source": "./plugins/doc-audit",
       "description": "Audit codebase documentation for accuracy, completeness, and freshness against actual code. Auto-fixes small discrepancies, reports structural changes. Companion to agent-ready.",
       "version": "1.0.0"
+    },
+    {
+      "name": "doc-sync",
+      "source": "./plugins/doc-sync",
+      "description": "Continuous documentation synchronization engine. Detects code changes via hooks, queues tasks, and processes them at session boundaries. Bridges agent-ready scaffolding and doc-audit maintenance with automated updates.",
+      "version": "1.0.0"
     }
   ]
 }

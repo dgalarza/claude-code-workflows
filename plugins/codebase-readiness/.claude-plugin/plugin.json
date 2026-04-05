@@ -8,12 +8,5 @@
   },
   "repository": "https://github.com/dgalarza/claude-code-workflows",
   "license": "MIT",
-  "keywords": [
-    "ai",
-    "agents",
-    "assessment",
-    "code-quality",
-    "readiness",
-    "lead-magnet"
-  ]
+  "keywords": ["ai", "agents", "assessment", "code-quality", "readiness", "lead-magnet"]
 }
