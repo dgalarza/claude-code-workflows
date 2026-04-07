@@ -1,6 +1,6 @@
 {
   "name": "doc-sentinel",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "Proactive documentation drift detector. Hooks into commits to identify docs referencing changed code, flags drift before staleness accumulates, and resolves warnings via targeted fixes.",
   "author": {
     "name": "Damian Galarza",

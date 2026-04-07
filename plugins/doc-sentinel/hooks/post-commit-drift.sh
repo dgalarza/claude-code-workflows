@@ -5,6 +5,16 @@
 
 set -euo pipefail
 
+# ─── Resolve project root ────────────────────────────────────────────────────
+# Hooks may run from any subdirectory of the project. Always resolve paths
+# relative to $CLAUDE_PROJECT_DIR (set by Claude Code), falling back to
+# `git rev-parse` for environments that skipped the export.
+PROJECT_ROOT="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || true)}"
+if [ -z "$PROJECT_ROOT" ]; then
+  exit 0
+fi
+cd "$PROJECT_ROOT"
+
 # ─── Fast pre-filter ─────────────────────────────────────────────────────────
 # Read the tool input from stdin. Skip if not a git commit.
 INPUT=$(cat)
@@ -32,9 +42,9 @@ if printf '%s\n' "$COMMIT_MSG" | grep -qE '^docs(\(.+\))?:'; then
 fi
 
 # ─── Configuration ────────────────────────────────────────────────────────────
-CONFIG_FILE=".doc-sentinel.json"
-DRIFT_FILE=".doc-sentinel-drift.json"
-DOC_ROOT="docs"
+CONFIG_FILE="$PROJECT_ROOT/.doc-sentinel.json"
+DRIFT_FILE="$PROJECT_ROOT/.doc-sentinel-drift.json"
+DOC_ROOT="$PROJECT_ROOT/docs"
 EXTRA_DOCS=""
 
 if [ -f "$CONFIG_FILE" ] && command -v jq &>/dev/null; then
@@ -64,8 +74,16 @@ if [ -f "$CONFIG_FILE" ] && command -v jq &>/dev/null; then
       SKIP=false
       while IFS= read -r pattern; do
         [ -z "$pattern" ] && continue
-        # Convert glob to regex: *.test.* → .*\.test\..*
-        REGEX=$(printf '%s' "$pattern" | sed 's/\./\\./g; s/\*\*/DOUBLESTAR/g; s/\*/[^/]*/g; s/DOUBLESTAR/.*/g')
+        # Convert glob to regex. Use `#` as sed delimiter — BSD sed (macOS)
+        # mis-parses `/` inside the replacement of `s/old/new/g`. Order matters:
+        # `?` must be expanded before `**/` becomes `(.*/)?` so the regex `?`
+        # quantifier isn't clobbered by the glob `?` → `.` rule.
+        REGEX=$(printf '%s' "$pattern" | sed -e 's#\.#\\.#g' \
+                                              -e 's#?#.#g' \
+                                              -e 's#\*\*/#DBLSTARSLASH#g' \
+                                              -e 's#\*\*#.*#g' \
+                                              -e 's#\*#[^/]*#g' \
+                                              -e 's#DBLSTARSLASH#(.*/)?#g')
         if printf '%s\n' "$src_file" | grep -qE "(^|/)${REGEX}$"; then
           SKIP=true
           break
@@ -91,16 +109,16 @@ fi
 
 # Add top-level doc files
 for f in AGENTS.md ARCHITECTURE.md CLAUDE.md README.md; do
-  if [ -f "$f" ]; then
-    DOC_FILES=$(printf '%s\n%s' "$DOC_FILES" "$f")
+  if [ -f "$PROJECT_ROOT/$f" ]; then
+    DOC_FILES=$(printf '%s\n%s' "$DOC_FILES" "$PROJECT_ROOT/$f")
   fi
 done
 
 # Add extra watched files from config
 if [ -n "$EXTRA_DOCS" ]; then
   while IFS= read -r extra; do
-    if [ -f "$extra" ]; then
-      DOC_FILES=$(printf '%s\n%s' "$DOC_FILES" "$extra")
+    if [ -f "$PROJECT_ROOT/$extra" ]; then
+      DOC_FILES=$(printf '%s\n%s' "$DOC_FILES" "$PROJECT_ROOT/$extra")
     fi
   done <<< "$EXTRA_DOCS"
 fi

@@ -69,7 +69,7 @@
       "name": "doc-sentinel",
       "source": "./plugins/doc-sentinel",
       "description": "Proactive documentation drift detector. Hooks into commits to identify docs referencing changed code, flags drift before staleness accumulates, and resolves warnings via targeted fixes.",
-      "version": "1.0.0"
+      "version": "1.0.5"
     }
   ]
 }
