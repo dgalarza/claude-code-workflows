@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-commit-drift.sh",
+            "timeout": 5000,
+            "statusMessage": "doc-sentinel: scanning for documentation drift..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/stop-drift-report.sh",
+            "timeout": 5000,
+            "statusMessage": "doc-sentinel: checking drift warnings..."
+          }
+        ]
+      }
+    ]
+  }
+}
