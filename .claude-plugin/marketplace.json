@@ -64,6 +64,12 @@
       "source": "./plugins/doc-audit",
       "description": "Audit codebase documentation for accuracy, completeness, and freshness against actual code. Auto-fixes small discrepancies, reports structural changes. Companion to agent-ready.",
       "version": "1.0.0"
+    },
+    {
+      "name": "dependabot-analyzer",
+      "source": "./plugins/dependabot-analyzer",
+      "description": "Automated Dependabot PR triage — fans out parallel agents to assess risk, auto-merges safe patches, diagnoses CI failures, and creates issues for anything needing human attention.",
+      "version": "1.0.0"
     }
   ]
 }
