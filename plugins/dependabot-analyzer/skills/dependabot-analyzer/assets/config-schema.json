@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Dependabot Analyzer Configuration",
+  "description": "Per-project configuration for the dependabot-analyzer plugin. Place at .claude/dependabot-analyzer.json in your project root.",
+  "type": "object",
+  "properties": {
+    "auto_merge": {
+      "type": "object",
+      "description": "Controls automatic merging of low-risk Dependabot PRs.",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to auto-merge PRs that fall within the safe threshold."
+        },
+        "max_semver": {
+          "type": "string",
+          "enum": ["patch", "minor", "major"],
+          "default": "patch",
+          "description": "Maximum semver bump level eligible for auto-merge."
+        },
+        "require_ci_pass": {
+          "type": "boolean",
+          "default": true,
+          "description": "Require all CI checks to pass before auto-merging."
+        },
+        "exclude_packages": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Package names that should never be auto-merged, regardless of risk score."
+        }
+      },
+      "additionalProperties": false
+    },
+    "issue_tracker": {
+      "type": "string",
+      "enum": ["github", "linear"],
+      "default": "github",
+      "description": "Where to create issues for PRs requiring deeper review."
+    },
+    "linear_config": {
+      "type": "object",
+      "description": "Required when issue_tracker is 'linear'. Linear project configuration.",
+      "properties": {
+        "team_id": {
+          "type": "string",
+          "description": "Linear team identifier."
+        },
+        "project_id": {
+          "type": "string",
+          "description": "Linear project identifier."
+        },
+        "label_ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Linear label IDs to apply to created issues."
+        }
+      },
+      "required": ["team_id"],
+      "additionalProperties": false
+    },
+    "labels": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": ["dependabot-analyzer"],
+      "description": "Labels to apply to created GitHub issues."
+    },
+    "batch_size": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10,
+      "default": 8,
+      "description": "Maximum number of parallel analysis agents to launch at once."
+    },
+    "repos": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": ["."],
+      "description": "Repositories to analyze. Use '.' for the current repo, or 'owner/repo' slugs for other repos."
+    },
+    "risk_thresholds": {
+      "type": "object",
+      "description": "Risk score thresholds that control when issues are created and merges are blocked.",
+      "properties": {
+        "create_issue_above": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 40,
+          "description": "Create an issue for PRs with a risk score above this value."
+        },
+        "block_merge_above": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 80,
+          "description": "Never auto-merge PRs with a risk score above this value."
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
