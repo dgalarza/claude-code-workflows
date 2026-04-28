@@ -41,15 +41,59 @@ if printf '%s\n' "$COMMIT_MSG" | grep -qE '^docs(\(.+\))?:'; then
   exit 0
 fi
 
+# ─── Helpers ─────────────────────────────────────────────────────────────────
+
+# Escape ERE special characters so a path can be safely embedded in a regex.
+# Without this, `qmd.ts` would also match `qmd_ts`, `qmdets`, etc., because
+# the `.` was being interpreted as the any-char wildcard.
+escape_regex() {
+  printf '%s' "$1" | sed 's/[][\\^$.*+?(){}|]/\\&/g'
+}
+
+# Convert a glob pattern (e.g. `docs/decisions/**`, `*.test.*`) to an ERE
+# regex anchored at end-of-string. The caller still has to anchor the start.
+# `?` must be expanded before `**/` becomes `(.*/)?` so the regex `?`
+# quantifier isn't clobbered by the glob `?` → `.` rule. Use `#` as sed
+# delimiter — BSD sed (macOS) mis-parses `/` inside the replacement of
+# `s/old/new/g`.
+glob_to_regex() {
+  printf '%s' "$1" | sed -e 's#\.#\\.#g' \
+                          -e 's#?#.#g' \
+                          -e 's#\*\*/#DBLSTARSLASH#g' \
+                          -e 's#\*\*#.*#g' \
+                          -e 's#\*#[^/]*#g' \
+                          -e 's#DBLSTARSLASH#(.*/)?#g'
+}
+
+# Return 0 if `path` matches any of the newline-separated glob patterns in
+# `patterns`, 1 otherwise.
+matches_any_glob() {
+  local path="$1"
+  local patterns="$2"
+  local pattern regex
+  while IFS= read -r pattern; do
+    [ -z "$pattern" ] && continue
+    regex=$(glob_to_regex "$pattern")
+    if printf '%s\n' "$path" | grep -qE "(^|/)${regex}\$"; then
+      return 0
+    fi
+  done <<< "$patterns"
+  return 1
+}
+
 # ─── Configuration ────────────────────────────────────────────────────────────
 CONFIG_FILE="$PROJECT_ROOT/.doc-sentinel.json"
 DRIFT_FILE="$PROJECT_ROOT/.doc-sentinel-drift.json"
 DOC_ROOT="$PROJECT_ROOT/docs"
 EXTRA_DOCS=""
+IGNORE_SOURCE_PATTERNS=""
+IGNORE_DOC_PATTERNS=""
 
 if [ -f "$CONFIG_FILE" ] && command -v jq &>/dev/null; then
   DOC_ROOT=$(jq -r '.docs_root // "docs"' "$CONFIG_FILE")
   EXTRA_DOCS=$(jq -r '.watch_files // [] | .[]' "$CONFIG_FILE" 2>/dev/null || echo "")
+  IGNORE_SOURCE_PATTERNS=$(jq -r '.ignore_sources // [] | .[]' "$CONFIG_FILE" 2>/dev/null || echo "")
+  IGNORE_DOC_PATTERNS=$(jq -r '.ignore_docs // [] | .[]' "$CONFIG_FILE" 2>/dev/null || echo "")
 fi
 
 # ─── Get changed files from the last commit ──────────────────────────────────
@@ -65,38 +109,17 @@ if [ -z "$SOURCE_FILES" ]; then
 fi
 
 # Apply ignore_sources patterns from config
-if [ -f "$CONFIG_FILE" ] && command -v jq &>/dev/null; then
-  IGNORE_PATTERNS=$(jq -r '.ignore_sources // [] | .[]' "$CONFIG_FILE" 2>/dev/null || echo "")
-  if [ -n "$IGNORE_PATTERNS" ]; then
-    FILTERED=""
-    while IFS= read -r src_file; do
-      [ -z "$src_file" ] && continue
-      SKIP=false
-      while IFS= read -r pattern; do
-        [ -z "$pattern" ] && continue
-        # Convert glob to regex. Use `#` as sed delimiter — BSD sed (macOS)
-        # mis-parses `/` inside the replacement of `s/old/new/g`. Order matters:
-        # `?` must be expanded before `**/` becomes `(.*/)?` so the regex `?`
-        # quantifier isn't clobbered by the glob `?` → `.` rule.
-        REGEX=$(printf '%s' "$pattern" | sed -e 's#\.#\\.#g' \
-                                              -e 's#?#.#g' \
-                                              -e 's#\*\*/#DBLSTARSLASH#g' \
-                                              -e 's#\*\*#.*#g' \
-                                              -e 's#\*#[^/]*#g' \
-                                              -e 's#DBLSTARSLASH#(.*/)?#g')
-        if printf '%s\n' "$src_file" | grep -qE "(^|/)${REGEX}$"; then
-          SKIP=true
-          break
-        fi
-      done <<< "$IGNORE_PATTERNS"
-      if [ "$SKIP" = false ]; then
-        FILTERED=$(printf '%s\n%s' "$FILTERED" "$src_file")
-      fi
-    done <<< "$SOURCE_FILES"
-    SOURCE_FILES=$(echo "$FILTERED" | sed '/^$/d')
-    if [ -z "$SOURCE_FILES" ]; then
-      exit 0
+if [ -n "$IGNORE_SOURCE_PATTERNS" ]; then
+  FILTERED=""
+  while IFS= read -r src_file; do
+    [ -z "$src_file" ] && continue
+    if ! matches_any_glob "$src_file" "$IGNORE_SOURCE_PATTERNS"; then
+      FILTERED=$(printf '%s\n%s' "$FILTERED" "$src_file")
     fi
+  done <<< "$SOURCE_FILES"
+  SOURCE_FILES=$(echo "$FILTERED" | sed '/^$/d')
+  if [ -z "$SOURCE_FILES" ]; then
+    exit 0
   fi
 fi
 
@@ -127,23 +150,58 @@ if [ -z "$DOC_FILES" ]; then
   exit 0
 fi
 
+DOC_FILE_LIST=$(echo "$DOC_FILES" | sed '/^$/d' | sort -u)
+
+# Apply ignore_docs patterns from config. Matches against repo-relative paths
+# so glob patterns like `docs/decisions/**` work the way users expect.
+if [ -n "$IGNORE_DOC_PATTERNS" ]; then
+  FILTERED=""
+  while IFS= read -r doc_file; do
+    [ -z "$doc_file" ] && continue
+    REL_PATH="${doc_file#$PROJECT_ROOT/}"
+    if ! matches_any_glob "$REL_PATH" "$IGNORE_DOC_PATTERNS"; then
+      FILTERED=$(printf '%s\n%s' "$FILTERED" "$doc_file")
+    fi
+  done <<< "$DOC_FILE_LIST"
+  DOC_FILE_LIST=$(echo "$FILTERED" | sed '/^$/d')
+  if [ -z "$DOC_FILE_LIST" ]; then
+    exit 0
+  fi
+fi
+
 # ─── Cross-reference: which docs mention changed source files? ────────────────
 DRIFT_WARNINGS=""
 TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 COMMIT_HASH=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
 
-DOC_FILE_LIST=$(echo "$DOC_FILES" | sed '/^$/d' | sort -u)
-
 while IFS= read -r src_file; do
   [ -z "$src_file" ] && continue
 
-  # Generate search patterns from the file path
-  # Match: full path, filename, or module name (without extension)
+  # Generate search patterns from the file path. Match three forms, from
+  # tightest to loosest:
+  #
+  #   1. The full path                 — `packages/agents/src/lib/qmd.ts`
+  #   2. The bare basename             — `qmd.ts`
+  #   3. The backtick-wrapped module   — `` `qmd` ``
+  #
+  # The backtick gate on the module name is the key noise control: without
+  # it, every commit touching `models.ts` or `queue.ts` would flag any doc
+  # that mentioned the words "models" or "queue" in prose (e.g., an ADR
+  # title or a paragraph about Redis queues), and the signal-to-noise
+  # ratio collapses. The plugin's `doc-references` rule already encourages
+  # backtick-quoted code identifiers, so this matcher meets docs at that
+  # convention.
+  #
+  # All three patterns get regex-escaped before being interpolated so that
+  # path separators and dots are treated as literals.
   BASENAME=$(basename "$src_file")
   MODULE_NAME="${BASENAME%.*}"
+  SRC_FILE_RE=$(escape_regex "$src_file")
+  BASENAME_RE=$(escape_regex "$BASENAME")
+  MODULE_NAME_RE=$(escape_regex "$MODULE_NAME")
 
   # Search all doc files at once with grep -l (one process instead of N)
-  MATCHING_DOCS=$(echo "$DOC_FILE_LIST" | xargs grep -lE "(${src_file}|${BASENAME}|${MODULE_NAME})" 2>/dev/null || true)
+  MATCHING_DOCS=$(echo "$DOC_FILE_LIST" | xargs grep -lE "(${SRC_FILE_RE}|${BASENAME_RE}|\`${MODULE_NAME_RE}\`)" 2>/dev/null || true)
   MATCHING_DOCS=$(echo "$MATCHING_DOCS" | sed '/^$/d' | sort -u)
   if [ -n "$MATCHING_DOCS" ]; then
     while IFS= read -r doc; do

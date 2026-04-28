@@ -110,9 +110,19 @@ Stop hook fires (end of session)
 |-------|---------|
 | `docs_root` | Primary documentation directory |
 | `watch_files` | Additional doc files outside docs_root to monitor |
-| `ignore_sources` | Source file patterns to skip (tests, type defs) |
-| `ignore_docs` | Doc files to exclude from drift checks |
+| `ignore_sources` | Source file glob patterns to skip (tests, type defs). Matched against repo-relative source paths |
+| `ignore_docs` | Doc file glob patterns to exclude from drift checks. Matched against repo-relative doc paths — e.g. `docs/decisions/**` to skip ADRs, which are historical records by design |
 | `severity` | Controls when drift is flagged (high/medium/low) |
+
+## How Matching Works
+
+For each changed source file, the hook looks for three patterns in each watched doc:
+
+1. **Full path** — `packages/agents/src/lib/qmd.ts`
+2. **Bare basename** — `qmd.ts`
+3. **Backtick-wrapped module name** — `` `qmd` ``
+
+The backtick gate on the module name is the key noise control: without it, every commit touching `models.ts` or `queue.ts` would match any doc that mentions the words "models" or "queue" in prose. The matcher meets docs at the convention encouraged by the bundled `doc-references` rule — backtick code identifiers, full paths in references — and trusts that prose mentions of common words aren't deliberate references.
 
 ## Drift Queue Format
 
@@ -174,7 +184,7 @@ Copy the `plugins/doc-sentinel/` directory into your project's `.claude/plugins/
 
 **Hook not firing:** Verify `hooks.json` is loaded — check Claude Code plugin settings. The PostToolUse hook only fires on Bash tool use containing `git commit`.
 
-**Too many false positives:** Tune `ignore_sources` in `.doc-sentinel.json` to skip files that docs reference generically (e.g., test files, generated types). The `resolve` skill lets you dismiss false positives.
+**Too many false positives:** Two knobs: tune `ignore_sources` for source files docs reference generically (test files, generated types), and tune `ignore_docs` for docs that match noisily (most commonly `docs/decisions/**` — ADRs are historical records and shouldn't trigger drift on every related commit). The `resolve` skill also lets you dismiss false positives after the fact.
 
 **Conflicts with doc-sync:** None expected — they use separate queue files (`.doc-sync-queue.json` vs `.doc-sentinel-drift.json`) and separate hook scripts. Both can be active simultaneously.
 

@@ -80,8 +80,8 @@ Build `.doc-sentinel.json` interactively. Present detected values and ask for co
 | `version` | number | `1` | Config schema version |
 | `docs_root` | string | `"docs"` | Primary documentation directory |
 | `watch_files` | string[] | `["AGENTS.md", "ARCHITECTURE.md", "README.md"]` | Additional doc files outside docs_root to monitor |
-| `ignore_sources` | string[] | `["*.test.*", "*.spec.*", "__tests__/**", "*.d.ts"]` | Source file patterns to skip during drift detection |
-| `ignore_docs` | string[] | `[]` | Doc files to exclude from drift checks |
+| `ignore_sources` | string[] | `["*.test.*", "*.spec.*", "__tests__/**", "*.d.ts"]` | Source file glob patterns to skip during drift detection. Matched against repo-relative source paths |
+| `ignore_docs` | string[] | `[]` | Doc file glob patterns to exclude from drift checks. Matched against repo-relative doc paths. Common pattern: `docs/decisions/**` to skip ADRs (historical records by design) |
 | `severity` | object | see below | Drift severity by doc category |
 
 **Severity levels:** `high` (flag immediately), `medium` (flag at session end), `low` (include in scan reports only).
