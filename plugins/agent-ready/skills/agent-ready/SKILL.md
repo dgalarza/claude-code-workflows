@@ -310,7 +310,9 @@ find . -path "*/decisions/*.md" -o -path "*/adr/*.md" -o -path "*/adrs/*.md" 2>/
 Using the template, generate an AGENTS.md that:
 - Stays under ~100 lines
 - Leads with project identity and build/test/lint one-liners
+- Includes a **Session Startup** section with the bearing-getting ritual (pwd, git log, smoke test) -- fill in the smoke-test command from detected scripts, or leave a `[TODO: add smoke-test command]` placeholder if nothing is detected
 - Uses directives (must/never/always/avoid/prefer) for conventions
+- Includes a **Definition of Done** section codifying end-to-end verification before marking work complete -- fill in lint/test commands from detected tooling
 - Markdown links to existing docs or docs that should be created
 - Includes ADR section if docs/decisions/ or other ADR directories exist
 - Lists max 5 known gotchas
@@ -437,6 +439,24 @@ if [ -f "$DOC" ]; then
     PCT=$(( CODE * 100 / TOTAL ))
     echo "Code example percentage: ${PCT}%"
   fi
+
+  # Session Startup section -- bearing-getting ritual for fresh contexts
+  if grep -qiE '^##+ .*(session startup|getting (started|up to speed)|orient)' "$DOC"; then
+    echo "✓ Session Startup section present"
+  else
+    echo "⚠ MISSING: Session Startup section -- agents have no prescribed orientation sequence on fresh contexts"
+  fi
+
+  # Definition of Done section -- end-to-end verification protocol
+  if grep -qiE '^##+ .*(definition of done|verification|done criteria)' "$DOC"; then
+    if grep -qiE 'end-to-end|end to end|browser|exercise' "$DOC"; then
+      echo "✓ Definition of Done section present (mentions end-to-end verification)"
+    else
+      echo "⚠ Definition of Done section present but does not mention end-to-end verification"
+    fi
+  else
+    echo "⚠ MISSING: Definition of Done section -- no codified end-to-end verification protocol"
+  fi
 fi
 
 # Check symlink status
@@ -507,6 +527,8 @@ Present an actionable report:
 - Code example %: [N]% [OK if <20% / WARNING if >20%]
 - Directive density: [N] directives in [M] lines
 - CLAUDE.md symlink status: [Correct/Needs fix]
+- Session Startup section: [Present/Missing]
+- Definition of Done section: [Present/Missing/Present-without-E2E]
 - Topic overlaps: [list]
 - Broken references: [list]
 - Cross-document conflicts: [list]
@@ -528,3 +550,5 @@ After presenting the report, offer to auto-fix issues:
 - Missing ARCHITECTURE.md entries: offer to run architecture mode to regenerate
 - Missing nested AGENTS.md: offer to create starter files for uncovered domains
 - CLAUDE.md not a symlink: offer to convert it to a symlink to AGENTS.md
+- Missing Session Startup section: offer to insert the bearing-getting ritual (pwd, git log, smoke test) using detected commands
+- Missing Definition of Done section: offer to insert a DoD checklist using detected lint/test commands
