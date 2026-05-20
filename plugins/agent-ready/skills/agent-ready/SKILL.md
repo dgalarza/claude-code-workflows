@@ -308,11 +308,12 @@ find . -path "*/decisions/*.md" -o -path "*/adr/*.md" -o -path "*/adrs/*.md" 2>/
 
 **New AGENTS.md:**
 Using the template, generate an AGENTS.md that:
-- Stays under ~100 lines
+- Stays under ~120 lines
 - Leads with project identity and build/test/lint one-liners
 - Includes a **Session Startup** section with the bearing-getting ritual (pwd, git log, smoke test) -- fill in the smoke-test command from detected scripts, or leave a `[TODO: add smoke-test command]` placeholder if nothing is detected
 - Uses directives (must/never/always/avoid/prefer) for conventions
 - Includes a **Definition of Done** section codifying end-to-end verification before marking work complete -- fill in lint/test commands from detected tooling
+- If the repo already uses machine-updated ledgers such as `tasks.json`, status queues, or work trackers, include a directive that names exactly which fields agents may edit
 - Markdown links to existing docs or docs that should be created
 - Includes ADR section if docs/decisions/ or other ADR directories exist
 - Lists max 5 known gotchas
@@ -449,7 +450,18 @@ if [ -f "$DOC" ]; then
 
   # Definition of Done section -- end-to-end verification protocol
   if grep -qiE '^##+ .*(definition of done|verification|done criteria)' "$DOC"; then
-    if grep -qiE 'end-to-end|end to end|browser|exercise' "$DOC"; then
+    DOD_SECTION=$(awk '
+      BEGIN { capture=0 }
+      /^##+[[:space:]]/ {
+        if (capture) exit
+      }
+      /^##+[[:space:]].*(Definition of Done|Verification|Done Criteria)/ {
+        capture=1
+      }
+      capture { print }
+    ' "$DOC")
+
+    if printf "%s\n" "$DOD_SECTION" | grep -qiE 'end-to-end|end to end|browser|exercise'; then
       echo "✓ Definition of Done section present (mentions end-to-end verification)"
     else
       echo "⚠ Definition of Done section present but does not mention end-to-end verification"

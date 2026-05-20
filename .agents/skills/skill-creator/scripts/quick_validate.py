@@ -1,13 +1,94 @@
 #!/usr/bin/env python3
-"""
-Quick validation script for skills - minimal version
-"""
+"""Quick validation script for skills."""
 
-import sys
-import os
 import re
-import yaml
+import sys
 from pathlib import Path
+
+try:
+    import yaml  # type: ignore
+except ImportError:
+    yaml = None
+
+
+def _parse_scalar(raw_value):
+    """Parse the simple scalar forms used in SKILL.md frontmatter."""
+    value = raw_value.strip()
+
+    if not value:
+        return ""
+
+    if (value.startswith('"') and value.endswith('"')) or (
+        value.startswith("'") and value.endswith("'")
+    ):
+        return value[1:-1]
+
+    lowered = value.lower()
+    if lowered == "true":
+        return True
+    if lowered == "false":
+        return False
+
+    return value
+
+
+def parse_frontmatter(frontmatter_text):
+    """Parse YAML frontmatter with a stdlib fallback for simple repo formats."""
+    if yaml is not None:
+        try:
+            parsed = yaml.safe_load(frontmatter_text)
+        except yaml.YAMLError as exc:
+            raise ValueError(f"Invalid YAML in frontmatter: {exc}") from exc
+        if parsed is None:
+            return {}
+        if not isinstance(parsed, dict):
+            raise ValueError("Frontmatter must be a YAML dictionary")
+        return parsed
+
+    parsed = {}
+    current_key = None
+
+    for line_no, raw_line in enumerate(frontmatter_text.splitlines(), start=1):
+        if not raw_line.strip():
+            continue
+
+        if raw_line.startswith((" ", "\t")):
+            if current_key is None:
+                raise ValueError(
+                    f"Unsupported indentation on line {line_no} without a parent key"
+                )
+
+            stripped = raw_line.strip()
+            if not stripped.startswith("- "):
+                raise ValueError(
+                    "PyYAML is not installed and this frontmatter uses nested YAML "
+                    f"that the fallback parser cannot read (line {line_no})"
+                )
+            if not isinstance(parsed[current_key], list):
+                raise ValueError(
+                    f"Mixed scalar/list values for '{current_key}' on line {line_no}"
+                )
+            parsed[current_key].append(_parse_scalar(stripped[2:]))
+            continue
+
+        if ":" not in raw_line:
+            raise ValueError(f"Invalid frontmatter line {line_no}: {raw_line}")
+
+        key, raw_value = raw_line.split(":", 1)
+        key = key.strip()
+        value = raw_value.strip()
+        current_key = key
+
+        if not key:
+            raise ValueError(f"Missing key on line {line_no}")
+
+        if not value:
+            parsed[key] = []
+            continue
+
+        parsed[key] = _parse_scalar(value)
+
+    return parsed
 
 def validate_skill(skill_path):
     """Basic validation of a skill"""
@@ -30,16 +111,21 @@ def validate_skill(skill_path):
 
     frontmatter_text = match.group(1)
 
-    # Parse YAML frontmatter
     try:
-        frontmatter = yaml.safe_load(frontmatter_text)
-        if not isinstance(frontmatter, dict):
-            return False, "Frontmatter must be a YAML dictionary"
-    except yaml.YAMLError as e:
-        return False, f"Invalid YAML in frontmatter: {e}"
+        frontmatter = parse_frontmatter(frontmatter_text)
+    except ValueError as exc:
+        return False, str(exc)
 
     # Define allowed properties
-    ALLOWED_PROPERTIES = {'name', 'description', 'license', 'allowed-tools', 'metadata', 'compatibility'}
+    ALLOWED_PROPERTIES = {
+        'name',
+        'description',
+        'license',
+        'allowed-tools',
+        'metadata',
+        'compatibility',
+        'disable-model-invocation',
+    }
 
     # Check for unexpected properties (excluding nested keys under metadata)
     unexpected_keys = set(frontmatter.keys()) - ALLOWED_PROPERTIES
@@ -90,6 +176,13 @@ def validate_skill(skill_path):
             return False, f"Compatibility must be a string, got {type(compatibility).__name__}"
         if len(compatibility) > 500:
             return False, f"Compatibility is too long ({len(compatibility)} characters). Maximum is 500 characters."
+
+    disable_model_invocation = frontmatter.get('disable-model-invocation')
+    if disable_model_invocation is not None and not isinstance(disable_model_invocation, bool):
+        return False, (
+            "disable-model-invocation must be a boolean, "
+            f"got {type(disable_model_invocation).__name__}"
+        )
 
     return True, "Skill is valid!"
 

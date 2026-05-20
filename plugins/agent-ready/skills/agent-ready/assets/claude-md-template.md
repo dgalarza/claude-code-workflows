@@ -1,6 +1,6 @@
 # AGENTS.md Template
 
-Use this template when generating a new AGENTS.md. Fill in sections based on actual codebase analysis. Remove sections that do not apply. Target ~100 lines.
+Use this template when generating a new AGENTS.md. Fill in sections based on actual codebase analysis. Remove sections that do not apply. Target ~120 lines.
 
 Note: This file will be created as AGENTS.md, and CLAUDE.md will be a symlink to it for Claude Code compatibility.
 
@@ -23,7 +23,7 @@ Note: This file will be created as AGENTS.md, and CLAUDE.md will be a symlink to
 Before making changes, run through these steps to orient on a fresh context:
 1. `pwd` -- confirm working directory
 2. `git log --oneline -10` -- see recent work
-3. Read [PROGRESS.md](./PROGRESS.md) if it exists, otherwise skip
+3. Read `PROGRESS.md` if it exists, otherwise skip
 4. Run `[smoke-test command]` -- verify the app is in a working state
 5. If anything is broken, fix that before starting new work
 
@@ -88,7 +88,7 @@ Use the [ADR template](docs/decisions/) to document context, the decision, conse
 
 ## Template Notes
 
-**Line budget:** Aim for ~100 lines. If a section exceeds 10 lines, extract the detail to a doc and link to it.
+**Line budget:** Aim for ~120 lines. If a section exceeds 10 lines, extract the detail to a doc and link to it.
 
 **Directive style:** Use must/never/always/avoid/prefer. State the rule, not the rationale. If rationale is needed, put it in a linked doc.
 
