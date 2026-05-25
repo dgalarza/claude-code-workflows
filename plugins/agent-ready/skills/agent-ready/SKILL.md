@@ -281,7 +281,7 @@ Read the existing AGENTS.md fully. Identify:
 ### Step 2: Load References
 
 Read `references/progressive-disclosure.md` for Harness Engineering principles.
-Read `assets/claude-md-template.md` for the output template (note: template is called claude-md-template but generates AGENTS.md content).
+Read `assets/agent-ready-template.md` for the output template that generates AGENTS.md content.
 
 ### Step 3: Detect Project Signals
 
