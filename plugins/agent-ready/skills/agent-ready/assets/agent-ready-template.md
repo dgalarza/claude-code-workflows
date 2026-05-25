@@ -23,9 +23,11 @@ Note: This file will be created as AGENTS.md, and CLAUDE.md will be a symlink to
 Before making changes, run through these steps to orient on a fresh context:
 1. `pwd` -- confirm working directory
 2. `git log --oneline -10` -- see recent work
-3. Read `PROGRESS.md` if it exists, otherwise skip
-4. Run `[smoke-test command]` -- verify the app is in a working state
-5. If anything is broken, fix that before starting new work
+3. `git fetch origin` -- refresh remote refs before comparing or integrating work
+4. Bring the branch up to date with the upstream default branch (`origin/HEAD`) using the repo's merge or rebase strategy
+5. Read `PROGRESS.md` if it exists, otherwise skip
+6. Run `[smoke-test command]` -- verify the app is in a working state
+7. If anything is broken, fix that before starting new work
 
 ## Test
 ```bash

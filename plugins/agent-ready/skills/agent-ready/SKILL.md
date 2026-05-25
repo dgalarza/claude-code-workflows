@@ -310,7 +310,7 @@ find . -path "*/decisions/*.md" -o -path "*/adr/*.md" -o -path "*/adrs/*.md" 2>/
 Using the template, generate an AGENTS.md that:
 - Stays under ~120 lines
 - Leads with project identity and build/test/lint one-liners
-- Includes a **Session Startup** section with the bearing-getting ritual (pwd, git log, smoke test) -- fill in the smoke-test command from detected scripts, or leave a `[TODO: add smoke-test command]` placeholder if nothing is detected
+- Includes a **Session Startup** section with the bearing-getting ritual (pwd, git log, fetch origin, sync with the upstream default branch using the repo's merge/rebase strategy, smoke test) -- fill in the smoke-test command from detected scripts, or leave a `[TODO: add smoke-test command]` placeholder if nothing is detected
 - Uses directives (must/never/always/avoid/prefer) for conventions
 - Includes a **Definition of Done** section codifying end-to-end verification before marking work complete -- fill in lint/test commands from detected tooling
 - If the repo already uses machine-updated ledgers such as `tasks.json`, status queues, or work trackers, include a directive that names exactly which fields agents may edit
@@ -562,5 +562,5 @@ After presenting the report, offer to auto-fix issues:
 - Missing ARCHITECTURE.md entries: offer to run architecture mode to regenerate
 - Missing nested AGENTS.md: offer to create starter files for uncovered domains
 - CLAUDE.md not a symlink: offer to convert it to a symlink to AGENTS.md
-- Missing Session Startup section: offer to insert the bearing-getting ritual (pwd, git log, smoke test) using detected commands
+- Missing Session Startup section: offer to insert the bearing-getting ritual (pwd, git log, fetch origin, sync with the upstream default branch using the repo's merge/rebase strategy, smoke test) using detected commands
 - Missing Definition of Done section: offer to insert a DoD checklist using detected lint/test commands
