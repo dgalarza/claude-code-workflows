@@ -5,7 +5,7 @@ Process raw meeting transcripts into structured notes with action items, summari
 ## Install
 
 ```bash
-npx skills add dgalarza/claude-code-workflows --skill "meeting-transcript"
+npx skills add dgalarza/claude-code-workflows --skill "process-meeting-transcript"
 
 # Or via Claude marketplace
 /plugin install meeting-transcript@dgalarza-workflows
