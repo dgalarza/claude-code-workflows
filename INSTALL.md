@@ -33,7 +33,7 @@ npx skills add dgalarza/claude-code-workflows --skill "tdd-workflow"
 | `tdd-workflow` | Red-green-refactor TDD workflow |
 | `conventional-commits` | Structured commit messages |
 | `parallel-code-review` | Multi-agent code reviews |
-| `process-meeting-transcript` | Process transcripts into notes |
+| `meeting-transcript` | Process transcripts into notes |
 | `gridfinity-planner` | 3D printing baseplate planning |
 
 ```bash
