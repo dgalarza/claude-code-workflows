@@ -6,9 +6,15 @@ This plugin runs a scored assessment of your repo across 8 dimensions and tells 
 
 The result is a score (0-100), a band rating, and a concrete improvement roadmap. Not opinions — evidence gathered from your actual codebase.
 
-## Installation
+## Install
 
+```bash
+npx skills add dgalarza/claude-code-workflows --skill "codebase-readiness"
 ```
+
+Or via Claude marketplace:
+
+```bash
 /plugin marketplace add dgalarza/claude-code-workflows
 /plugin install codebase-readiness@dgalarza-workflows
 ```
@@ -69,7 +75,13 @@ Benchmarks show agentic coding can deliver 20x+ productivity — but only when t
 
 If Documentation & Context is one of your weaker dimensions, the [agent-ready](../agent-ready/README.md) companion plugin scaffolds CLAUDE.md, ARCHITECTURE.md, and a docs/ structure automatically. It reads your assessment results and suggests where to start.
 
+```bash
+npx skills add dgalarza/claude-code-workflows --skill "agent-ready"
 ```
+
+Or via Claude marketplace:
+
+```bash
 /plugin install agent-ready@dgalarza-workflows
 ```
 
