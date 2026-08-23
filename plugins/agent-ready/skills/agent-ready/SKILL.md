@@ -1,6 +1,6 @@
 ---
 name: agent-ready
-description: Make a codebase agent-ready by scaffolding AGENTS.md, ARCHITECTURE.md, and docs/ structure. Analyzes codebase structure, generates documentation artifacts following progressive disclosure patterns, and audits existing artifacts for staleness and coherence. Use when improving a codebase for AI agent work.
+description: Make a codebase agent-ready by scaffolding AGENTS.md, ARCHITECTURE.md, and docs/ structure and recommending project-local framework skills. Analyzes codebase structure, generates documentation artifacts following progressive disclosure patterns, and audits existing artifacts for staleness and coherence. Use when improving a codebase for AI agent work.
 ---
 
 # Agent-Ready
@@ -37,6 +37,22 @@ Determine which mode to run based on user intent:
 | Check existing artifacts | **audit** | "audit docs", "are my docs up to date", "check agent readiness" |
 
 If intent is ambiguous, ask the user which mode they want.
+
+---
+
+## Startup: Recommend Project Skills
+
+After selecting a mode and before making project changes, read `references/recommended-skills.md` and inspect the repository for its documented framework signals.
+
+When one or more catalog entries match:
+1. Check project-local skills and exclude any that are already installed
+2. Present the detected framework, recommended skill, source, and short rationale
+3. Ask once whether to install all recommendations, a selected subset, or none
+4. Wait for explicit confirmation; never install a skill based only on detection
+5. Install confirmed skills from the repository root with the catalog commands, which omit `--global` to preserve project scope
+6. Report install results and continue the selected agent-ready mode even if an install fails
+
+When nothing matches or all matching skills are installed, continue without prompting. Do not recommend uncataloged skills merely because they seem related.
 
 ---
 

@@ -1,6 +1,6 @@
 # agent-ready
 
-Make a codebase agent-ready by scaffolding AGENTS.md, ARCHITECTURE.md, and docs/ structure following progressive disclosure patterns.
+Make a codebase agent-ready by scaffolding AGENTS.md, ARCHITECTURE.md, and docs/ structure following progressive disclosure patterns, then recommend project-local skills for detected frameworks.
 
 This is the **remediation companion** to [codebase-readiness](../codebase-readiness/). While codebase-readiness *scores* how agent-ready your codebase is, agent-ready *fixes* the gaps by generating the documentation and structural artifacts that make a codebase legible to AI agents.
 
@@ -21,6 +21,17 @@ npx skills add dgalarza/claude-code-workflows --skill "agent-ready"
 | **architecture** | Generate ARCHITECTURE.md from actual codebase analysis | "Create an ARCHITECTURE.md" |
 | **agents-md** | Create or refactor AGENTS.md for progressive disclosure, create CLAUDE.md symlink | "Set up AGENTS.md" |
 | **audit** | Check existing agent-readiness artifacts for staleness and coherence | "Are my agent docs up to date?" |
+
+## Framework Skill Recommendations
+
+Agent-ready inspects project manifests for strong framework signals and recommends a small, opinionated set of skills:
+
+| Detected Project | Recommended Skill | Source |
+|------------------|-------------------|--------|
+| React | `vercel-react-best-practices` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) |
+| Mastra | `mastra` | [mastra-ai/skills](https://github.com/mastra-ai/skills) |
+
+It checks project-local installations first, groups missing recommendations into one prompt, and waits for confirmation. Confirmed skills are installed from the repository root with `npx skills add` in project scope; agent-ready never installs them globally or without consent.
 
 ## Principles
 
