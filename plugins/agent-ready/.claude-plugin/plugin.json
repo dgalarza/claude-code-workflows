@@ -1,7 +1,7 @@
 {
   "name": "agent-ready",
   "version": "1.4.0",
-  "description": "Make a codebase agent-ready with progressive-disclosure documentation and opinionated project-local framework skill recommendations. Creates CLAUDE.md as a symlink for Claude Code compatibility.",
+  "description": "Make a codebase agent-ready with progressive-disclosure documentation and opinionated, stack-specific project skill recommendations. Creates CLAUDE.md as a symlink for Claude Code compatibility.",
   "author": {
     "name": "Damian Galarza",
     "url": "https://www.damiangalarza.com"

@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2026.08.23] — 2026-08-23
 
 ### Added
-- **agent-ready v1.4.0** — Detects React and Mastra repositories, recommends their official project skills, and installs confirmed selections locally with `npx skills add`.
+- **agent-ready v1.4.0** — Detects supported frameworks, services, and infrastructure, recommends curated project skills, and installs confirmed selections locally with `npx skills add`. Includes React, React Native, Angular, Svelte, Mastra, FastAPI, Laravel, Supabase, Stripe, Cloudflare Workers, Terraform, and optional UI guidance.
 
 ## [2026.05.26] — 2026-05-26
 
