@@ -5,6 +5,11 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026.08.23] — 2026-08-23
+
+### Added
+- **agent-ready v1.4.0** — Detects supported frameworks, services, and infrastructure, recommends curated project skills, and installs confirmed selections locally with `npx skills add`. Includes React, React Native, Angular, Svelte, Mastra, FastAPI, Laravel, Supabase, Stripe, Cloudflare Workers, Terraform, and optional UI guidance.
+
 ## [2026.05.26] — 2026-05-26
 
 ### Changed
@@ -44,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Docs
 - Documented release process and versioning strategy
 
+[2026.08.23]: https://github.com/dgalarza/claude-code-workflows/tree/2026.08.23
 [2026.05.26]: https://github.com/dgalarza/claude-code-workflows/tree/2026.05.26
 [2026.05.22]: https://github.com/dgalarza/claude-code-workflows/tree/2026.05.22
 [2026.04.14]: https://github.com/dgalarza/claude-code-workflows/tree/2026.04.14

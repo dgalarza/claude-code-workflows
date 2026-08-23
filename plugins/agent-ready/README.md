@@ -1,6 +1,6 @@
 # agent-ready
 
-Make a codebase agent-ready by scaffolding AGENTS.md, ARCHITECTURE.md, and docs/ structure following progressive disclosure patterns.
+Make a codebase agent-ready by scaffolding AGENTS.md, ARCHITECTURE.md, and docs/ structure following progressive disclosure patterns, then recommend project-local skills for the detected stack.
 
 This is the **remediation companion** to [codebase-readiness](../codebase-readiness/). While codebase-readiness *scores* how agent-ready your codebase is, agent-ready *fixes* the gaps by generating the documentation and structural artifacts that make a codebase legible to AI agents.
 
@@ -21,6 +21,28 @@ npx skills add dgalarza/claude-code-workflows --skill "agent-ready"
 | **architecture** | Generate ARCHITECTURE.md from actual codebase analysis | "Create an ARCHITECTURE.md" |
 | **agents-md** | Create or refactor AGENTS.md for progressive disclosure, create CLAUDE.md symlink | "Set up AGENTS.md" |
 | **audit** | Check existing agent-readiness artifacts for staleness and coherence | "Are my agent docs up to date?" |
+
+## Project Skill Recommendations
+
+Agent-ready inspects tracked manifests and configuration for strong stack signals and recommends a curated set of skills:
+
+| Detected Project | Recommended Skill | Source |
+|------------------|-------------------|--------|
+| React web | `vercel-react-best-practices` | [Vercel](https://github.com/vercel-labs/agent-skills) |
+| React Native or Expo | `vercel-react-native-skills` | [Vercel](https://github.com/vercel-labs/agent-skills) |
+| Angular | `angular-developer` | [Angular](https://github.com/angular/angular) |
+| Svelte | `svelte-core-bestpractices` | [Svelte](https://github.com/sveltejs/ai-tools) |
+| Mastra | `mastra` | [Mastra](https://github.com/mastra-ai/skills) |
+| FastAPI | `fastapi` | [FastAPI](https://github.com/fastapi/fastapi) |
+| Laravel | `laravel-best-practices` | [Laravel](https://github.com/laravel/boost) |
+| Supabase | `supabase` | [Supabase](https://github.com/supabase/agent-skills) |
+| Stripe | `stripe-best-practices` | [Stripe](https://github.com/stripe/ai) |
+| Cloudflare Workers | `workers-best-practices` | [Cloudflare](https://github.com/cloudflare/skills) |
+| Terraform | `terraform-style-guide` | [HashiCorp](https://github.com/hashicorp/agent-skills) |
+
+For repositories with a clearly user-facing browser UI, it separately offers `frontend-design` from Anthropic and `web-design-guidelines` from Vercel as optional additions.
+
+Agent-ready checks project-local installations first, groups missing recommendations into one prompt, and waits for confirmation. Confirmed skills are installed from the repository root with `npx skills add` in project scope; optional skills are not selected by default, and nothing is installed globally or without consent.
 
 ## Principles
 
