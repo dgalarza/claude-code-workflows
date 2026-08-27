@@ -38,8 +38,11 @@ After reviewing the output, format a **Codebase Snapshot**:
 - **CI/CD**: [platform(s) found or none]
 - **CLAUDE.md**: [present at path, X lines / absent]
 - **Linting config**: [tools found or none]
+- **Quality gates**: [copy the `Suggested Gate Maturity Level: Lx -- ...` line from recon output, e.g. "L0 -- no complexity, duplication, or dead-code tooling detected"]
 - **README**: [present, X lines / absent]
 ```
+
+**The `Quality gates` line is required.** `recon.sh` ends its `=== QUALITY GATES ===` section with `Suggested Gate Maturity Level: Lx -- <reason>`. Copy that level and reason onto the snapshot's `Quality gates` line. Then read `references/quality-gates.md` and check the suggestion against the detailed evidence above it (L0 none, L1 report-only, L2 threshold, L3 regression-aware blocking, L4 governed); change the line only when the evidence contradicts the heuristic, and say why. Do not launch the assessment agents with a snapshot that lacks this line -- the agents score only their own slice of the gate evidence and read the level from the snapshot; if it is missing, each agent re-derives it independently and the four dimensions drift apart.
 
 Determine `PRIMARY_LANGUAGE` and `LANGUAGE_TIER` from the snapshot. These values drive which language reference file to load.
 
@@ -57,7 +60,8 @@ Each agent receives a composed prompt built from reference files:
 
 1. **Read the language file** — `references/languages/{PRIMARY_LANGUAGE}.md`
 2. **Read the dimension files** — each agent gets its relevant dimension files from `references/dimensions/`
-3. **Compose the prompt** — role preamble + codebase snapshot + dimension content + language content + output instructions
+3. **Read the shared gate reference** — `references/quality-gates.md` goes to the Test & CI, Code Quality, and Architecture agents (each scores a distinct slice; the credit-ownership table prevents double counting)
+4. **Compose the prompt** — role preamble + codebase snapshot + dimension content + quality-gates content + language content + output instructions
 
 Use the Read tool to load each reference file, then include the content inline in the agent prompts. When including the language file, instruct each agent to reference only the sections relevant to its assigned dimensions.
 
@@ -72,6 +76,7 @@ Send a **single message** with **4 Agent tool calls** (subagent_type: `general-p
 Dimension files to read and include:
 - `references/dimensions/test-foundation.md`
 - `references/dimensions/feedback-loops.md`
+- `references/quality-gates.md` (Feedback Loops slice only: actionability, reproducibility, gate tests)
 
 Prompt:
 ```
@@ -97,6 +102,12 @@ Reference only the Test Foundation and Feedback Loops sections from the language
 ### Dimension Guide: Feedback Loops
 
 [INSERT CONTENT OF references/dimensions/feedback-loops.md]
+
+### Shared Reference: Regression-Aware Quality Gates
+
+Use the Gate Maturity Level from the snapshot. Score only the Feedback Loops slice from the credit-ownership table (actionability, reproducibility, gate tests). Do not credit tool coverage or blocking behaviour here.
+
+[INSERT CONTENT OF references/quality-gates.md]
 
 ### Language-Specific Criteria
 
@@ -147,6 +158,7 @@ Return the full scored assessment in the output format specified in the dimensio
 Dimension files to read and include:
 - `references/dimensions/code-clarity.md`
 - `references/dimensions/consistency.md`
+- `references/quality-gates.md` (Code Clarity slice: structural coverage; Consistency slice: lint-debt treatment)
 
 Prompt:
 ```
@@ -173,6 +185,12 @@ Reference only the Code Clarity and Consistency sections from the language file.
 
 [INSERT CONTENT OF references/dimensions/consistency.md]
 
+### Shared Reference: Regression-Aware Quality Gates
+
+Use the Gate Maturity Level from the snapshot. Code Clarity credits which structural properties (complexity, duplication, dead code) are covered and whether each is blocked at L3+. Consistency credits lint/format enforcement and how lint legacy debt is treated. Do not credit CI ergonomics or baseline governance in either dimension.
+
+[INSERT CONTENT OF references/quality-gates.md]
+
 ### Language-Specific Criteria
 
 [INSERT CONTENT OF references/languages/{PRIMARY_LANGUAGE}.md]
@@ -188,6 +206,7 @@ Dimension files to read and include:
 - `references/dimensions/type-safety.md`
 - `references/dimensions/architecture-clarity.md`
 - `references/dimensions/change-safety.md`
+- `references/quality-gates.md` (Change Safety slice only: blocking semantics and baseline governance)
 
 Prompt:
 ```
@@ -217,6 +236,12 @@ Reference only the Type Safety, Architecture, and Change Safety sections from th
 ### Dimension Guide: Change Safety
 
 [INSERT CONTENT OF references/dimensions/change-safety.md]
+
+### Shared Reference: Regression-Aware Quality Gates
+
+Use the Gate Maturity Level from the snapshot. Score only the Change Safety slice: whether CI blocks new or worsened structural debt (L3+) and how the baseline is governed. Do not credit tool selection or CI ergonomics here.
+
+[INSERT CONTENT OF references/quality-gates.md]
 
 ### Language-Specific Criteria
 
@@ -280,6 +305,8 @@ In dynamic languages, tests are the type system. Test Foundation carries more we
 
 Read the report template from `assets/report-template.md`. Fill in the template using the agent results and the weight table matching the codebase's `LANGUAGE_TIER` from Phase 3.
 
+Include the Codebase Snapshot in the report exactly as it was given to the agents, `Quality gates` line included, and repeat that line verbatim in the `Quality Gate Maturity` section. The snapshot and the section must never disagree.
+
 **Important:** Use the exact weights from the appropriate Phase 3 table (dynamic vs. static). Do not use hardcoded weights — they differ by language tier.
 
 Output the completed report.
@@ -298,7 +325,11 @@ If the user confirms, write the full report to `AGENT_READY_ASSESSMENT.md` in th
 
 ## Phase 6: CI Integration Recommendation
 
-After saving (or if the user declines), mention:
+After saving (or if the user declines), if the Gate Maturity Level is L0-L2, mention that the **agent-ready** plugin's `quality-gates` mode installs a regression-aware gate (report / check / baseline commands, merge-base-aware CI, reviewed baseline, and tests) using the project's native tools:
+
+> Your quality gates scored [Lx]. Run `agent-ready` in **quality-gates** mode to install a gate that blocks new or worsened complexity, duplication, and dead code without forcing a cleanup of legacy debt first.
+
+Then mention:
 
 > **For continuous tracking:** Consider adding [`btar`](https://github.com/jaredmcfarland/btar) to your CI pipeline. It provides fast, deterministic measurement of your verification infrastructure (type errors, lint violations, test coverage) and can gate PRs when scores regress. This assessment gives a strategic baseline; btar gives daily CI enforcement of the most critical metrics.
 >

@@ -14,6 +14,7 @@ Consistency determines whether an agent can learn patterns from one part of the 
   - They encode decisions that are hard to infer from code alone
   - Error messages act as "context injection" — when an agent violates a rule, the error message teaches it the correct approach
   - Examples: "don't import from domain X in domain Y", "all API handlers must call authorize()", "database queries must go through the repository layer"
+- **Lint legacy-debt treatment (style slice)**: How is pre-existing lint debt handled? A todo or baseline file (`.rubocop_todo.yml`, `phpstan-baseline`, ESLint baseline) that shrinks over time and is pruned when violations are fixed is a ratchet; one that only grows, or hundreds of inline disables, is suppression. See `references/quality-gates.md` -- this dimension credits **style tooling and lint-debt treatment** only; complexity, duplication, and dead-code checks are scored under Code Clarity
 
 ## Evidence-Gathering Commands
 
@@ -34,6 +35,15 @@ find . -maxdepth 2 \( \
   -name ".golangci.yml" -o -name "checkstyle.xml" -o -name ".scalafmt.conf" -o \
   -name "biome.json" -o -name "deno.json" -o -name ".stylelintrc*" \
 \) 2>/dev/null | grep -v node_modules | grep -v .git
+
+# Lint legacy-debt treatment (see references/quality-gates.md)
+for f in .rubocop_todo.yml phpstan-baseline.neon eslint-baseline.json .eslint-baseline.json; do
+  [ -f "$f" ] && echo "$f: $(wc -l < "$f") lines; commits touching it: $(git log --format=%h -- "$f" 2>/dev/null | wc -l); last change: $(git log --format=%cs -1 -- "$f" 2>/dev/null)"
+done
+# Inline suppressions substituting for a baseline
+grep -rEc "eslint-disable|rubocop:disable|noqa|nolint|@SuppressWarnings|phpcs:ignore|# type: ignore" \
+  --include="*.ts" --include="*.tsx" --include="*.js" --include="*.rb" --include="*.py" --include="*.go" --include="*.java" --include="*.php" . 2>/dev/null \
+  | grep -v ":0$" | grep -v node_modules | grep -v vendor | awk -F: '{s+=$2} END {print "inline suppressions:", s+0}'
 ```
 
 NOTE: Detailed linter/formatter detection, rule counting, and strictness analysis commands are language-specific and belong in language files.
@@ -48,11 +58,15 @@ NOTE: Detailed linter/formatter detection, rule counting, and strictness analysi
 
 NOTE: For dimensions where scoring bands differ materially by language, these bands provide the general framing. The language file provides concrete criteria and tooling-specific thresholds.
 
+**Lint-debt treatment:** the 81-100 band assumes lint violations fail CI *and* legacy debt is either cleared or held in a baseline that is pruned as it shrinks. A baseline that only grows is a suppression mechanism and does not qualify for the top band.
+
 ## Score Modifiers
 
 - **Custom/architectural linters present** (enforcing domain rules, not just style): **+10**
 - **Auto-format on commit** (via pre-commit hooks): **+3**
 - **Linter configured but >20% of rules disabled/overridden**: **-5**
+- **Lint baseline / todo file that shrinks over time** (git history shows removals): **+5**
+- **Lint baseline that has only grown, or more than 100 inline suppressions without a baseline**: **-5**
 
 ## Output Format
 
@@ -67,6 +81,7 @@ NOTE: For dimensions where scoring bands differ materially by language, these ba
 - Pre-commit hooks: [present / absent — what they enforce]
 - CI enforcement: [lint only / format only / both / neither]
 - Custom/architectural linters: [present / absent — description if present]
+- Lint legacy-debt treatment: [cleared / pruned baseline / growing baseline / inline suppressions -- counts and last-shrink date]
 
 ### Strengths
 - [What's working well]

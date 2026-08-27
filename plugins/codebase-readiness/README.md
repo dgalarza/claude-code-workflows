@@ -47,12 +47,12 @@ The assessment spawns 4 parallel agents, scores all 8 dimensions using language-
 |---------------------------|-------------------------------------------------------------------------|
 | Test Foundation           | Coverage, quality, test-to-code ratio, mutation testing                 |
 | Documentation & Context   | CLAUDE.md, ARCHITECTURE.md, ADRs, topic docs                           |
-| Code Clarity              | File size, naming, filesystem as interface, catch-all directories       |
+| Code Clarity              | File size, naming, catch-all directories, complexity/duplication/dead-code gate coverage |
 | Architecture Clarity      | Domain boundary visibility in the file tree, not just conceptual DDD    |
 | Type Safety               | Strict types, semantic type names, database-level invariants            |
-| Consistency & Conventions | Linting, formatting, custom architectural linters                       |
-| Feedback Loops            | CI speed, ephemeral environments, parallel dev capability               |
-| Change Safety             | Coupling, test isolation, PR size patterns                              |
+| Consistency & Conventions | Linting, formatting, custom architectural linters, lint-debt baseline treatment |
+| Feedback Loops            | CI speed, ephemeral environments, actionable and reproducible quality-gate feedback |
+| Change Safety             | Coupling, migrations, feature flags, CI blocking new/worsened debt vs a governed baseline |
 
 ## Architecture
 
@@ -60,6 +60,8 @@ The skill uses a **reference file pattern** for extensibility:
 
 - **Dimension files** (`references/dimensions/`) define *what* to assess and *how* to score — the methodology. These are language-agnostic and rarely change.
 - **Language files** (`references/languages/`) carry all language-specific tooling, commands, and scoring criteria. Adding support for a new language means adding one file.
+
+- **Shared references** (`references/quality-gates.md`) cover cross-cutting concerns. Regression-aware quality gates (complexity, duplication, dead code with baseline treatment of legacy debt) are assigned a single Gate Maturity Level (L0-L4) during reconnaissance, and each of the four affected dimensions scores one distinct slice of the evidence so nothing is double-counted. Top-band credit requires CI that blocks new or worsened debt, not report-only tooling.
 
 During assessment, the orchestrator detects the primary language, loads the appropriate reference files, and composes prompts for 4 general-purpose agents that run in parallel. Each agent receives the relevant dimension guides plus the full language file.
 
