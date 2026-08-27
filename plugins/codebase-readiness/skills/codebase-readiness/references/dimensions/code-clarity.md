@@ -12,6 +12,7 @@ Code clarity determines whether an agent can understand and modify individual fi
 - **Naming clarity**: Can the purpose of a file/class/module be inferred from its name? Vague names (utils, helpers, misc, common, shared) force agents to read files to understand them
 - **Single Responsibility Principle**: Do files and classes have a single, clear purpose? Or do they mix multiple concerns?
 - **Catch-all directories**: Directories named utils/, helpers/, common/, shared/, misc/ are red flags — they attract unfocused code that has no natural home, making it hard for agents to know what lives where
+- **Structural quality gates (coverage slice)**: Are complexity, duplication, and dead-code / unused-export checks configured with project thresholds? Presence earns partial credit; a gate that blocks new or worsened findings in PR CI (Gate Maturity Level L3+, from the Codebase Snapshot) earns full credit. See `references/quality-gates.md` -- this dimension credits **which structural properties are covered**, not CI ergonomics or baseline governance (those belong to Feedback Loops and Change Safety)
 
 ## Evidence-Gathering Commands
 
@@ -50,6 +51,13 @@ for dir in utils helpers common shared misc; do
     echo "$dir/: $COUNT files"
   fi
 done
+
+# Structural quality gate coverage (see references/quality-gates.md; use the Gate Maturity Level from the snapshot)
+grep -rEl "complexity|cognitive|C901|Metrics/(Cyclomatic|Perceived)Complexity|gocyclo|gocognit" \
+  .eslintrc* eslint.config.* biome.json .rubocop.yml pyproject.toml ruff.toml .golangci.yml phpmd*.xml detekt*.yml pmd*.xml 2>/dev/null
+grep -rEl "jscpd|flay|duplicate-code|cpd|phpcpd|dupl" package.json Gemfile pyproject.toml .golangci.yml .pylintrc pmd*.xml composer.json .jscpd.json 2>/dev/null
+grep -rEl "knip|ts-prune|ts-unused-exports|vulture|debride|deadcode|unused|cargo-machete|UnusedPrivateMember" \
+  package.json knip.json* Gemfile pyproject.toml .golangci.yml Cargo.toml detekt*.yml phpstan.neon* 2>/dev/null
 ```
 
 ## Scoring Bands
@@ -62,11 +70,17 @@ done
 
 NOTE: For dimensions where scoring bands differ materially by language, these bands provide the general framing. The language file provides concrete criteria and tooling-specific thresholds.
 
+**Structural gate requirement for the top band:** 81-100 requires complexity and duplication to be gated at L3 or higher (CI blocks new or worsened findings). Report-only tooling caps this dimension at 80 regardless of file-size metrics.
+
 ## Score Modifiers
 
 - **No files exceed 500 lines**: **+5**
 - **Catch-all directories (utils/, helpers/, etc.) contain >20 files each**: **-5**
 - **More than 10 god files (>1000 lines)**: **-10**
+- **Complexity check configured with a project threshold**: **+2**; enforced at L3+: **+4** instead
+- **Duplication check configured**: **+2**; enforced at L3+: **+4** instead
+- **Reliable dead-code / unused-export check configured**: **+2**; enforced at L3+: **+4** instead
+- **Structural tooling present but report-only (L1) for more than 6 months of history**: **-3**
 
 ## Output Format
 
@@ -82,6 +96,7 @@ NOTE: For dimensions where scoring bands differ materially by language, these ba
 - Catch-all directories: [list with file counts]
 - Directory depth: [typical nesting level]
 - Naming quality: [excellent / good / mixed / poor — examples]
+- Structural gate coverage: [complexity: none / report-only / blocked] [duplication: none / report-only / blocked] [dead code: none / report-only / blocked] -- Gate Maturity Level [L0-L4] from snapshot
 
 ### Strengths
 - [What's working well]

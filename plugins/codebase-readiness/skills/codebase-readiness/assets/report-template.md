@@ -46,6 +46,14 @@ The goal is to make agent output cheaply verifiable: the cost of a wrong answer 
 
 ---
 
+## Quality Gate Maturity: [L0-L4]
+
+**Quality gates:** [the snapshot line, verbatim -- e.g. "L0 -- no complexity, duplication, or dead-code tooling detected"]
+
+[One or two sentences of interpretation. L3+ means CI blocks new or worsened structural debt; below that, agents can add complexity, duplication, and dead code without CI objecting.]
+
+---
+
 ## Critical Findings
 [List any dimensions scoring below 40, with the specific gap and why it blocks agent work]
 
@@ -62,6 +70,7 @@ The goal is to make agent output cheaply verifiable: the cost of a wrong answer 
 | Property-based tests present | ✓ / ✗ | Oracle generates adversarial inputs, not just happy paths |
 | Reproducible dev state (seeds/factories) | ✓ / ✗ | Agents can set up verifiable scenarios independently |
 | Coverage reported on PRs | ✓ / ✗ | Regression signal visible before human review |
+| Structural debt gate blocks new/worsened findings (L3+) | ✓ / ✗ | Complexity, duplication, and dead code cannot silently grow under agent-authored PRs |
 
 **Verification bottleneck:** [The single biggest barrier to confirming agent-produced changes — e.g., "No security scanning means agent-introduced vulnerabilities only surface in manual review or production" or "45-min CI limits agents to ~10 verification cycles per day"]
 
@@ -89,6 +98,8 @@ If Documentation & Context scored below 60, the **agent-ready** companion plugin
 ```
 
 It reads this assessment report and suggests which mode to run first based on your weakest dimensions.
+
+If the Gate Maturity Level above is L0-L2, its **quality-gates** mode installs a regression-aware gate -- `report` / `check` / `baseline` commands on your native tools, merge-base-aware CI, a human-reviewed baseline, and tests of the gate -- so legacy debt stays put while new or worsened debt is blocked.
 
 ---
 
