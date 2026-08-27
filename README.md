@@ -47,7 +47,7 @@ Once you have your score, the [agent-ready](plugins/agent-ready/README.md) plugi
 | Skill | Description |
 |-------|-------------|
 | [Codebase Readiness](plugins/codebase-readiness/README.md) | Score your repo's readiness for autonomous AI agent work |
-| [Agent Ready](plugins/agent-ready/README.md) | Fix documentation gaps: scaffold CLAUDE.md, ARCHITECTURE.md, and docs/ |
+| [Agent Ready](plugins/agent-ready/README.md) | Fix documentation gaps and install regression-aware quality gates: CLAUDE.md, ARCHITECTURE.md, docs/, baseline-gated CI |
 | [TDD Workflow](plugins/tdd-workflow/README.md) | Test-driven development, one test at a time |
 | [Conventional Commits](plugins/conventional-commits/README.md) | Structured commit messages |
 | [Parallel Code Review](plugins/parallel-code-review/README.md) | Multi-agent code reviews |

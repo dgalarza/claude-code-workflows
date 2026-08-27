@@ -15,6 +15,7 @@ docs/
 │   ├── setup.md                       # Development environment setup
 │   ├── testing.md                     # Testing patterns and conventions
 │   ├── deployment.md                  # Deployment process and checklist
+│   ├── quality-gates.md               # Quality gate commands, thresholds, baseline protocol
 │   └── [workflow-name].md             # Additional workflow guides as needed
 ├── references/                        # Reference material
 │   ├── api.md                         # API documentation or pointers
@@ -48,6 +49,7 @@ Index of project documentation. Start here to find what you need.
 - [Setup](./guides/setup.md) -- Development environment setup
 - [Testing](./guides/testing.md) -- Testing patterns and conventions
 - [Deployment](./guides/deployment.md) -- How to deploy
+- [Quality Gates](./guides/quality-gates.md) -- Regression-aware complexity, duplication, and dead-code checks
 
 ## References
 - [API](./references/api.md) -- API documentation
