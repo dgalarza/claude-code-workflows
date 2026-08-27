@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'plugins/*/skills/**'
+      - 'plugins/*/tests/**'
       - 'plugins/*/.claude-plugin/plugin.json'
       - '.claude-plugin/marketplace.json'
 
@@ -56,6 +57,18 @@ jobs:
           fi
 
           echo "All skills passed validation."
+
+  test-templates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Test quality-gate engine template
+        run: python3 -m unittest discover -s plugins/agent-ready/tests -v
 
   validate-json:
     runs-on: ubuntu-latest

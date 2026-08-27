@@ -6,3 +6,6 @@ CLAUDE.local.md
 
 # Claude Code — worktree state
 .claude/worktrees
+
+# Python bytecode from template tests
+__pycache__/

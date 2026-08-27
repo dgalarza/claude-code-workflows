@@ -50,11 +50,13 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full codemap.
 - [Directive 3 -- e.g., "Prefer composition over inheritance"]
 - [Directive 4 -- e.g., "Always validate inputs at service boundaries using [framework/library]"]
 - [Directive 5 -- e.g., "Use [naming convention] for [file type]"]
+- Never edit, extend, or approve `[quality baseline file]`; when `[quality-gate check command]` reports stale entries, run `[quality-gate prune command]` and commit the result
 
 ## Definition of Done
 A change is not complete until:
 - [Type-check / lint command] passes
 - [Test command] passes, including any new tests for the change
+- `[quality-gate check command]` passes -- no new or worsened complexity, duplication, or dead code; fix the code rather than touching the baseline
 - The feature has been exercised end-to-end, not just unit-tested
   - Backend changes: hit the actual endpoint, inspect the response
   - UI changes: load the page in a browser, click through the flow
@@ -66,6 +68,7 @@ Do not mark work complete based on "the code looks right" or "the unit tests pas
 ## Common Workflows
 - Setup: [docs/guides/setup.md](docs/guides/setup.md)
 - Testing patterns: [docs/guides/testing.md](docs/guides/testing.md)
+- Quality gates: [docs/guides/quality-gates.md](docs/guides/quality-gates.md)
 - Deployment: [docs/guides/deployment.md](docs/guides/deployment.md)
 - Adding a new feature: [docs/guides/new-feature.md](docs/guides/new-feature.md)
 

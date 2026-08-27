@@ -1,0 +1,50 @@
+# Regression-aware quality gate.
+#
+# Fails the PR on new or worsened complexity / duplication / dead-code
+# findings relative to the reviewed baseline, on stale baseline entries, or on
+# an unreviewed baseline. Findings are annotated on the PR diff.
+#
+# Adjust the setup block so the project's analyzers are installed. Keep
+# fetch-depth: 0 -- the gate resolves the merge-base with the base branch.
+# Never add continue-on-error, and never run `baseline` here.
+
+name: Quality Gate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  quality-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch base branch for merge-base
+        run: git fetch origin ${{ github.base_ref || 'main' }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # --- Project setup: install whatever the checks in .quality-gate.json call ---
+      # - uses: actions/setup-node@v4
+      #   with: { node-version: '22', cache: 'npm' }
+      # - run: npm ci
+      #
+      # - uses: ruby/setup-ruby@v1
+      #   with: { bundler-cache: true }
+      #
+      # - uses: actions/setup-go@v5
+      #   with: { go-version-file: go.mod }
+      # - uses: golangci/golangci-lint-action@v6
+      # ---------------------------------------------------------------------------
+
+      - name: Quality gate
+        run: python3 scripts/quality-gate.py check
+
+      - name: Gate self-test
+        run: bash scripts/quality-gate-test.sh
