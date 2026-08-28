@@ -1,0 +1,214 @@
+[
+  {
+    "path": "/home/runner/work/claude-code-workflows/claude-code-workflows/plugins/codebase-readiness/skills/codebase-readiness",
+    "name": "codebase-readiness",
+    "valid": true,
+    "findings": [
+      {
+        "type": "suggestion",
+        "category": "description",
+        "message": "Description may benefit from explicit \"when to use\" guidance",
+        "recommendation": "Consider adding trigger contexts (e.g., \"Use when users want to...\")"
+      },
+      {
+        "type": "info",
+        "category": "testing",
+        "message": "No evaluation infrastructure found",
+        "recommendation": "Consider adding test cases if skill has objectively verifiable outputs"
+      }
+    ],
+    "stats": {
+      "body_lines": 304,
+      "description_length": 272
+    },
+    "bundled_resources": {
+      "scripts": {
+        "count": 1,
+        "files": [
+          "recon.sh"
+        ]
+      },
+      "references": {
+        "count": 2,
+        "files": []
+      },
+      "assets": {
+        "count": 1,
+        "files": [
+          "report-template.md"
+        ]
+      }
+    }
+  },
+  {
+    "path": "/home/runner/work/claude-code-workflows/claude-code-workflows/plugins/conventional-commits/skills/conventional-commits",
+    "name": "conventional-commits",
+    "valid": true,
+    "findings": [
+      {
+        "type": "suggestion",
+        "category": "documentation",
+        "message": "references/commit-examples.md has 634 lines but no table of contents",
+        "recommendation": "Add a table of contents for files >300 lines"
+      },
+      {
+        "type": "info",
+        "category": "testing",
+        "message": "No evaluation infrastructure found",
+        "recommendation": "Consider adding test cases if skill has objectively verifiable outputs"
+      }
+    ],
+    "stats": {
+      "body_lines": 348,
+      "description_length": 330
+    },
+    "bundled_resources": {
+      "references": {
+        "count": 1,
+        "files": [
+          "commit-examples.md"
+        ]
+      }
+    }
+  },
+  {
+    "path": "/home/runner/work/claude-code-workflows/claude-code-workflows/plugins/gridfinity-planner/skills/gridfinity-baseplate-planner",
+    "name": "gridfinity-baseplate-planner",
+    "valid": true,
+    "findings": [
+      {
+        "type": "info",
+        "category": "testing",
+        "message": "No evaluation infrastructure found",
+        "recommendation": "Consider adding test cases if skill has objectively verifiable outputs"
+      }
+    ],
+    "stats": {
+      "body_lines": 205,
+      "description_length": 452
+    },
+    "bundled_resources": {}
+  },
+  {
+    "path": "/home/runner/work/claude-code-workflows/claude-code-workflows/plugins/meeting-transcript/skills/process-meeting-transcript",
+    "name": "process-meeting-transcript",
+    "valid": true,
+    "findings": [
+      {
+        "type": "info",
+        "category": "testing",
+        "message": "No evaluation infrastructure found",
+        "recommendation": "Consider adding test cases if skill has objectively verifiable outputs"
+      }
+    ],
+    "stats": {
+      "body_lines": 144,
+      "description_length": 268
+    },
+    "bundled_resources": {}
+  },
+  {
+    "path": "/home/runner/work/claude-code-workflows/claude-code-workflows/plugins/parallel-code-review/skills/parallel-code-review",
+    "name": "parallel-code-review",
+    "valid": true,
+    "findings": [
+      {
+        "type": "info",
+        "category": "testing",
+        "message": "No evaluation infrastructure found",
+        "recommendation": "Consider adding test cases if skill has objectively verifiable outputs"
+      }
+    ],
+    "stats": {
+      "body_lines": 277,
+      "description_length": 381
+    },
+    "bundled_resources": {}
+  },
+  {
+    "path": "/home/runner/work/claude-code-workflows/claude-code-workflows/plugins/rails-toolkit/skills/linear-implement",
+    "name": "linear-implement",
+    "valid": true,
+    "findings": [
+      {
+        "type": "warning",
+        "category": "length",
+        "message": "SKILL.md body has 611 lines (recommended: <500)",
+        "recommendation": "Consider moving content to bundled resources with clear references"
+      },
+      {
+        "type": "info",
+        "category": "testing",
+        "message": "No evaluation infrastructure found",
+        "recommendation": "Consider adding test cases if skill has objectively verifiable outputs"
+      }
+    ],
+    "stats": {
+      "body_lines": 611,
+      "description_length": 396
+    },
+    "bundled_resources": {}
+  },
+  {
+    "path": "/home/runner/work/claude-code-workflows/claude-code-workflows/plugins/rails-toolkit/skills/rspec-testing",
+    "name": "rspec-testing",
+    "valid": true,
+    "findings": [
+      {
+        "type": "warning",
+        "category": "length",
+        "message": "SKILL.md body has 567 lines (recommended: <500)",
+        "recommendation": "Consider moving content to bundled resources with clear references"
+      },
+      {
+        "type": "suggestion",
+        "category": "documentation",
+        "message": "references/thoughtbot_patterns.md has 407 lines but no table of contents",
+        "recommendation": "Add a table of contents for files >300 lines"
+      },
+      {
+        "type": "info",
+        "category": "testing",
+        "message": "No evaluation infrastructure found",
+        "recommendation": "Consider adding test cases if skill has objectively verifiable outputs"
+      }
+    ],
+    "stats": {
+      "body_lines": 567,
+      "description_length": 349
+    },
+    "bundled_resources": {
+      "references": {
+        "count": 2,
+        "files": [
+          "better_specs_guide.md",
+          "thoughtbot_patterns.md"
+        ]
+      }
+    }
+  },
+  {
+    "path": "/home/runner/work/claude-code-workflows/claude-code-workflows/plugins/tdd-workflow/skills/tdd-workflow",
+    "name": "tdd-workflow",
+    "valid": true,
+    "findings": [
+      {
+        "type": "suggestion",
+        "category": "description",
+        "message": "Description is quite short, may undertrigger",
+        "recommendation": "Consider expanding with more contexts, keywords, and examples"
+      },
+      {
+        "type": "info",
+        "category": "testing",
+        "message": "No evaluation infrastructure found",
+        "recommendation": "Consider adding test cases if skill has objectively verifiable outputs"
+      }
+    ],
+    "stats": {
+      "body_lines": 14,
+      "description_length": 65
+    },
+    "bundled_resources": {}
+  }
+]
