@@ -91,13 +91,11 @@ The goal is to make agent output cheaply verifiable: the cost of a wrong answer 
 
 ## Start Fixing: agent-ready
 
-If Documentation & Context scored below 60, the **agent-ready** companion plugin can close that gap now. It scaffolds CLAUDE.md, ARCHITECTURE.md, and a docs/ structure following progressive disclosure patterns, built on your actual codebase.
-
-```
-/plugin install agent-ready@dgalarza-workflows
-```
+If Documentation & Context or Architecture Clarity scored below 60, the **agent-ready** companion plugin can close those gaps now. It scaffolds AGENTS.md with a CLAUDE.md symlink, ARCHITECTURE.md, a `docs/` structure following progressive disclosure patterns, `docs/DOMAIN.md`, and a starter ADR, all built on your actual codebase.
 
 It reads this assessment report and suggests which mode to run first based on your weakest dimensions.
+
+Get it, with both install methods and how to run it: https://www.damiangalarza.com/agent-ready/
 
 If the Gate Maturity Level above is L0-L2, its **quality-gates** mode installs a regression-aware gate -- `report` / `check` / `baseline` commands on your native tools, merge-base-aware CI, a human-reviewed baseline, and tests of the gate -- so legacy debt stays put while new or worsened debt is blocked.
 

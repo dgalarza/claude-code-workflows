@@ -16,7 +16,7 @@ Before entering any mode, check if `AGENT_READY_ASSESSMENT.md` exists in the pro
 If it exists:
 1. Read it and extract dimension scores
 2. Auto-suggest a mode based on the weakest dimensions:
-   - Documentation & Context < 50 -> suggest **claude-md** first
+   - Documentation & Context < 50 -> suggest **agents-md** first
    - Architecture Clarity < 50 -> suggest **architecture** first
    - Both < 50 -> suggest **scaffold** (full setup)
    - Quality gates at L0-L2 in the snapshot (or Code Clarity / Change Safety < 50 with no debt gate in the evidence) -> suggest **quality-gates**
