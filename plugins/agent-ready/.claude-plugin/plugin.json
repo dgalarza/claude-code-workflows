@@ -1,6 +1,6 @@
 {
   "name": "agent-ready",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Make a codebase agent-ready with progressive-disclosure documentation, regression-aware quality gates, and opinionated, stack-specific project skill recommendations. Creates CLAUDE.md as a symlink for Claude Code compatibility.",
   "author": {
     "name": "Damian Galarza",
