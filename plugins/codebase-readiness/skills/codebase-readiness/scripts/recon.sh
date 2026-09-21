@@ -57,9 +57,19 @@ else
 fi
 
 echo ""
-echo "=== CLAUDE.MD ==="
-find . -name "CLAUDE.md" 2>/dev/null | grep -v node_modules | grep -v .git || echo "No CLAUDE.md found"
-find . -name "CLAUDE.md" -exec wc -l {} \; 2>/dev/null | grep -v node_modules || true
+echo "=== AGENT INSTRUCTIONS ==="
+find . \( -name "AGENTS.md" -o -name "CLAUDE.md" \) 2>/dev/null | grep -v node_modules | grep -v .git || echo "No AGENTS.md or CLAUDE.md found"
+find . \( -name "AGENTS.md" -o -name "CLAUDE.md" \) -exec wc -l {} \; 2>/dev/null | grep -v node_modules || true
+if [ -L CLAUDE.md ]; then
+  echo "CLAUDE.md symlink target: $(readlink CLAUDE.md)"
+fi
+
+
+echo ""
+echo "=== DOMAIN CONTEXT ==="
+find . -maxdepth 4 \( -name "CONTEXT.md" -o -name "CONTEXT-MAP.md" -o -name "DOMAIN.md" \) 2>/dev/null | grep -v node_modules | grep -v .git || echo "No domain context docs found"
+find . -type d \( -name "adr" -o -name "adrs" -o -name "decisions" \) 2>/dev/null | grep -v node_modules | grep -v .git || echo "No ADR directory found"
+find . \( -path "*/adr/*.md" -o -path "*/adrs/*.md" -o -path "*/decisions/*.md" \) 2>/dev/null | grep -v node_modules | grep -v .git | head -20 || true
 
 echo ""
 echo "=== LINTING/FORMATTING ==="

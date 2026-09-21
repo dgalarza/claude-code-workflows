@@ -36,7 +36,8 @@ After reviewing the output, format a **Codebase Snapshot**:
 - **Source files**: [X]
 - **Test files**: [X] (ratio: X%)
 - **CI/CD**: [platform(s) found or none]
-- **CLAUDE.md**: [present at path, X lines / absent]
+- **Agent instructions**: [AGENTS.md / CLAUDE.md / both, with canonical path and symlink status / absent]
+- **Domain context**: [CONTEXT.md / CONTEXT-MAP.md / docs/DOMAIN.md / absent; ADR location and count]
 - **Linting config**: [tools found or none]
 - **Quality gates**: [copy the `Suggested Gate Maturity Level: Lx -- ...` line from recon output, e.g. "L0 -- no complexity, duplication, or dead-code tooling detected"]
 - **README**: [present, X lines / absent]
@@ -148,7 +149,7 @@ Reference only the Documentation sections from the language file.
 
 [INSERT CONTENT OF references/languages/{PRIMARY_LANGUAGE}.md]
 
-Return the full scored assessment in the output format specified in the dimension guide. Be specific — reference actual files found. CLAUDE.md is the most important artifact for agent-readiness — give it special attention.
+Return the full scored assessment in the output format specified in the dimension guide. Be specific — reference actual files found. Treat the project's canonical agent instruction entrypoint as primary: AGENTS.md when CLAUDE.md is its symlink, otherwise the existing root instruction file. Assess conflicting duplicate files as a coherence risk.
 ```
 
 ---

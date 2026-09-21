@@ -5,9 +5,10 @@ Recommended documentation layout for agent-ready codebases. Adapt based on proje
 ---
 
 ```
+CONTEXT.md                             # Canonical domain glossary, created when terms are resolved
 docs/
 ├── README.md                          # Documentation index -- start here
-├── DOMAIN.md                          # Business domain knowledge, terminology, workflows
+├── DOMAIN.md                          # Workflows, relationships, and compliance context (not a glossary)
 ├── architecture/                      # Design documents
 │   ├── [feature-name].md              # Design doc for a specific feature or system
 │   └── ...
@@ -21,9 +22,9 @@ docs/
 │   ├── api.md                         # API documentation or pointers
 │   ├── schemas.md                     # Data schemas and models
 │   └── [topic].md                     # Other reference material
-└── decisions/                         # Architecture Decision Records (ADRs)
-    ├── 001-[decision-title].md        # First decision
-    ├── 002-[decision-title].md        # Second decision
+└── adr/                               # Architecture Decision Records, created when warranted
+    ├── 0001-[decision-title].md
+    ├── 0002-[decision-title].md
     └── ...
 ```
 
@@ -40,7 +41,8 @@ Index of project documentation. Start here to find what you need.
 - [ARCHITECTURE.md](../ARCHITECTURE.md) -- System overview, codemap, invariants, and boundaries
 
 ## Domain Knowledge
-- [DOMAIN.md](./DOMAIN.md) -- Business concepts, terminology, and workflows the code implements
+- [DOMAIN.md](./DOMAIN.md) -- Business workflows, relationships, and compliance context
+- Add a `CONTEXT.md` link here only when `../CONTEXT.md` exists; it is the canonical business terms and vocabulary-to-avoid doc
 
 ## Design Documents
 - [docs/architecture/[name].md](./architecture/[name].md) -- [Brief description]
@@ -56,9 +58,9 @@ Index of project documentation. Start here to find what you need.
 - [Schemas](./references/schemas.md) -- Data models and schemas
 
 ## Decisions
-Architecture Decision Records (ADRs) capture significant decisions and their rationale.
+Architecture Decision Records (ADRs) capture durable decisions and their rationale.
 
-- [001 - [Title]](./decisions/001-[title].md) -- [One-line summary]
+- [0001 - [Title]](./adr/0001-[title].md) -- [One-line summary]
 ```
 
 ---
@@ -66,24 +68,12 @@ Architecture Decision Records (ADRs) capture significant decisions and their rat
 ## ADR Template
 
 ```markdown
-# [Number]. [Title]
+# [Short title]
 
-**Date:** YYYY-MM-DD
-**Status:** [Proposed | Accepted | Deprecated | Superseded by [link]]
-
-## Context
-[What is the issue motivating this decision?]
-
-## Decision
-[What is the change that we are proposing and/or doing?]
-
-## Consequences
-[What becomes easier or harder as a result of this decision?]
-
-## Alternatives Considered
-- [Alternative 1] -- [Why rejected]
-- [Alternative 2] -- [Why rejected]
+[One to three sentences explaining the context, decision, and why it was chosen.]
 ```
+
+Add status, alternatives, or consequences only when they preserve non-obvious context.
 
 ---
 
@@ -92,10 +82,11 @@ Architecture Decision Records (ADRs) capture significant decisions and their rat
 **Start small.** Not every project needs every directory. Begin with:
 1. `docs/README.md` (index)
 2. `docs/guides/setup.md` (if setup is non-trivial)
-3. `docs/decisions/` (start recording decisions now)
+3. `CONTEXT.md` only after a domain term is resolved
+4. `docs/adr/` only after a qualifying decision is made
 
 **Grow as needed.** Add guides and references when content would otherwise bloat CLAUDE.md or get duplicated across docs.
 
 **Single source of truth.** Each topic lives in exactly one file. CLAUDE.md links point here. Do not duplicate content between docs and CLAUDE.md.
 
-**ADRs are permanent.** Do not delete old ADRs. Mark them as Deprecated or Superseded. The history of decisions is valuable context for agents.
+**Create ADRs sparingly.** Write one only when all three are true: the decision is hard to reverse, surprising without context, and the result of a real trade-off. Do not delete ADRs once written; mark obsolete ones as Deprecated or Superseded.

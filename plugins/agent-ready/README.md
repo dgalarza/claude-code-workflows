@@ -17,10 +17,11 @@ npx skills add dgalarza/claude-code-workflows --skill "agent-ready"
 
 | Mode | What It Does | Example Prompt |
 |------|-------------|----------------|
-| **scaffold** | Full setup: docs/ structure, ARCHITECTURE.md, AGENTS.md, CLAUDE.md symlink, starter ADR, quality gate | "Make this codebase agent-ready" |
+| **scaffold** | Full setup: docs/ structure, ARCHITECTURE.md, AGENTS.md, CLAUDE.md symlink, documentation check, quality gate | "Make this codebase agent-ready" |
 | **architecture** | Generate ARCHITECTURE.md from actual codebase analysis | "Create an ARCHITECTURE.md" |
 | **agents-md** | Create or refactor AGENTS.md for progressive disclosure, create CLAUDE.md symlink | "Set up AGENTS.md" |
 | **quality-gates** | Install a regression-aware quality gate: native complexity/duplication/dead-code checks, reviewed baseline, merge-base-aware CI, docs, tests | "Set up quality gates", "baseline our tech debt" |
+| **migrate** | Upgrade a legacy agent-ready scaffold to the current domain-context, ADR, and documentation-check contract | "Migrate our agent-ready docs" |
 | **audit** | Check existing agent-readiness artifacts and the quality gate for staleness, coherence, and governance | "Are my agent docs up to date?" |
 
 ## Quality Gates
@@ -35,7 +36,7 @@ What gets installed in your repo:
 | Commands | `report` / `check` / `baseline --prune`, identical locally and in CI, exposed through the project's task runner |
 | Baseline | Created only with a written `--reason` and a human `--approve --reviewed-by`; `check` fails while it is unreviewed; refused in CI; CODEOWNERS-protected. Stale entries fail `check` until pruned, so the baseline only shrinks |
 | CI | Merge-base-aware job that annotates findings on the PR diff. No `continue-on-error` |
-| Docs | `docs/guides/quality-gates.md` plus Definition of Done and directives in AGENTS.md |
+| Docs | `docs/guides/quality-gates.md` plus Definition of Done and directives in AGENTS.md; scaffold also installs link and topology verification via `scripts/docs-check.py` |
 | Tests | A self-test proving a clean tree passes, synthetic debt fails, and stale entries are pruned |
 
 The pattern is documented in `references/quality-gates-pattern.md` with adapter recipes per language. The engine template has its own unit tests in `tests/`.
@@ -77,6 +78,12 @@ This approach ensures:
 - Your documentation works with any AI coding agent
 - Claude Code users have seamless compatibility
 - You maintain a single source of truth (AGENTS.md)
+
+## Domain Context and ADRs
+
+`CONTEXT.md` is the canonical glossary when a project has resolved domain terminology. `docs/DOMAIN.md` documents supported workflows, relationships, and compliance context without duplicating that glossary. Agent-ready creates `CONTEXT.md` lazily rather than inferring business terms from code.
+
+Create an ADR only when the decision is hard to reverse, surprising without context, and the result of a meaningful trade-off. ADRs live in `docs/adr/` for new scaffolds; migrate mode can move legacy `docs/decisions/` records with `git mv` after confirmation.
 
 ## Integration with codebase-readiness
 

@@ -1,6 +1,6 @@
 # Domain Knowledge Template
 
-Use this template when generating a DOMAIN.md. Seed sections by scanning model names, entity types, and README content from the codebase. Mark thin definitions for team review rather than leaving them blank.
+Use this template when generating a DOMAIN.md. Seed only workflows, relationships, and domain rules that code or existing documentation supports. Canonical terminology belongs in CONTEXT.md and is created only when terms are resolved.
 
 ---
 
@@ -10,15 +10,10 @@ Use this template when generating a DOMAIN.md. Seed sections by scanning model n
 <!-- This file documents the business domain this codebase implements.
      It answers "what does this system do?" not "how is the code structured?"
      For code architecture, see ARCHITECTURE.md.
-     Maintainers: update this when new domain concepts are introduced in code. -->
+     Canonical terminology belongs in CONTEXT.md, created only once terms are resolved.
+     Maintainers: update this when a workflow, relationship, or domain rule changes. -->
 
-## Glossary
-
-Business terms the code implements. Not code terms -- if it only exists in code and has no business meaning, it belongs in ARCHITECTURE.md.
-
-- **[Term]** -- [Definition in 1-2 sentences. What is this in the real world?] Maps to `[model_or_class_name]` in codebase.
-- **[Term]** -- [Definition.] Maps to `[model_or_class_name]` in codebase.
-- **[Term]** -- [Definition.] <!-- TODO: needs domain expert review -->
+<!-- If CONTEXT.md exists, link it here. Do not duplicate its glossary in this file. -->
 
 ## Core Workflows
 
@@ -61,14 +56,10 @@ Industry-specific rules the code must respect. These constraints explain why cer
 
 **This documents business concepts, not code patterns.** Code architecture, module boundaries, and technical invariants go in ARCHITECTURE.md. DOMAIN.md answers "what does the product do and why?" -- the knowledge that lives in domain experts' heads and product docs, not in the code itself.
 
-**Keep glossary entries to 2-3 sentences max.** If a concept needs a full explanation, link to a dedicated doc in `docs/references/`. The glossary is a quick-reference lookup, not a textbook.
+**Keep workflows and relationships concrete.** If a workflow cannot be supported by code or existing documentation, leave a review marker rather than inventing it.
 
-**Link to code when helpful, but focus on the "what" and "why", not the "how."** Including model names and service names helps agents navigate the codebase. But the definition should make sense to someone who has never read the code.
+**Canonical terminology belongs in `CONTEXT.md`.** Create that file lazily when a term is resolved. Keep definitions tight, record avoided synonyms there, and link to it from this file when it exists.
 
-**Update when new domain concepts are introduced in code.** If a PR adds a new model that represents a business concept, DOMAIN.md should get an entry. Treat it like updating a schema migration -- part of the change, not a follow-up task.
-
-**Engineers who join should be able to read this and understand what the product does,** not just how the code is structured. This is the file you wish existed on your first week.
-
-**Even a partially-filled DOMAIN.md is better than nothing.** Bootstrap it with what you can discover from model names, database schemas, and the README. Mark gaps with `<!-- TODO: needs domain expert review -->` for the team to fill in. A stub with real terms and thin definitions beats a perfect document that never gets written.
+**Link to code when helpful, but focus on the "what" and "why", not the "how."** Including model names and service names helps agents navigate the codebase. But the explanation should make sense to someone who has never read the code.
 
 **This file is especially valuable for AI agents working in the codebase.** Agents can reference it to understand business intent behind code changes, write more accurate tests, and avoid violating domain rules they would otherwise have no way to discover.

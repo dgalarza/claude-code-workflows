@@ -91,7 +91,7 @@ The goal is to make agent output cheaply verifiable: the cost of a wrong answer 
 
 ## Start Fixing: agent-ready
 
-If Documentation & Context or Architecture Clarity scored below 60, the **agent-ready** companion plugin can close those gaps now. It scaffolds AGENTS.md with a CLAUDE.md symlink, ARCHITECTURE.md, a `docs/` structure following progressive disclosure patterns, `docs/DOMAIN.md`, and a starter ADR, all built on your actual codebase.
+If Documentation & Context or Architecture Clarity scored below 60, the **agent-ready** companion plugin can close those gaps now. It scaffolds AGENTS.md with a CLAUDE.md symlink, ARCHITECTURE.md, a progressive-disclosure `docs/` structure, supported domain workflows in `docs/DOMAIN.md`, and documentation link/topology checks. It creates `CONTEXT.md` and ADRs only when terms or decisions are actually resolved. Use its **migrate** mode to upgrade an older agent-ready scaffold.
 
 It reads this assessment report and suggests which mode to run first based on your weakest dimensions.
 
@@ -139,7 +139,7 @@ An agent-ready codebase maximizes automated verification and minimizes the cost 
 
 - **Tests are the oracle** — when an agent makes a change, the test suite tells it immediately whether that change matches intent. Without tests, every agent change requires a human to read and reason about correctness manually — which destroys scalability. A noisy oracle (flaky tests, heavily mocked suites) is nearly as bad as no tests.
 - **Type systems reduce verifier noise** — a type-checked build that passes is a higher-confidence signal than an untyped build that passes. Types convert silent runtime failures into loud compile-time failures, so agent mistakes are caught before a human ever reviews them.
-- **Documentation makes intent verifiable** — CLAUDE.md and ADRs give agents the context to produce changes that match business intent, not just syntactic correctness. Without documented intent, an agent's change can pass every automated check and still be wrong in ways only a human reviewer can catch.
+- **Documentation makes intent verifiable:** the canonical agent instruction entrypoint, domain context, and consequential ADRs give agents the context to produce changes that match business intent, not just syntactic correctness. Without documented intent, an agent's change can pass every automated check and still be wrong in ways only a human reviewer can catch.
 - **Small files bound the verification surface** — when a change is contained to one focused file, a test failure is attributable and precise. Large files and high coupling produce noisy feedback: a failure could be caused by any of a dozen interacting concerns.
 - **Fast feedback enables iteration** — a 45-minute CI pipeline limits agents to ~10 verification cycles per day. A 5-minute pipeline enables ~100. Pipeline speed is a structural prerequisite for agent work at scale, not a convenience.
 - **Security and vulnerability scanning extends coverage** — functional tests verify behavior; security scanners verify a different correctness dimension that agents can silently violate.
