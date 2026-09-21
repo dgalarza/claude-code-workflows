@@ -24,13 +24,13 @@ The "one big AGENTS.md" approach fails:
 3. **It rots instantly.** A monolithic manual becomes a graveyard of stale rules. Agents cannot tell what is still true.
 4. **It resists verification.** A single blob does not lend itself to mechanical checks (coverage, freshness, ownership, cross-links).
 
-Instead: treat CLAUDE.md as **the table of contents** -- roughly 100 lines, primarily a map with pointers to deeper sources of truth.
+Instead: treat AGENTS.md as **the table of contents** -- roughly 100 lines, primarily a map with pointers to deeper sources of truth. CLAUDE.md is a compatibility symlink to it.
 
 ---
 
 ## Three Disclosure Layers
 
-### Layer 1: CLAUDE.md (Always Loaded)
+### Layer 1: AGENTS.md (Always Loaded)
 - ~100 lines, always injected into agent context
 - Project identity (name, one-line description)
 - Build/test/lint one-liners
@@ -44,9 +44,9 @@ Instead: treat CLAUDE.md as **the table of contents** -- roughly 100 lines, prim
 - Topic-level overviews (TESTING.md, DEPLOYMENT.md, etc.)
 - Loaded on-demand when agent needs structural understanding
 
-### Layer 3: Topic Docs + Nested CLAUDE.md (On-Demand)
+### Layer 3: Topic Docs + Nested AGENTS.md (On-Demand)
 - Deep guides (setup, testing patterns, API reference)
-- Domain-specific CLAUDE.md in major subdirectories
+- Domain-specific AGENTS.md in major subdirectories when local rules justify one
 - ADRs (Architecture Decision Records)
 - Design docs, execution plans
 - Loaded only when agent works in a specific domain
@@ -55,7 +55,7 @@ Instead: treat CLAUDE.md as **the table of contents** -- roughly 100 lines, prim
 
 ## Directive Density
 
-CLAUDE.md content should be primarily **directives**, not explanations:
+AGENTS.md content should be primarily **directives**, not explanations:
 
 **Good (directive):**
 ```
@@ -71,9 +71,9 @@ We use ESLint with a custom configuration that extends...
 [20 lines of setup instructions]
 ```
 
-Measure directive density: count lines containing must/never/always/avoid/prefer versus total lines. A healthy CLAUDE.md has high directive density.
+Measure directive density: count lines containing must/never/always/avoid/prefer versus total lines. A healthy AGENTS.md has high directive density.
 
-Signs of role confusion (content that belongs in topic docs, not CLAUDE.md):
+Signs of role confusion (content that belongs in topic docs, not AGENTS.md):
 - Code examples longer than 10 lines
 - "How-to" sections with multiple implementation steps
 - Reference material like API inventories or module lists
@@ -83,7 +83,7 @@ Signs of role confusion (content that belongs in topic docs, not CLAUDE.md):
 
 ## Links Over Duplication
 
-Every piece of knowledge should have exactly one source of truth. CLAUDE.md links out; it does not absorb.
+Every piece of knowledge should have exactly one source of truth. AGENTS.md links out; it does not absorb.
 
 ```markdown
 # Testing
@@ -97,22 +97,22 @@ We use Jest for unit tests. Always mock external services...
 [50 lines duplicating what's in docs/guides/testing.md]
 ```
 
-Duplicated content drifts apart over time and creates conflicting instructions. When CLAUDE.md and a topic doc disagree, the agent makes unpredictable choices.
+Duplicated content drifts apart over time and creates conflicting instructions. When AGENTS.md and a topic doc disagree, the agent makes unpredictable choices.
 
 ---
 
-## Nested CLAUDE.md for Domain Directories
+## Nested AGENTS.md for Domain Directories
 
-Major domain directories should have their own CLAUDE.md with domain-specific instructions:
+Major domain directories may have AGENTS.md files when domain-specific rules or gotchas warrant their maintenance cost:
 
 ```
 src/
-├── CLAUDE.md          # Root: project-wide conventions
+├── AGENTS.md          # Root: project-wide conventions
 ├── auth/
-│   ├── CLAUDE.md      # Auth-specific patterns and gotchas
+│   ├── AGENTS.md      # Auth-specific patterns and gotchas
 │   └── ...
 ├── billing/
-│   ├── CLAUDE.md      # Billing-specific invariants
+│   ├── AGENTS.md      # Billing-specific invariants
 │   └── ...
 ```
 
@@ -125,7 +125,7 @@ This enables agents to load only the relevant context when working in a specific
 Documentation that is not enforced will rot. Build CI checks for:
 - Link/reference resolution (do markdown links point to real files?)
 - Freshness (when was each doc last updated?)
-- Coverage (do major directories have CLAUDE.md?)
+- Coverage (do directories with local rules have AGENTS.md?)
 - Cross-link integrity (do docs reference each other correctly?)
 
 A recurring "doc-gardening" process should scan for stale documentation and flag or fix it.
@@ -134,4 +134,4 @@ A recurring "doc-gardening" process should scan for stale documentation and flag
 
 ## Key Takeaway
 
-Give the agent a map, not a 1,000-page manual. Start with a small, stable entry point (CLAUDE.md) and teach it where to look next. Structure knowledge so agents can progressively discover what they need, when they need it.
+Give the agent a map, not a 1,000-page manual. Start with a small, stable entry point (AGENTS.md) and teach it where to look next. Structure knowledge so agents can progressively discover what they need, when they need it.

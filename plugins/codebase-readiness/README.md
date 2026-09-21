@@ -46,7 +46,7 @@ The assessment spawns 4 parallel agents, scores all 8 dimensions using language-
 | Dimension                 | What it measures                                                        |
 |---------------------------|-------------------------------------------------------------------------|
 | Test Foundation           | Coverage, quality, test-to-code ratio, mutation testing                 |
-| Documentation & Context   | CLAUDE.md, ARCHITECTURE.md, ADRs, topic docs                           |
+| Documentation & Context   | Canonical agent instructions, ARCHITECTURE.md, domain context, ADRs, topic docs |
 | Code Clarity              | File size, naming, catch-all directories, complexity/duplication/dead-code gate coverage |
 | Architecture Clarity      | Domain boundary visibility in the file tree, not just conceptual DDD    |
 | Type Safety               | Strict types, semantic type names, database-level invariants            |
@@ -75,7 +75,7 @@ Benchmarks show agentic coding can deliver 20x+ productivity — but only when t
 
 ## Start Fixing: agent-ready
 
-If Documentation & Context is one of your weaker dimensions, the [agent-ready](../agent-ready/README.md) companion plugin scaffolds CLAUDE.md, ARCHITECTURE.md, and a docs/ structure automatically. It reads your assessment results and suggests where to start.
+If Documentation & Context is one of your weaker dimensions, the [agent-ready](../agent-ready/README.md) companion plugin scaffolds canonical AGENTS.md instructions with a CLAUDE.md compatibility symlink, ARCHITECTURE.md, domain-aware docs, and documentation checks. Its migrate mode upgrades older agent-ready scaffolds. It reads your assessment results and suggests where to start.
 
 ```bash
 npx skills add dgalarza/claude-code-workflows --skill "agent-ready"

@@ -38,7 +38,8 @@ Before making changes, run through these steps to orient on a fresh context:
 
 ## Architecture
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full codemap.
-- [Domain Knowledge](docs/DOMAIN.md) -- business concepts, terminology, and workflows
+- [Domain Knowledge](docs/DOMAIN.md) -- business workflows, relationships, and compliance context
+- [Domain Context](CONTEXT.md) -- canonical business terms and avoided synonyms (include only when this file exists)
 
 - [Key architectural fact 1 -- e.g., "Monorepo with packages/ for shared code and apps/ for deployables"]
 - [Key architectural fact 2 -- e.g., "Domain logic lives in src/domains/, each domain is self-contained"]
@@ -60,6 +61,7 @@ A change is not complete until:
 - The feature has been exercised end-to-end, not just unit-tested
   - Backend changes: hit the actual endpoint, inspect the response
   - UI changes: load the page in a browser, click through the flow
+- When documentation, documentation paths, or agent aliases change, `python3 scripts/docs-check.py` passes
 - No new warnings in the dev server logs
 - Commit message describes *why*, not just *what*
 
@@ -73,15 +75,12 @@ Do not mark work complete based on "the code looks right" or "the unit tests pas
 - Adding a new feature: [docs/guides/new-feature.md](docs/guides/new-feature.md)
 
 ## Architecture Decision Records
-When making significant architectural decisions, create an ADR in [docs/decisions/](docs/decisions/).
+Create an ADR in [docs/adr/](docs/adr/) only when all of these are true:
+- Reversing the decision later would be costly
+- A future maintainer would not understand the choice from code alone
+- Real alternatives were considered and their trade-offs matter
 
-Write an ADR when:
-- Choosing between competing architectural approaches
-- Adopting or rejecting a major technology or framework
-- Establishing cross-cutting patterns (auth, logging, error handling)
-- Making trade-offs that affect system design
-
-Use the [ADR template](docs/decisions/) to document context, the decision, consequences, and alternatives considered.
+Do not create ADRs for routine implementation choices, temporary constraints, or self-evident conventions. Record the context, decision, and why; add alternatives or consequences only when they preserve non-obvious context.
 
 ## Known Gotchas
 - [Gotcha 1 -- e.g., "The `users` table has a trigger that auto-updates `updated_at`; do not set it manually"]
@@ -97,7 +96,7 @@ Use the [ADR template](docs/decisions/) to document context, the decision, conse
 
 **Directive style:** Use must/never/always/avoid/prefer. State the rule, not the rationale. If rationale is needed, put it in a linked doc.
 
-**Linked docs:** Use markdown links (`[path](path)`) to point to docs that exist or will be created. Each link is a promise that the file contains useful detail the agent can read on demand. Do NOT use `@file` syntax -- that eagerly loads files into context on every conversation, defeating progressive disclosure.
+**Linked docs:** Use markdown links (`[path](path)`) to point to docs that exist or will be created. Each link is a promise that the file contains useful detail the agent can read on demand. Link `CONTEXT.md` only when it exists. Do NOT use `@file` syntax -- that eagerly loads files into context on every conversation, defeating progressive disclosure.
 
 **AGENTS.md vs CLAUDE.md:** AGENTS.md is the canonical file that works with any AI coding agent. CLAUDE.md should be a symlink to AGENTS.md for backward compatibility with Claude Code.
 

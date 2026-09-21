@@ -12,20 +12,20 @@ Critically, documentation quality is not just about **presence** — it's about 
 
 | Artifact | Purpose | Agent Value |
 |----------|---------|-------------|
-| **CLAUDE.md** | Direct instructions to the agent — conventions, gotchas, workflow rules | Highest — agent reads this first |
+| **Agent instruction entrypoint** (`AGENTS.md`, `CLAUDE.md`, or a declared equivalent) | Direct instructions to the agent: conventions, gotchas, workflow rules | Highest: agent reads this first |
 | **ARCHITECTURE.md** | Structural overview — component map, boundaries, data flow | High — enables navigation without reading all code |
 | **ADRs** | Decision records — why choices were made, what alternatives were rejected | High — prevents agent from re-proposing rejected approaches |
 | **Topic docs** | Focused guides — CONVENTIONS.md, TESTING.md, DEPLOYMENT.md, etc. | Medium — provides domain-specific depth |
 
-### CLAUDE.md Assessment
+### Agent Instruction Entrypoint Assessment
 
-- **Presence**: Does a root CLAUDE.md exist?
-- **Structure quality**: Is it well-organized with clear sections, or a wall of text?
-- **@imports**: Does it use @-imports to reference other docs rather than duplicating content?
-- **Bloat anti-pattern**: Is it excessively long (>500 lines)? Bloated CLAUDE.md files degrade agent performance — they should be concise and link out to detailed docs
-- **Nested CLAUDE.md files**: Are there domain-specific CLAUDE.md files in subdirectories? This signals mature agent-aware documentation architecture
+- **Presence and authority**: Does a root AGENTS.md or CLAUDE.md exist? When both exist, is one explicitly canonical or a symlink rather than a conflicting duplicate?
+- **Structure quality**: Is the canonical file well-organized with clear sections, or a wall of text?
+- **Imports and links**: Does it reference deeper docs without duplicating content?
+- **Bloat anti-pattern**: Is it excessively long (>500 lines)? Bloated instruction files degrade agent performance, so they should be concise and link out to detailed docs.
+- **Scoped instructions**: Are nested AGENTS.md or CLAUDE.md files present only where local rules or gotchas justify them?
 - **Actionable content**: Does it contain actual instructions (do this, don't do that) vs. just descriptions?
-- **Role discipline**: Is CLAUDE.md acting as a concise directive index (linking to detailed docs), or has it absorbed tutorial-style content that belongs in topic docs? Signs of role confusion include: code examples longer than 10 lines, "how-to" sections with multiple steps, or reference material (API lists, module inventories)
+- **Role discipline**: Is it a concise directive index, or has it absorbed tutorial-style content that belongs in topic docs? Signs of role confusion include code examples longer than 10 lines, "how-to" sections with multiple steps, or reference material.
 
 ### ARCHITECTURE.md Assessment
 
@@ -35,11 +35,13 @@ Critically, documentation quality is not just about **presence** — it's about 
 - **API boundaries**: Are the boundaries between components documented — what is public API vs. internal?
 - **Cross-cutting concerns**: Are concerns that span multiple components documented (auth, logging, error handling)?
 
-### ADR Assessment
+### Domain Context and ADR Assessment
 
-- **Presence**: Do Architecture Decision Records exist?
-- **Quality signals**: Do ADRs include alternatives considered, rationale for the choice, and consequences/trade-offs?
-- **Recency**: Are ADRs still being written, or did the practice stop?
+- **Glossary authority**: Does `CONTEXT.md` or `CONTEXT-MAP.md` provide canonical business terminology without competing glossaries?
+- **Context topology**: Where multiple contexts exist, does the map identify each context and their relationships?
+- **Presence**: Do Architecture Decision Records exist when consequential decisions have been made?
+- **Quality signals**: Are ADRs concise records of a hard-to-reverse, surprising trade-off, with rationale and alternatives/consequences when useful?
+- **Discipline**: Do ADRs avoid routine implementation notes and boilerplate records?
 - **Discoverability**: Are ADRs in a standard location (docs/adr/, docs/decisions/, etc.)?
 
 ### Topic Documentation Assessment
@@ -78,16 +80,18 @@ Documentation quality isn't just about presence — it's about whether docs form
 ## Evidence-Gathering Commands
 
 ```bash
-# CLAUDE.md presence and structure
-find . -name "CLAUDE.md" 2>/dev/null | grep -v node_modules | grep -v .git
-wc -l CLAUDE.md 2>/dev/null
-grep -c "@" CLAUDE.md 2>/dev/null  # @imports
+# Agent instruction entrypoints and structure
+find . \( -name "AGENTS.md" -o -name "CLAUDE.md" \) 2>/dev/null | grep -v node_modules | grep -v .git
+wc -l AGENTS.md CLAUDE.md 2>/dev/null
+[ -L CLAUDE.md ] && readlink CLAUDE.md
+grep -c "@" AGENTS.md CLAUDE.md 2>/dev/null  # imports
 
 # ARCHITECTURE.md
 find . -name "ARCHITECTURE.md" -o -name "ARCHITECTURE.rst" 2>/dev/null | grep -v node_modules | grep -v .git
 wc -l ARCHITECTURE.md 2>/dev/null
 
-# ADRs
+# Domain context and ADRs
+find . -maxdepth 4 \( -name "CONTEXT.md" -o -name "CONTEXT-MAP.md" -o -name "DOMAIN.md" \) 2>/dev/null | grep -v node_modules | grep -v .git
 find . -type d -name "adr" -o -name "adrs" -o -name "decisions" -o -name "decision-records" 2>/dev/null | grep -v node_modules | grep -v .git
 find . -path "*/adr/*.md" -o -path "*/adrs/*.md" -o -path "*/decisions/*.md" 2>/dev/null | grep -v node_modules | grep -v .git | wc -l
 
@@ -112,55 +116,57 @@ grep -r "markdown\|markdownlint\|link-check\|docs" .github/ .circleci/ .buildkit
 ### Coherence Evidence Commands
 
 ```bash
-# CLAUDE.md content type analysis
-echo "=== CLAUDE.md content breakdown ==="
-if [ -f CLAUDE.md ]; then
-  echo "Total lines: $(wc -l < CLAUDE.md)"
-  echo "Code block lines: $(sed -n '/^```/,/^```/p' CLAUDE.md | wc -l)"
-  echo "Sections (## headings): $(grep -c '^##' CLAUDE.md)"
-  echo "Directive keywords (must/never/always/avoid/prefer): $(grep -ci 'must\|never\|always\|avoid\|prefer' CLAUDE.md)"
-  TOTAL=$(wc -l < CLAUDE.md)
-  CODE=$(sed -n '/^```/,/^```/p' CLAUDE.md | wc -l)
+# Canonical agent-instruction content type analysis
+DOC="AGENTS.md"
+if [ ! -f "$DOC" ] && [ -f "CLAUDE.md" ]; then DOC="CLAUDE.md"; fi
+echo "=== ${DOC} content breakdown ==="
+if [ -f "$DOC" ]; then
+  echo "Total lines: $(wc -l < "$DOC")"
+  echo "Code block lines: $(sed -n '/^```/,/^```/p' "$DOC" | wc -l)"
+  echo "Sections (## headings): $(grep -c '^##' "$DOC")"
+  echo "Directive keywords (must/never/always/avoid/prefer): $(grep -ci 'must\|never\|always\|avoid\|prefer' "$DOC")"
+  TOTAL=$(wc -l < "$DOC")
+  CODE=$(sed -n '/^```/,/^```/p' "$DOC" | wc -l)
   if [ "$TOTAL" -gt 0 ]; then
     PCT=$(( CODE * 100 / TOTAL ))
     echo "Code example percentage: ${PCT}%"
   fi
 fi
 
-# Topic overlap: does CLAUDE.md cover topics that have dedicated docs?
-echo "=== Topic overlap between CLAUDE.md and dedicated docs ==="
+# Topic overlap: does the canonical instruction file cover topics that have dedicated docs?
+echo "=== Topic overlap between ${DOC} and dedicated docs ==="
 for doc in $(find docs/ doc/ -name "*.md" -maxdepth 2 2>/dev/null | grep -v node_modules); do
   TOPIC=$(basename "$doc" .md | tr '[:upper:]' '[:lower:]' | sed 's/_/ /g')
-  if grep -qi "$TOPIC" CLAUDE.md 2>/dev/null; then
-    CLAUDE_LINES=$(grep -ci "$TOPIC" CLAUDE.md 2>/dev/null)
+  if grep -qi "$TOPIC" "$DOC" 2>/dev/null; then
+    ENTRY_LINES=$(grep -ci "$TOPIC" "$DOC" 2>/dev/null)
     DOC_LINES=$(wc -l < "$doc" 2>/dev/null | tr -d ' ')
-    echo "  Overlap: '$TOPIC' — CLAUDE.md mentions ${CLAUDE_LINES}x, dedicated doc is ${DOC_LINES} lines"
+    echo "  Overlap: '$TOPIC': ${DOC} mentions ${ENTRY_LINES}x, dedicated doc is ${DOC_LINES} lines"
   fi
 done
 
 # Validate @-imports and doc references resolve to real files
 echo "=== Broken documentation references ==="
-if [ -f CLAUDE.md ]; then
-  # Check @-import style references
-  grep -oE '@[a-zA-Z0-9_./-]+\.md' CLAUDE.md 2>/dev/null | while read -r ref; do
+if [ -f "$DOC" ]; then
+  # Check import-style references
+  grep -oE '@[a-zA-Z0-9_./-]+\.md' "$DOC" 2>/dev/null | while read -r ref; do
     FILE=$(echo "$ref" | sed 's/^@//')
     if [ ! -f "$FILE" ]; then
-      echo "  BROKEN @-import: $ref -> $FILE not found"
+      echo "  BROKEN import: $ref -> $FILE not found"
     fi
   done
   # Check markdown link references
-  grep -oE '\[.*\]\(\./[^)]+\)' CLAUDE.md 2>/dev/null | grep -oE '\./[^)]+' | while read -r ref; do
+  grep -oE '\[.*\]\(\./[^)]+\)' "$DOC" 2>/dev/null | grep -oE '\./[^)]+' | while read -r ref; do
     if [ ! -f "$ref" ]; then
       echo "  BROKEN link: $ref not found"
     fi
   done
 fi
 
-# Conflicting patterns: check if CLAUDE.md "avoid" patterns appear as valid examples in topic docs
+# Conflicting patterns: check if the canonical instruction file's "avoid" patterns appear as valid examples in topic docs
 echo "=== Potential cross-document conflicts ==="
-if [ -f CLAUDE.md ] && [ -d docs/ ]; then
-  # Extract function/method patterns marked as "avoid" in CLAUDE.md
-  grep -B1 -A3 '❌.*[Aa]void\|# ❌\|\/\/ ❌' CLAUDE.md 2>/dev/null | \
+if [ -f "$DOC" ] && [ -d docs/ ]; then
+  # Extract function/method patterns marked as "avoid" in the canonical instruction file
+  grep -B1 -A3 '❌.*[Aa]void\|# ❌\|\/\/ ❌' "$DOC" 2>/dev/null | \
     grep -oE '[a-zA-Z]+\.[a-zA-Z]+\(|[a-zA-Z]+\(\)' | sort -u | while read -r pattern; do
     # Check if these "avoid" patterns appear as valid/recommended in topic docs
     TOPIC_HITS=$(grep -rl "$pattern" docs/ 2>/dev/null | grep -v node_modules)
@@ -168,7 +174,7 @@ if [ -f CLAUDE.md ] && [ -d docs/ ]; then
       # Verify the pattern isn't also marked as "avoid" in the topic doc
       for hit in $TOPIC_HITS; do
         if ! grep -B2 "$pattern" "$hit" 2>/dev/null | grep -qi 'avoid\|❌\|don.t'; then
-          echo "  CONFLICT: CLAUDE.md marks '$pattern' as avoid, but $hit shows it as valid"
+          echo "  CONFLICT: ${DOC} marks '$pattern' as avoid, but $hit shows it as valid"
         fi
       done
     fi
@@ -177,16 +183,16 @@ fi
 
 # Source of truth declarations
 echo "=== Source of truth declarations ==="
-grep -rn "source of truth\|authoritative\|canonical\|definitive" CLAUDE.md docs/ 2>/dev/null | grep -v node_modules | grep -v .git
+grep -rn "source of truth\|authoritative\|canonical\|definitive" AGENTS.md CLAUDE.md CONTEXT.md CONTEXT-MAP.md docs/ 2>/dev/null | grep -v node_modules | grep -v .git
 ```
 
 ## Scoring Bands
 
-- **0-20**: No CLAUDE.md, no ARCHITECTURE.md, no ADRs. README is minimal or absent. Agent must infer everything from code alone.
-- **21-40**: README exists with basic setup. No CLAUDE.md or ARCHITECTURE.md. No ADRs. Agent has minimal guidance beyond code structure.
-- **41-60**: CLAUDE.md exists but may be unstructured or bloated. Some documentation present (README, partial architecture notes). No ADRs or topic docs. Agent has some guidance but significant gaps. Documentation may contain duplicated or contradictory content across files.
-- **61-80**: CLAUDE.md is well-structured and concise, with no contradictions against topic docs. CLAUDE.md delegates to topic docs via @-imports rather than duplicating content. ARCHITECTURE.md present with codemap. Some ADRs exist. Topic docs cover key areas. Agent can navigate and understand most of the codebase from documentation.
-- **81-100**: CLAUDE.md well-structured with @imports and nested domain files. No duplication or conflicts between CLAUDE.md and topic docs — clear source-of-truth boundaries. ARCHITECTURE.md comprehensive with invariants and boundaries. ADRs actively maintained. Topic docs cover conventions, testing, and deployment. Documentation freshness enforced in CI. Agent has rich, reliable context for any change.
+- **0-20**: No root agent instruction file, no ARCHITECTURE.md, no domain context, and no consequential ADRs. README is minimal or absent. Agent must infer everything from code alone.
+- **21-40**: README exists with basic setup. No root agent instruction file or ARCHITECTURE.md. Agent has minimal guidance beyond code structure.
+- **41-60**: A root instruction file exists but may be unstructured, bloated, or conflict with a duplicate. Some documentation is present, but domain terminology and durable decisions are undocumented or duplicated.
+- **61-80**: The canonical instruction entrypoint is concise and delegates to topic docs. ARCHITECTURE.md has a codemap. Domain context and consequential ADRs are discoverable. Agents can navigate and understand most changes from documentation.
+- **81-100**: A clear canonical instruction entrypoint and scoped docs have no duplication or conflicts. ARCHITECTURE.md is comprehensive, domain context has one glossary authority, ADRs are concise and maintained only for consequential trade-offs, and documentation verification runs in CI.
 
 NOTE: For dimensions where scoring bands differ materially by language, these bands provide the general framing. The language file provides concrete criteria and tooling-specific thresholds.
 
@@ -194,15 +200,15 @@ NOTE: For dimensions where scoring bands differ materially by language, these ba
 
 ### Positive Modifiers
 - **ADRs present and actively maintained** (written within last 6 months): **+5**
-- **Nested CLAUDE.md files in 3+ directories**: **+5**
+- **Scoped agent instruction files in 3+ directories, each justified by local rules**: **+5**
 - **Documentation link checking in CI**: **+3**
-- **All @-imports and doc references in CLAUDE.md resolve to existing files**: **+3**
+- **All canonical-instruction imports and documentation references resolve to existing files**: **+3**
 
 ### Negative Modifiers
-- **CLAUDE.md >500 lines without @imports** (bloat anti-pattern): **-10**
-- **Conflicting instructions detected** between CLAUDE.md and topic docs (e.g., CLAUDE.md marks a pattern as "avoid" but a topic doc shows it as valid/recommended): **-10**
-- **CLAUDE.md duplicates content from topic docs** (>20 lines of overlapping content on the same topic without @-import delegation): **-5**
-- **CLAUDE.md code examples exceed 30% of total lines** (tutorial content that belongs in topic docs, not directive content): **-5**
+- **Canonical instruction file >500 lines without links or imports** (bloat anti-pattern): **-10**
+- **Conflicting instructions detected** between the canonical instruction file and topic docs, or between AGENTS.md and CLAUDE.md: **-10**
+- **Canonical instruction file duplicates content from topic docs** (>20 lines of overlapping content on the same topic without delegation): **-5**
+- **Canonical instruction file code examples exceed 30% of total lines** (tutorial content that belongs in topic docs, not directive content): **-5**
 
 ## Output Format
 
@@ -212,20 +218,21 @@ NOTE: For dimensions where scoring bands differ materially by language, these ba
 **Score: XX/100**
 
 ### Evidence
-- CLAUDE.md: [present / absent — line count, @imports count, nested files count]
-- CLAUDE.md content profile: [code example %, directive keyword density, section count]
+- Agent instructions: [canonical AGENTS.md / CLAUDE.md / absent: line count, links/imports, scoped files, alias status]
+- Agent-instruction content profile: [code example %, directive keyword density, section count]
 - ARCHITECTURE.md: [present / absent — line count, key sections found]
-- ADRs: [count, most recent date, location]
+- Domain context: [CONTEXT.md / CONTEXT-MAP.md / DOMAIN.md; glossary authority and map coverage]
+- ADRs: [count, most recent date, location, consequential vs boilerplate]
 - Topic docs: [list of files found]
 - README: [present / absent — line count, key sections found]
 - Documentation CI: [link checking / freshness checks / none]
 
 ### Coherence
-- Topic overlap: [list of topics covered in both CLAUDE.md and dedicated docs]
+- Topic overlap: [list of topics covered in both the canonical instruction file and dedicated docs]
 - Cross-document conflicts: [count and description of contradictions found]
-- Source of truth clarity: [clear / ambiguous — details if ambiguous]
-- Broken references: [count of broken @-imports or markdown links]
-- CLAUDE.md role: [directive index / mixed / tutorial-heavy]
+- Source of truth clarity: [clear / ambiguous: details, including glossary authority]
+- Broken references: [count of broken imports or markdown links]
+- Agent-instruction role: [directive index / mixed / tutorial-heavy]
 
 ### Strengths
 - [What's working well]

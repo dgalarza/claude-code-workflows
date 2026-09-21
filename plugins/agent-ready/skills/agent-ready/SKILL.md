@@ -36,6 +36,7 @@ Determine which mode to run based on user intent:
 | Generate architecture doc | **architecture** | "create ARCHITECTURE.md", "architecture doc", "codemap" |
 | Create/refactor AGENTS.md | **agents-md** | "set up AGENTS.md", "create AGENTS.md", "refactor AGENTS.md" |
 | Install regression-aware quality gates | **quality-gates** | "set up quality gates", "block new complexity", "baseline our tech debt", "stop agents adding dead code", "regression gate" |
+| Upgrade a prior agent-ready scaffold | **migrate** | "migrate agent-ready", "upgrade our agent docs", "modernize agent-ready" |
 | Check existing artifacts | **audit** | "audit docs", "are my docs up to date", "check agent readiness" |
 
 If intent is ambiguous, ask the user which mode they want.
@@ -87,8 +88,12 @@ ls .eslintrc* .rubocop.yml .prettierrc* pyproject.toml ruff.toml .golangci.yml 2
 # CI configuration
 ls .github/workflows/*.yml .circleci/config.yml .buildkite/*.yml Jenkinsfile 2>/dev/null
 
-# ADRs
-find . -type d -name "decisions" -o -name "adr" -o -name "adrs" 2>/dev/null | grep -v node_modules | grep -v .git
+# Domain documentation and ADRs
+find . -maxdepth 3 \( -name "CONTEXT.md" -o -name "CONTEXT-MAP.md" -o -name "DOMAIN.md" \) 2>/dev/null | grep -v node_modules | grep -v .git
+find . -type d \( -name "decisions" -o -name "adr" -o -name "adrs" \) 2>/dev/null | grep -v node_modules | grep -v .git
+
+# Compatibility signals for the Matt Pocock design workflow
+find .agents .claude -maxdepth 3 -type d \( -name "grill-with-docs" -o -name "domain-modeling" -o -name "grilling" \) 2>/dev/null
 ```
 
 ### Step 2: Report Inventory
@@ -107,24 +112,30 @@ Present a clear inventory to the user:
 ### Will Create
 - docs/ directory structure
 - docs/README.md (documentation index)
-- ARCHITECTURE.md (codemap, invariants, boundaries)
-- docs/DOMAIN.md (business domain knowledge, terminology, workflows)
+- ARCHITECTURE.md (codemap, invariants, and dependency rules)
+- docs/DOMAIN.md (business workflows, relationships, and compliance context)
 - AGENTS.md (progressive disclosure entry point)
 - CLAUDE.md (symlink to AGENTS.md for Claude Code compatibility)
-- docs/decisions/001-agent-ready-documentation.md (starter ADR)
-- Quality gate: scripts/quality-gate.py, .quality-gate.json, CI job, docs/guides/quality-gates.md, gate self-test (baseline created only after review -- see Step 8)
+- docs/adr/ (only when a qualifying decision is made; no starter ADR)
+- Documentation check: scripts/docs-check.py, CI job, and a Definition of Done directive
+- Quality gate: scripts/quality-gate.py, .quality-gate.json, CI job, docs/guides/quality-gates.md, gate self-test (baseline created only after review -- see Step 7)
 ```
 
 ### Step 3: Create docs/ Structure
 
 Read `assets/docs-structure-template.md` for the recommended layout.
 
-Create the directory structure:
+Create only the directories needed now:
 ```bash
-mkdir -p docs/architecture docs/guides docs/references docs/decisions
+mkdir -p docs/architecture docs/guides docs/references scripts .github/workflows
+cp "<skill-dir>/assets/docs-check.py" scripts/docs-check.py
+cp "<skill-dir>/assets/docs-check-ci-template.yml" .github/workflows/docs-check.yml
+chmod +x scripts/docs-check.py
 ```
 
-Create `docs/README.md` as an index. Populate it based on what documentation exists and what will be created.
+Create `docs/README.md` as an index. Populate it based on what documentation exists and what will be created. Link `CONTEXT.md` only if it already exists. Do not create `docs/adr/` or `CONTEXT.md` until they have content.
+
+Before generating domain or architecture documentation, present a **documentation design checkpoint**. Separate facts discovered in reconnaissance from the decisions only the team can make: whether domain terminology is already settled, whether a multi-context map is needed, and whether any durable architectural decision is being made. If compatible `grill-with-docs`, `grilling`, or `domain-modeling` skills are installed and terminology or trade-offs remain unsettled, recommend that workflow. Do not invoke it automatically or block scaffolding that does not need it.
 
 ### Step 4: Generate ARCHITECTURE.md
 
@@ -151,62 +162,29 @@ cat README.md 2>/dev/null | head -80
 ```
 
 Using the discovered model/entity names and README context:
-1. Populate the glossary with discovered terms, even if definitions are thin -- mark them with `<!-- TODO: needs domain expert review -->`
-2. Sketch domain relationships based on model associations or naming patterns
-3. Leave workflow and regulatory sections as template placeholders if not enough context exists
+1. Do not create or infer glossary entries. If `CONTEXT.md` or `CONTEXT-MAP.md` exists, read the relevant context and use its vocabulary.
+2. Sketch relationships only where code associations or existing documentation supports them; mark inferences for review.
+3. Leave workflow and regulatory sections as template placeholders if not enough context exists.
 
-Write the result to `docs/DOMAIN.md`. Note in the output that this file should be reviewed and filled in by domain experts on the team -- it is seeded from code analysis and will have gaps.
+Write the result to `docs/DOMAIN.md`. Link `CONTEXT.md` if it exists, but do not create it speculatively. Recommend a domain-modeling workflow when the team needs to resolve new canonical terms.
 
 ### Step 6: Generate AGENTS.md
 
 Execute the **agents-md** mode logic (see below) inline. Do not launch a separate agent.
 
-### Step 7: Create Starter ADR
-
-Create `docs/decisions/001-agent-ready-documentation.md`:
-
-```markdown
-# 1. Agent-Ready Documentation Structure
-
-**Date:** [today's date]
-**Status:** Accepted
-
-## Context
-This codebase is being prepared for AI agent work. Agents need structured, discoverable documentation to work effectively -- they cannot access knowledge that lives outside the repository.
-
-## Decision
-Adopt a progressive disclosure documentation structure:
-- AGENTS.md as a concise entry point (~100 lines) with markdown links to detailed docs
-- CLAUDE.md as a symlink to AGENTS.md for Claude Code compatibility
-- ARCHITECTURE.md as a codemap with invariants and boundaries
-- docs/DOMAIN.md for business domain knowledge, terminology, and workflows
-- docs/ directory for guides, references, and decision records
-- Nested AGENTS.md files for major domain directories (as needed)
-
-## Consequences
-- All project knowledge must live in-repo (not in Slack, Confluence, or heads)
-- Documentation changes should be reviewed like code changes
-- AGENTS.md must stay concise; bloat gets extracted to docs/
-- ADRs should be written for significant architectural decisions going forward
-
-## Alternatives Considered
-- Single large AGENTS.md -- rejected because it crowds agent context and rots quickly
-- No structured docs, rely on code comments -- rejected because agents need navigational aids beyond inline comments
-```
-
-### Step 8: Install Quality Gates
+### Step 7: Install Quality Gates
 
 Execute the **quality-gates** mode logic (see below) inline. The Definition of Done written in Step 6 must reference the gate's `check` command, so if Step 6 ran before the command name was known, update AGENTS.md now.
 
 Do not skip the baseline review protocol to keep scaffold moving: if the user is not ready to review the baseline, install the engine, config, CI, docs, and tests, leave the baseline uncreated, and record in the summary that `check` will fail until a baseline is created and approved.
 
-### Step 9: Summary
+### Step 8: Summary
 
 Present everything created with file paths, and suggest next steps:
-- Review `docs/DOMAIN.md` and add business domain definitions -- this is the most valuable file for human and AI onboarding
-- Add domain-specific nested AGENTS.md files for major directories
-- Start writing ADRs for future architectural decisions
-- Set up CI checks for documentation freshness
+- Review `docs/DOMAIN.md` and verify every inferred workflow or relationship
+- Resolve domain terminology through `CONTEXT.md` only when terms are actually decided
+- Create an ADR only when the decision is hard to reverse, surprising without context, and the result of a real trade-off
+- Run `python3 scripts/docs-check.py` after changing Markdown links, documentation paths, or agent-entrypoint aliases
 - Review and approve the quality-gate baseline PR, then add `.quality-baseline.json` to CODEOWNERS
 - Run `agent-ready audit` periodically to check for drift
 
@@ -246,7 +224,7 @@ Read source files to identify:
 
 ### Step 3: Read Existing Context
 
-Read README.md and any existing documentation for project context. Do not duplicate what README already covers -- ARCHITECTURE.md complements it.
+Read README.md and any existing documentation for project context. Before mapping a domain, read the relevant `CONTEXT.md`, or resolve it through `CONTEXT-MAP.md` when present. Read ADRs that affect the area from `docs/adr/`, `docs/decisions/`, or the project's established ADR location. Use canonical domain vocabulary and explicitly surface an ADR conflict rather than silently overriding it. Do not duplicate what README already covers -- ARCHITECTURE.md complements it.
 
 ### Step 4: Load References
 
@@ -261,6 +239,7 @@ Using the template and principles, generate an ARCHITECTURE.md with:
 - **Invariants:** Rules that hold across the codebase. **Always include absences** -- things that deliberately do not exist.
 - **Boundaries:** Public vs internal APIs. Layer dependency rules. Which modules can import which.
 - **Cross-cutting concerns:** How logging, auth, errors, and config work across the system.
+- **Domain terminology:** Use the applicable `CONTEXT.md` vocabulary when one exists. Do not invent a competing glossary.
 
 ### Step 6: Present and Confirm
 
@@ -326,7 +305,8 @@ ls .github/workflows/*.yml 2>/dev/null
 find docs/ doc/ -name "*.md" 2>/dev/null | head -20
 ls ARCHITECTURE.md CONTRIBUTING.md 2>/dev/null
 
-# ADRs (check if decision records exist)
+# Domain context and ADRs
+find . -maxdepth 4 \( -name "CONTEXT.md" -o -name "CONTEXT-MAP.md" \) 2>/dev/null | grep -v node_modules | grep -v .git
 find . -path "*/decisions/*.md" -o -path "*/adr/*.md" -o -path "*/adrs/*.md" 2>/dev/null | grep -v node_modules | grep -v .git | head -5
 ```
 
@@ -342,7 +322,9 @@ Using the template, generate an AGENTS.md that:
 - Includes three quality-gate directives (run `check` before finishing; never edit, extend, or approve the baseline; run `baseline --prune` when `check` reports stale entries) under Key Conventions or Definition of Done, not as a new section
 - If the repo already uses machine-updated ledgers such as `tasks.json`, status queues, or work trackers, include a directive that names exactly which fields agents may edit
 - Markdown links to existing docs or docs that should be created
-- Includes ADR section if docs/decisions/ or other ADR directories exist
+- Links `CONTEXT.md` or `CONTEXT-MAP.md` when one exists, without duplicating its glossary
+- Includes an ADR section that states the three-part eligibility rule: hard to reverse, surprising without context, and a real trade-off
+- Adds a documentation-check directive when `scripts/docs-check.py` exists or scaffold is about to install it
 - Lists max 5 known gotchas
 - Avoids code examples longer than 5 lines
 
@@ -499,6 +481,44 @@ Next steps:
 
 ---
 
+## Mode: migrate
+
+Upgrade a repository scaffolded by an older agent-ready version to the current documentation contract. This mode is conservative: preserve content and history, present a migration plan, and wait for explicit confirmation before changing files.
+
+### Step 1: Detect Legacy Artifacts
+
+Inventory the root agent entrypoints, `docs/DOMAIN.md`, `CONTEXT.md`, `CONTEXT-MAP.md`, ADR directories, documentation indexes, documentation-check scripts and CI jobs. Flag these legacy patterns:
+- `docs/DOMAIN.md` contains a glossary but no `CONTEXT.md`
+- ADRs live in `docs/decisions/` rather than the current `docs/adr/` layout
+- A starter `001-agent-ready-documentation.md` exists
+- AGENTS.md lacks Session Startup, Definition of Done, the ADR eligibility rule, or a documentation-check directive
+- Documentation links and aliases are not checked in CI
+
+Read every affected file. Do not infer synonym preferences, rewrite a glossary, or classify a document as disposable based only on its filename.
+
+### Step 2: Present the Migration Plan
+
+Show a file-by-file plan with source, destination, and whether content will be copied, moved with `git mv`, or edited in place. The recommended plan is:
+1. Keep `AGENTS.md` canonical and retain `CLAUDE.md -> AGENTS.md` as the compatibility symlink.
+2. Promote confirmed entries from `docs/DOMAIN.md`'s glossary into root `CONTEXT.md`. Preserve definitions verbatim; ask the team to resolve `_Avoid_` synonyms rather than guessing. Remove the migrated glossary from DOMAIN.md and add a link to CONTEXT.md.
+3. Move ADRs to `docs/adr/` with `git mv`, preserve their contents and numbering, and update every in-repo link. Do not delete the old starter ADR; retain it as historical context and exclude it from ADR-quality credit if it is boilerplate.
+4. Update `docs/README.md`, AGENTS.md, and ARCHITECTURE.md links to the new topology.
+5. Install `scripts/docs-check.py` and `.github/workflows/docs-check.yml`; add the scoped Definition of Done directive.
+
+If the project deliberately uses a different ADR directory or maintains multiple bounded contexts, present that as an alternative and preserve it on explicit request. Never run the recommended plan without confirmation.
+
+### Step 3: Migrate and Verify
+
+After confirmation:
+- use `git mv` for tracked ADR paths;
+- update links in the same change;
+- generate CONTEXT.md only from reviewed, existing glossary entries;
+- leave unresolved or duplicate terminology for a domain-modeling session;
+- run `python3 scripts/docs-check.py` and the project's normal documentation or test checks;
+- finish with `agent-ready audit` and report remaining manual decisions.
+
+---
+
 ## Mode: audit
 
 Check health of existing agent-readiness artifacts.
@@ -516,8 +536,9 @@ if [ -L CLAUDE.md ]; then
   echo "CLAUDE.md is a symlink to: $(readlink CLAUDE.md)"
 fi
 
-# ARCHITECTURE.md
+# ARCHITECTURE.md and domain context
 find . -name "ARCHITECTURE.md" 2>/dev/null | grep -v node_modules | grep -v .git
+find . -maxdepth 4 \( -name "CONTEXT.md" -o -name "CONTEXT-MAP.md" -o -name "DOMAIN.md" \) 2>/dev/null | grep -v node_modules | grep -v .git
 
 # docs/ contents
 find docs/ doc/ -type f 2>/dev/null | grep -v node_modules | grep -v .git
@@ -548,9 +569,14 @@ for doc in AGENTS.md CLAUDE.md; do
 done
 ```
 
-**ADR recency:**
+**ADR recency and context-map resolution:**
 ```bash
 find . -path "*/decisions/*.md" -o -path "*/adr/*.md" 2>/dev/null | grep -v node_modules | xargs ls -lt 2>/dev/null | head -5
+if [ -f CONTEXT-MAP.md ]; then
+  grep -oE '\]\([^)]+CONTEXT\.md\)' CONTEXT-MAP.md | tr -d '[]()' | while read -r ref; do
+    [ -f "$ref" ] || echo "BROKEN context-map target: $ref"
+  done
+fi
 ```
 
 ### Step 3: Coherence Checks
@@ -637,16 +663,24 @@ if [ -f "$DOC" ]; then
   done
 fi
 
-# Source of truth declarations
-find AGENTS.md CLAUDE.md docs/ -type f 2>/dev/null | xargs grep -rn "source of truth\|authoritative\|canonical\|definitive" 2>/dev/null | grep -v node_modules | grep -v .git
+# Source of truth declarations and documentation checks
+find AGENTS.md CLAUDE.md CONTEXT.md CONTEXT-MAP.md docs/ -type f 2>/dev/null | xargs grep -rn "source of truth\|authoritative\|canonical\|definitive" 2>/dev/null | grep -v node_modules | grep -v .git
+if [ -f scripts/docs-check.py ]; then
+  python3 scripts/docs-check.py
+else
+  echo "⚠ MISSING: scripts/docs-check.py"
+fi
+grep -rl "scripts/docs-check.py" .github/workflows .gitlab-ci.yml .circleci .buildkite 2>/dev/null || echo "⚠ MISSING: documentation-check CI job"
 ```
 
 ### Step 4: Coverage Checks
 
-- **Domain knowledge documentation:** Check if `docs/DOMAIN.md` exists. If it exists, check whether it is populated (has content beyond the template placeholders) or is still a stub. If missing, flag it as a coverage gap with the recommendation: "Create docs/DOMAIN.md to document business domain concepts -- this is the most valuable file for human and AI onboarding."
-- **Domain directories without nested AGENTS.md:** Find major source directories that could benefit from domain-specific AGENTS.md files
-- **Unlisted directories in ARCHITECTURE.md:** Find top-level source directories not mentioned in the codemap
-- **Missing docs/ categories:** Check if guides/, references/, decisions/ exist and have content
+- **Domain documentation:** Check whether `docs/DOMAIN.md` documents supported workflows and relationships, and whether `CONTEXT.md` or `CONTEXT-MAP.md` is the sole canonical glossary when domain terms have been settled. Do not flag a missing CONTEXT.md when no terms are resolved yet.
+- **Domain directories without scoped instructions:** Recommend nested AGENTS.md only where a domain has local rules or gotchas, not merely because a directory exists.
+- **Unlisted directories in ARCHITECTURE.md:** Find top-level source directories not mentioned in the codemap.
+- **ADR discipline:** Flag boilerplate or routine ADRs, missing rationale, and ADRs that duplicate implementation notes. A small set of consequential ADRs is healthy.
+- **Missing docs/ categories:** Check if guides/ and references/ are needed and populated. Do not require `docs/adr/` until a qualifying decision exists.
+- **Documentation verification:** Classify link, alias, and context-map checks as CI-enforced, local-only, or absent.
 - **Quality gate:** Run the detection commands from `references/quality-gates-pattern.md` (`.quality-gate.json`, native baseline/diff modes, CI job, `docs/guides/quality-gates.md`, gate self-test, CODEOWNERS entry, DoD mention). Classify as: **installed and governed** (check in CI, baseline reviewed, self-test present, DoD references it), **installed but ungoverned** (missing review, tests, CODEOWNERS, or DoD mention), **report-only** (tooling runs but cannot fail CI), or **absent**. If `.quality-baseline.json` exists, run `check` and report stale entries and unreviewed status
 
 ### Step 5: Report
@@ -663,8 +697,9 @@ Present an actionable report:
 | CLAUDE.md (symlink) | [Correct symlink/Regular file/Missing] | ./CLAUDE.md | — |
 | ARCHITECTURE.md | [Present/Missing] | ./ARCHITECTURE.md | [N] |
 | DOMAIN.md | [Present/Stub/Missing] | ./docs/DOMAIN.md | [N] |
+| CONTEXT.md / CONTEXT-MAP.md | [Present/Absent/Not yet needed] | [path] | [N] |
 | docs/ index | [Present/Missing] | ./docs/README.md | [N] |
-| ADRs | [N found] | ./docs/decisions/ | — |
+| ADRs | [N found, consequential/boilerplate] | [path] | — |
 | Nested AGENTS.md | [N found] | [locations] | — |
 
 ### Staleness Issues
@@ -675,6 +710,8 @@ Present an actionable report:
 - Code example %: [N]% [OK if <20% / WARNING if >20%]
 - Directive density: [N] directives in [M] lines
 - CLAUDE.md symlink status: [Correct/Needs fix]
+- Domain glossary authority: [CONTEXT.md / CONTEXT-MAP.md / duplicated / not yet needed]
+- Documentation checks: [CI-enforced / local-only / absent]
 - Session Startup section: [Present/Missing]
 - Definition of Done section: [Present/Missing/Present-without-E2E]
 - Topic overlaps: [list]
@@ -682,7 +719,7 @@ Present an actionable report:
 - Cross-document conflicts: [list]
 
 ### Coverage Gaps
-- Directories without AGENTS.md: [list]
+- Directories needing scoped instructions: [list, only when local rules exist]
 - Directories not in ARCHITECTURE.md: [list]
 - Missing docs/ categories: [list]
 
@@ -703,7 +740,8 @@ After presenting the report, offer to auto-fix issues:
 - Broken doc links: remove or create the missing file
 - Primary doc bloat: offer to run agents-md mode to refactor
 - Missing ARCHITECTURE.md entries: offer to run architecture mode to regenerate
-- Missing nested AGENTS.md: offer to create starter files for uncovered domains
+- Missing scoped AGENTS.md where local rules exist: offer to create a starter file
+- Legacy DOMAIN.md/decisions topology: offer to run migrate mode
 - CLAUDE.md not a symlink: offer to convert it to a symlink to AGENTS.md
 - Missing Session Startup section: offer to insert the bearing-getting ritual (pwd, git log, fetch origin, sync with the upstream default branch using the repo's merge/rebase strategy, smoke test) using detected commands
 - Missing Definition of Done section: offer to insert a DoD checklist using detected lint/test commands

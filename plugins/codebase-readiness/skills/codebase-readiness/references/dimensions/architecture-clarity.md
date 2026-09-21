@@ -7,13 +7,14 @@ Architecture clarity determines whether an agent can understand where to make a 
 ## What to Examine
 
 - **Domain boundary visibility**: The PRIMARY signal. Are business domains expressed as distinct filesystem subtrees, not just conceptual groupings?
-  - When boundaries are NOT in the filesystem, agents cannot: reason about one vertical in isolation, benefit from domain-specific CLAUDE.md files, apply scoped skills, or limit blast radius
+  - When boundaries are NOT in the filesystem, agents cannot: reason about one vertical in isolation, benefit from scoped agent instructions, apply scoped skills, or limit blast radius
   - Good visibility means: each domain lives in its own subtree, cross-domain dependencies are explicit, and each domain has a natural home for domain-specific documentation
 - **Domain grouping consistency**: Within domain directories, do files follow consistent naming and organization? Or are some files at the root level while others are properly nested?
 - **Service/domain layer presence**: Is business logic separated from transport/presentation concerns (thin controllers, service objects, use cases, interactors)?
 - **God objects / large shared files**: Are there oversized files that concentrate cross-cutting logic, making it impossible to reason about one domain in isolation?
-- **Nested CLAUDE.md files**: The presence of domain-scoped CLAUDE.md files signals intentional boundary design for agent consumption
-- **Dependency explicitness**: Can you trace which domains depend on which by examining imports/requires, or are dependencies implicit and global?
+- **Scoped agent instructions**: Domain-scoped AGENTS.md or CLAUDE.md files can signal intentional boundary design when each records real local rules.
+- **Domain context maps**: `CONTEXT.md` and `CONTEXT-MAP.md` make bounded contexts, canonical terminology, and cross-context relationships explicit.
+- **Dependency explicitness**: Can you trace which domains depend on which by examining imports/requires, context maps, or ADRs, or are dependencies implicit and global?
 
 ## Evidence-Gathering Commands
 
@@ -33,8 +34,9 @@ find . -name "*.rb" -o -name "*.ts" -o -name "*.tsx" -o -name "*.py" -o -name "*
   | grep -v node_modules | grep -v .git | grep -v vendor | grep -v spec | grep -v test \
   | xargs wc -l 2>/dev/null | sort -rn | head -15
 
-# Nested CLAUDE.md files (signals intentional domain scoping)
-find . -name "CLAUDE.md" 2>/dev/null | grep -v node_modules | grep -v .git
+# Scoped instructions and domain context (signals intentional domain scoping)
+find . \( -name "AGENTS.md" -o -name "CLAUDE.md" \) 2>/dev/null | grep -v node_modules | grep -v .git
+find . -maxdepth 4 \( -name "CONTEXT.md" -o -name "CONTEXT-MAP.md" \) 2>/dev/null | grep -v node_modules | grep -v .git
 
 # Dependency management files
 ls package.json Gemfile requirements*.txt pyproject.toml go.mod composer.json 2>/dev/null
@@ -68,13 +70,13 @@ fi
 - **21-40**: Some separation exists but is inconsistent. Multiple domains share the same models/services directories. Business logic partially extracted but no clear domain boundaries in the filesystem.
 - **41-60**: Service layer present, conventions partially followed. Domain subdirectories exist BUT are unreliable — more than 25% root-level leakage, inconsistent naming across layers. Agent can sometimes reason about one domain but must verify assumptions.
 - **61-80**: Clear service/domain layer with thin controllers. Domain subdirectories reliably used (less than 25% root leakage). Names align across layers. Agent can usually navigate to the right domain confidently.
-- **81-100**: Each domain is independently navigable in the file tree. Domains live in their own subtrees with explicit cross-domain dependencies. Each domain has a natural home for domain-specific CLAUDE.md. Agent can reason about a single domain without understanding the whole codebase.
+- **81-100**: Each domain is independently navigable in the file tree. Domains live in their own subtrees with explicit cross-domain dependencies. Each domain has a natural home for scoped instructions and context. Agent can reason about a single domain without understanding the whole codebase.
 
 NOTE: For dimensions where scoring bands differ materially by language, these bands provide the general framing. The language file provides concrete criteria and tooling-specific thresholds.
 
 ## Score Modifiers
 
-- **Nested CLAUDE.md files** present in domain directories: **+5**
+- **A CONTEXT-MAP.md with resolvable context relationships, or scoped agent instruction files with real local rules**: **+5**
 - **God files** (files >1000 lines of business logic) in shared directories: **-5 per god file** (up to -15)
 
 ## Output Format
@@ -90,7 +92,8 @@ NOTE: For dimensions where scoring bands differ materially by language, these ba
 - Domain grouping consistency: [XX% root-level leakage]
 - Service/domain layer: [present / partial / absent]
 - God objects found: [count, with largest listed]
-- Nested CLAUDE.md files: [count, locations]
+- Scoped agent instructions: [count, locations, local-rule justification]
+- Domain context: [CONTEXT.md / CONTEXT-MAP.md, locations, relationship coverage]
 - Cross-domain dependency explicitness: [explicit / implicit / mixed]
 
 ### Strengths
