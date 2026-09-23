@@ -5,6 +5,12 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026.09.22] — 2026-09-22
+
+### Added
+- **agent-ready v1.6.0** — Adds a `migrate` mode for bringing existing documentation into the agent-ready structure, with a consistent audit-first migration workflow, updated templates, and an optional CI documentation-structure checker.
+- **codebase-readiness v1.9.0** — Improves documentation and architecture-clarity assessment, including more precise scoring guidance and reconnaissance for documentation and agent-instruction structure.
+
 ## [2026.08.27] — 2026-08-27
 
 ### Added
@@ -55,6 +61,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Docs
 - Documented release process and versioning strategy
 
+[2026.09.22]: https://github.com/dgalarza/claude-code-workflows/tree/2026.09.22
+[2026.09.06]: https://github.com/dgalarza/claude-code-workflows/tree/2026.09.06
+[2026.08.27]: https://github.com/dgalarza/claude-code-workflows/tree/2026.08.27
 [2026.08.23]: https://github.com/dgalarza/claude-code-workflows/tree/2026.08.23
 [2026.05.26]: https://github.com/dgalarza/claude-code-workflows/tree/2026.05.26
 [2026.05.22]: https://github.com/dgalarza/claude-code-workflows/tree/2026.05.22
