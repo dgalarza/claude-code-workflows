@@ -2,7 +2,7 @@
 
 Use this template when generating a new AGENTS.md. Fill in sections based on actual codebase analysis. Remove sections that do not apply. Target ~120 lines.
 
-Note: This file will be created as AGENTS.md, and CLAUDE.md will be a symlink to it for Claude Code compatibility.
+Note: Claude Code supports AGENTS.md directly starting with version 2.1.277, so no CLAUDE.md symlink is needed. See [the announcement](https://x.com/trq212/status/2101009392611278961).
 
 ---
 
@@ -98,7 +98,7 @@ Do not create ADRs for routine implementation choices, temporary constraints, or
 
 **Linked docs:** Use markdown links (`[path](path)`) to point to docs that exist or will be created. Each link is a promise that the file contains useful detail the agent can read on demand. Link `CONTEXT.md` only when it exists. Do NOT use `@file` syntax -- that eagerly loads files into context on every conversation, defeating progressive disclosure.
 
-**AGENTS.md vs CLAUDE.md:** AGENTS.md is the canonical file that works with any AI coding agent. CLAUDE.md should be a symlink to AGENTS.md for backward compatibility with Claude Code.
+**AGENTS.md and Claude Code:** AGENTS.md is the shared instruction file. Claude Code supports it directly starting with version 2.1.277 ([announcement](https://x.com/trq212/status/2101009392611278961)); do not create or require a CLAUDE.md symlink. Preserve an existing CLAUDE.md unless explicitly asked to consolidate it.
 
 **Structured ledgers -- prefer JSON over Markdown:** For files that track state agents update incrementally (task lists, feature status, work queues), use JSON with a strict schema rather than Markdown. Agents are far less likely to inappropriately edit, reformat, or "improve" a JSON file. Pair it with an explicit directive in AGENTS.md (e.g., "In `tasks.json`, only flip the `status` field -- never edit `description` or `acceptance_criteria`").
 
