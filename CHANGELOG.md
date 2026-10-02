@@ -5,6 +5,11 @@ All notable changes to this repository will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026.10.01] — 2026-10-01
+
+### Fixed
+- **agent-ready v1.6.1** — Stops requiring a `CLAUDE.md` symlink; Claude Code 2.1.277+ reads `AGENTS.md` directly, and existing `CLAUDE.md` files are preserved.
+
 ## [2026.09.22] — 2026-09-22
 
 ### Added
@@ -61,6 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Docs
 - Documented release process and versioning strategy
 
+[2026.10.01]: https://github.com/dgalarza/claude-code-workflows/tree/2026.10.01
 [2026.09.22]: https://github.com/dgalarza/claude-code-workflows/tree/2026.09.22
 [2026.09.06]: https://github.com/dgalarza/claude-code-workflows/tree/2026.09.06
 [2026.08.27]: https://github.com/dgalarza/claude-code-workflows/tree/2026.08.27
