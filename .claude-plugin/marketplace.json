@@ -57,8 +57,8 @@
     {
       "name": "agent-ready",
       "source": "./plugins/agent-ready",
-      "description": "Make a codebase agent-ready with progressive-disclosure documentation, domain-context and ADR discipline, regression-aware quality gates, documentation checks, and opinionated stack-specific project skill recommendations. Creates CLAUDE.md as a symlink for Claude Code compatibility.",
-      "version": "1.6.0"
+      "description": "Make a codebase agent-ready with progressive-disclosure documentation, domain-context and ADR discipline, regression-aware quality gates, documentation checks, and opinionated stack-specific project skill recommendations. Uses AGENTS.md directly with Claude Code 2.1.277+ without requiring a CLAUDE.md symlink.",
+      "version": "1.6.1"
     },
     {
       "name": "doc-audit",

@@ -85,8 +85,8 @@ Add status, alternatives, or consequences only when they preserve non-obvious co
 3. `CONTEXT.md` only after a domain term is resolved
 4. `docs/adr/` only after a qualifying decision is made
 
-**Grow as needed.** Add guides and references when content would otherwise bloat CLAUDE.md or get duplicated across docs.
+**Grow as needed.** Add guides and references when content would otherwise bloat AGENTS.md or get duplicated across docs.
 
-**Single source of truth.** Each topic lives in exactly one file. CLAUDE.md links point here. Do not duplicate content between docs and CLAUDE.md.
+**Single source of truth.** Each topic lives in exactly one file. AGENTS.md links point here. Do not duplicate content between docs and AGENTS.md.
 
 **Create ADRs sparingly.** Write one only when all three are true: the decision is hard to reverse, surprising without context, and the result of a real trade-off. Do not delete ADRs once written; mark obsolete ones as Deprecated or Superseded.

@@ -24,7 +24,7 @@ The "one big AGENTS.md" approach fails:
 3. **It rots instantly.** A monolithic manual becomes a graveyard of stale rules. Agents cannot tell what is still true.
 4. **It resists verification.** A single blob does not lend itself to mechanical checks (coverage, freshness, ownership, cross-links).
 
-Instead: treat AGENTS.md as **the table of contents** -- roughly 100 lines, primarily a map with pointers to deeper sources of truth. CLAUDE.md is a compatibility symlink to it.
+Instead: treat AGENTS.md as **the table of contents** -- roughly 100 lines, primarily a map with pointers to deeper sources of truth. Claude Code supports AGENTS.md directly starting with version 2.1.277 ([announcement](https://x.com/trq212/status/2101009392611278961)); a CLAUDE.md compatibility symlink is unnecessary.
 
 ---
 

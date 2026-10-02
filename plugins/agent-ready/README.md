@@ -17,9 +17,9 @@ npx skills add dgalarza/claude-code-workflows --skill "agent-ready"
 
 | Mode | What It Does | Example Prompt |
 |------|-------------|----------------|
-| **scaffold** | Full setup: docs/ structure, ARCHITECTURE.md, AGENTS.md, CLAUDE.md symlink, documentation check, quality gate | "Make this codebase agent-ready" |
+| **scaffold** | Full setup: docs/ structure, ARCHITECTURE.md, AGENTS.md, documentation check, quality gate | "Make this codebase agent-ready" |
 | **architecture** | Generate ARCHITECTURE.md from actual codebase analysis | "Create an ARCHITECTURE.md" |
-| **agents-md** | Create or refactor AGENTS.md for progressive disclosure, create CLAUDE.md symlink | "Set up AGENTS.md" |
+| **agents-md** | Create or refactor AGENTS.md for progressive disclosure | "Set up AGENTS.md" |
 | **quality-gates** | Install a regression-aware quality gate: native complexity/duplication/dead-code checks, reviewed baseline, merge-base-aware CI, docs, tests | "Set up quality gates", "baseline our tech debt" |
 | **migrate** | Upgrade a legacy agent-ready scaffold to the current domain-context, ADR, and documentation-check contract | "Migrate our agent-ready docs" |
 | **audit** | Check existing agent-readiness artifacts and the quality gate for staleness, coherence, and governance | "Are my agent docs up to date?" |
@@ -70,14 +70,9 @@ Built on two key sources:
 - **Harness Engineering (OpenAI)** -- repository as system of record, progressive disclosure, AGENTS.md as table of contents not encyclopedia, enforce invariants not implementations
 - **matklad's ARCHITECTURE.md** -- bird's-eye codemap, name important modules, call out invariants (especially absences), point out boundaries
 
-## AGENTS.md vs CLAUDE.md
+## AGENTS.md and Claude Code
 
-This plugin generates **AGENTS.md** as the primary documentation file, which works with any AI coding agent that supports the AGENTS.md convention. For backward compatibility with Claude Code, it also creates **CLAUDE.md as a symlink** to AGENTS.md.
-
-This approach ensures:
-- Your documentation works with any AI coding agent
-- Claude Code users have seamless compatibility
-- You maintain a single source of truth (AGENTS.md)
+This plugin generates **AGENTS.md** as the shared instruction file. Claude Code supports AGENTS.md directly starting with version 2.1.277 ([announcement](https://x.com/trq212/status/2101009392611278961)), so no CLAUDE.md symlink is needed. Existing CLAUDE.md files are preserved; review them for conflicting instructions if both files exist.
 
 ## Domain Context and ADRs
 

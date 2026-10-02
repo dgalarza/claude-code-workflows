@@ -115,7 +115,7 @@ Present a clear inventory to the user:
 - ARCHITECTURE.md (codemap, invariants, and dependency rules)
 - docs/DOMAIN.md (business workflows, relationships, and compliance context)
 - AGENTS.md (progressive disclosure entry point)
-- CLAUDE.md (symlink to AGENTS.md for Claude Code compatibility)
+- AGENTS.md (also recognized by Claude Code 2.1.277+; no CLAUDE.md alias needed)
 - docs/adr/ (only when a qualifying decision is made; no starter ADR)
 - Documentation check: scripts/docs-check.py, CI job, and a Definition of Done directive
 - Quality gate: scripts/quality-gate.py, .quality-gate.json, CI job, docs/guides/quality-gates.md, gate self-test (baseline created only after review -- see Step 7)
@@ -184,7 +184,7 @@ Present everything created with file paths, and suggest next steps:
 - Review `docs/DOMAIN.md` and verify every inferred workflow or relationship
 - Resolve domain terminology through `CONTEXT.md` only when terms are actually decided
 - Create an ADR only when the decision is hard to reverse, surprising without context, and the result of a real trade-off
-- Run `python3 scripts/docs-check.py` after changing Markdown links, documentation paths, or agent-entrypoint aliases
+- Run `python3 scripts/docs-check.py` after changing Markdown links or documentation paths
 - Review and approve the quality-gate baseline PR, then add `.quality-baseline.json` to CODEOWNERS
 - Run `agent-ready audit` periodically to check for drift
 
@@ -249,7 +249,7 @@ Show the draft to the user. Write to `ARCHITECTURE.md` in the project root on co
 
 ## Mode: agents-md
 
-Create a new AGENTS.md or refactor an existing one for progressive disclosure. Also creates CLAUDE.md as a symlink for Claude Code compatibility.
+Create a new AGENTS.md or refactor an existing one for progressive disclosure. Claude Code 2.1.277+ reads AGENTS.md directly, so do not create or require a CLAUDE.md symlink.
 
 ### Step 1: Assess Current State
 
@@ -338,38 +338,13 @@ Using the template, generate an AGENTS.md that:
    - Content moved to which files
    - New doc links added
 
-### Step 5: Create Symlink
+### Step 5: Handle Legacy CLAUDE.md (only if present)
 
-After creating or updating AGENTS.md, create a symlink from CLAUDE.md to AGENTS.md for Claude Code compatibility:
-
-```bash
-# Remove CLAUDE.md if it exists and is a regular file (not already a symlink)
-if [ -f CLAUDE.md ] && [ ! -L CLAUDE.md ]; then
-  # If CLAUDE.md exists and AGENTS.md doesn't exist yet, this was already migrated in step 4
-  # Otherwise, back it up first
-  if [ ! -f AGENTS.md ]; then
-    echo "CLAUDE.md will be migrated to AGENTS.md"
-  else
-    echo "Backing up existing CLAUDE.md to CLAUDE.md.backup before creating symlink"
-    mv CLAUDE.md CLAUDE.md.backup
-  fi
-fi
-
-# Create the symlink
-ln -sf AGENTS.md CLAUDE.md
-
-# Verify the symlink
-ls -la CLAUDE.md
-```
-
-Inform the user that:
-- AGENTS.md is the canonical documentation file that works with any AI coding agent
-- CLAUDE.md is a symlink to AGENTS.md for backward compatibility with Claude Code
-- Both files now point to the same content
+Claude Code supports AGENTS.md directly starting with version 2.1.277 ([announcement](https://x.com/trq212/status/2101009392611278961)). Do not create a CLAUDE.md symlink, replace an existing CLAUDE.md, or require AGENTS.md and CLAUDE.md to be aliases. If CLAUDE.md is the only instruction file, use it as source material for AGENTS.md; preserve the original unless the user explicitly asks to remove or consolidate it. If both files exist independently, leave them intact and mention that their instructions may need reconciliation if they conflict.
 
 ### Step 6: Present and Confirm
 
-Show the draft (or before/after diff for refactoring). Write AGENTS.md and create the CLAUDE.md symlink on confirmation.
+Show the draft (or before/after diff for refactoring). Write AGENTS.md on confirmation.
 
 ---
 
@@ -492,14 +467,14 @@ Inventory the root agent entrypoints, `docs/DOMAIN.md`, `CONTEXT.md`, `CONTEXT-M
 - ADRs live in `docs/decisions/` rather than the current `docs/adr/` layout
 - A starter `001-agent-ready-documentation.md` exists
 - AGENTS.md lacks Session Startup, Definition of Done, the ADR eligibility rule, or a documentation-check directive
-- Documentation links and aliases are not checked in CI
+- Documentation links and context-map targets are not checked in CI
 
 Read every affected file. Do not infer synonym preferences, rewrite a glossary, or classify a document as disposable based only on its filename.
 
 ### Step 2: Present the Migration Plan
 
 Show a file-by-file plan with source, destination, and whether content will be copied, moved with `git mv`, or edited in place. The recommended plan is:
-1. Keep `AGENTS.md` canonical and retain `CLAUDE.md -> AGENTS.md` as the compatibility symlink.
+1. Keep `AGENTS.md` as the shared agent-instructions file; Claude Code 2.1.277+ reads it natively. Do not create or require a `CLAUDE.md` symlink; preserve any existing CLAUDE.md unless explicitly asked to consolidate.
 2. Promote confirmed entries from `docs/DOMAIN.md`'s glossary into root `CONTEXT.md`. Preserve definitions verbatim; ask the team to resolve `_Avoid_` synonyms rather than guessing. Remove the migrated glossary from DOMAIN.md and add a link to CONTEXT.md.
 3. Move ADRs to `docs/adr/` with `git mv`, preserve their contents and numbering, and update every in-repo link. Do not delete the old starter ADR; retain it as historical context and exclude it from ADR-quality credit if it is boilerplate.
 4. Update `docs/README.md`, AGENTS.md, and ARCHITECTURE.md links to the new topology.
@@ -531,9 +506,9 @@ Find all agent-readiness artifacts:
 # AGENTS.md and CLAUDE.md files (root and nested)
 find . -name "AGENTS.md" -o -name "CLAUDE.md" 2>/dev/null | grep -v node_modules | grep -v .git
 
-# Check if CLAUDE.md is a symlink to AGENTS.md
-if [ -L CLAUDE.md ]; then
-  echo "CLAUDE.md is a symlink to: $(readlink CLAUDE.md)"
+# Note any legacy CLAUDE.md independently; it is not required to alias AGENTS.md
+if [ -f CLAUDE.md ]; then
+  echo "CLAUDE.md exists independently (not required for Claude Code 2.1.277+)"
 fi
 
 # ARCHITECTURE.md and domain context
@@ -584,7 +559,7 @@ fi
 Run the coherence analysis from the codebase-readiness documentation dimension:
 
 ```bash
-# AGENTS.md content type analysis (use AGENTS.md as primary, fall back to CLAUDE.md if it's not a symlink)
+# AGENTS.md content type analysis (use AGENTS.md as primary, fall back to legacy CLAUDE.md only when AGENTS.md is absent)
 DOC="AGENTS.md"
 if [ ! -f "$DOC" ] && [ -f "CLAUDE.md" ] && [ ! -L "CLAUDE.md" ]; then
   DOC="CLAUDE.md"
@@ -632,11 +607,9 @@ if [ -f "$DOC" ]; then
   fi
 fi
 
-# Check symlink status
-if [ -L CLAUDE.md ]; then
-  echo "✓ CLAUDE.md is correctly symlinked to $(readlink CLAUDE.md)"
-elif [ -f CLAUDE.md ] && [ -f AGENTS.md ]; then
-  echo "⚠ WARNING: Both CLAUDE.md and AGENTS.md exist as separate files. CLAUDE.md should be a symlink to AGENTS.md"
+# CLAUDE.md is optional; do not enforce aliasing. Flag only potential instruction duplication/conflict for manual review.
+if [ -f CLAUDE.md ] && [ -f AGENTS.md ]; then
+  echo "ℹ Both AGENTS.md and CLAUDE.md exist; review for conflicting instructions if needed. Claude Code 2.1.277+ reads AGENTS.md directly."
 fi
 
 # Topic overlap
@@ -680,7 +653,7 @@ grep -rl "scripts/docs-check.py" .github/workflows .gitlab-ci.yml .circleci .bui
 - **Unlisted directories in ARCHITECTURE.md:** Find top-level source directories not mentioned in the codemap.
 - **ADR discipline:** Flag boilerplate or routine ADRs, missing rationale, and ADRs that duplicate implementation notes. A small set of consequential ADRs is healthy.
 - **Missing docs/ categories:** Check if guides/ and references/ are needed and populated. Do not require `docs/adr/` until a qualifying decision exists.
-- **Documentation verification:** Classify link, alias, and context-map checks as CI-enforced, local-only, or absent.
+- **Documentation verification:** Classify link and context-map checks as CI-enforced, local-only, or absent. CLAUDE.md aliasing is not checked or required.
 - **Quality gate:** Run the detection commands from `references/quality-gates-pattern.md` (`.quality-gate.json`, native baseline/diff modes, CI job, `docs/guides/quality-gates.md`, gate self-test, CODEOWNERS entry, DoD mention). Classify as: **installed and governed** (check in CI, baseline reviewed, self-test present, DoD references it), **installed but ungoverned** (missing review, tests, CODEOWNERS, or DoD mention), **report-only** (tooling runs but cannot fail CI), or **absent**. If `.quality-baseline.json` exists, run `check` and report stale entries and unreviewed status
 
 ### Step 5: Report
@@ -694,7 +667,7 @@ Present an actionable report:
 | Artifact | Status | Location | Lines |
 |----------|--------|----------|-------|
 | AGENTS.md (root) | [Present/Missing] | ./AGENTS.md | [N] |
-| CLAUDE.md (symlink) | [Correct symlink/Regular file/Missing] | ./CLAUDE.md | — |
+| CLAUDE.md (optional legacy file) | [Present/Absent] | ./CLAUDE.md | [N/—] |
 | ARCHITECTURE.md | [Present/Missing] | ./ARCHITECTURE.md | [N] |
 | DOMAIN.md | [Present/Stub/Missing] | ./docs/DOMAIN.md | [N] |
 | CONTEXT.md / CONTEXT-MAP.md | [Present/Absent/Not yet needed] | [path] | [N] |
@@ -709,7 +682,7 @@ Present an actionable report:
 - Primary doc (AGENTS.md or CLAUDE.md) line count: [N] [OK if <150 / WARNING if >150 / CRITICAL if >300]
 - Code example %: [N]% [OK if <20% / WARNING if >20%]
 - Directive density: [N] directives in [M] lines
-- CLAUDE.md symlink status: [Correct/Needs fix]
+- AGENTS.md compatibility: [Claude Code 2.1.277+ reads it directly / note older-tooling constraints if relevant]
 - Domain glossary authority: [CONTEXT.md / CONTEXT-MAP.md / duplicated / not yet needed]
 - Documentation checks: [CI-enforced / local-only / absent]
 - Session Startup section: [Present/Missing]
@@ -742,7 +715,7 @@ After presenting the report, offer to auto-fix issues:
 - Missing ARCHITECTURE.md entries: offer to run architecture mode to regenerate
 - Missing scoped AGENTS.md where local rules exist: offer to create a starter file
 - Legacy DOMAIN.md/decisions topology: offer to run migrate mode
-- CLAUDE.md not a symlink: offer to convert it to a symlink to AGENTS.md
+- Both AGENTS.md and CLAUDE.md present: offer to review possible instruction conflicts; do not merge, replace, or symlink automatically
 - Missing Session Startup section: offer to insert the bearing-getting ritual (pwd, git log, fetch origin, sync with the upstream default branch using the repo's merge/rebase strategy, smoke test) using detected commands
 - Missing Definition of Done section: offer to insert a DoD checklist using detected lint/test commands
 - Quality gate absent or report-only: offer to run quality-gates mode

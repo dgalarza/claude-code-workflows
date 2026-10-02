@@ -46,15 +46,6 @@ def check_links(errors: list[str]) -> None:
                 )
 
 
-def check_agent_alias(errors: list[str]) -> None:
-    agents = ROOT / "AGENTS.md"
-    claude = ROOT / "CLAUDE.md"
-    if agents.exists() and claude.exists() and not claude.is_symlink():
-        errors.append("CLAUDE.md must be a symlink to AGENTS.md when both files exist")
-    if claude.is_symlink() and claude.readlink() != Path("AGENTS.md"):
-        errors.append("CLAUDE.md must point to AGENTS.md")
-
-
 def check_context_map(errors: list[str]) -> None:
     context_map = ROOT / "CONTEXT-MAP.md"
     if not context_map.exists():
@@ -72,7 +63,6 @@ def check_context_map(errors: list[str]) -> None:
 def main() -> int:
     errors: list[str] = []
     check_links(errors)
-    check_agent_alias(errors)
     check_context_map(errors)
 
     if errors:
