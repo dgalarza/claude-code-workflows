@@ -21,6 +21,8 @@ These two are the place to start. Each has its own landing page.
 
 Source: [codebase-readiness](plugins/codebase-readiness/README.md) and [agent-ready](plugins/agent-ready/README.md).
 
+[Get the Agent-Ready Codebase Playbook](https://www.damiangalarza.com/newsletter?utm_source=github&utm_medium=readme&utm_campaign=codebase-playbook)
+
 After a score, a [Foundation Sprint](https://www.damiangalarza.com/services/?utm_source=github&utm_medium=readme&utm_campaign=agent-skills) is two weeks on the highest-leverage problem, with a Production AI retainer if the work should continue.
 
 ---
@@ -31,7 +33,7 @@ Install the bundle in Claude Code:
 
 ```bash
 /plugin marketplace add dgalarza/agent-skills
-/plugin install engineering-skills@agent-skills
+/plugin install engineering-skills@dgalarza-agent-skills
 ```
 
 Or one skill on Cursor, Codex, or another agent:

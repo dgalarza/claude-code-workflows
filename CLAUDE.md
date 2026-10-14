@@ -1,6 +1,6 @@
 # Agent Skills
 
-Contributor guide for this skills library when working in Claude Code. The marketplace name is `agent-skills`. The GitHub repository is `dgalarza/claude-code-workflows` until that repository is renamed to `dgalarza/agent-skills`.
+Contributor guide for this skills library when working in Claude Code. The marketplace name is `dgalarza-agent-skills`. The GitHub repository is `dgalarza/claude-code-workflows` until that repository is renamed to `dgalarza/agent-skills`.
 
 Architecture and the reasons for the layout are in [ARCHITECTURE.md](ARCHITECTURE.md). [AGENTS.md](AGENTS.md) is the same guide for other agents.
 

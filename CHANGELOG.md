@@ -8,7 +8,7 @@ Plugin and marketplace versions use calendar versioning, `YYYY.MM.PATCH` (exampl
 ## [2026.10.0] — 2026-10-14
 
 ### Breaking
-- Marketplace name is `agent-skills`. It was `dgalarza-workflows`. Existing Claude Code installs need `/plugin marketplace add dgalarza/agent-skills` and a fresh `/plugin install <name>@agent-skills`. The GitHub repository rename to `dgalarza/agent-skills` is a follow-up and is not part of this change.
+- Marketplace name is `dgalarza-agent-skills`. It was `dgalarza-workflows`. The bare name `agent-skills` is reserved by Claude Code for Anthropic marketplaces. Existing Claude Code installs need `/plugin marketplace add dgalarza/agent-skills` and a fresh `/plugin install <name>@dgalarza-agent-skills`. The GitHub repository rename to `dgalarza/agent-skills` is a follow-up and is not part of this change.
 - Plugin versions moved to CalVer. `codebase-readiness`, `agent-ready`, and `engineering-skills` are `2026.10.0`.
 
 ### Added

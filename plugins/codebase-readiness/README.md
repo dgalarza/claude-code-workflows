@@ -14,7 +14,7 @@ From this repository, after the marketplace is added:
 
 ```bash
 /plugin marketplace add dgalarza/agent-skills
-/plugin install codebase-readiness@agent-skills
+/plugin install codebase-readiness@dgalarza-agent-skills
 ```
 
 ```bash

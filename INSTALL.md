@@ -1,6 +1,6 @@
 # Installation
 
-Canonical install paths for this library. Marketplace name: `agent-skills`. Repository shorthand: `dgalarza/agent-skills`.
+Canonical install paths for this library. Marketplace name: `dgalarza-agent-skills`. Repository shorthand: `dgalarza/agent-skills`.
 
 The GitHub rename from `dgalarza/claude-code-workflows` to `dgalarza/agent-skills` happens after this change merges. Use the commands below once that rename is in place. Rename the existing repository so the old URL keeps redirecting. A new repository created with the old name would break that redirect.
 
@@ -8,7 +8,7 @@ The GitHub rename from `dgalarza/claude-code-workflows` to `dgalarza/agent-skill
 
 ```bash
 /plugin marketplace add dgalarza/agent-skills
-/plugin install <name>@agent-skills
+/plugin install <name>@dgalarza-agent-skills
 ```
 
 Plugins:
@@ -20,7 +20,7 @@ Plugins:
 | Engineering skills | `engineering-skills` | `team-code-review`, `stacked-prs`, `conventional-comments`, `conventional-commits`, `tdd` |
 
 ```bash
-/plugin install engineering-skills@agent-skills
+/plugin install engineering-skills@dgalarza-agent-skills
 ```
 
 Operator utilities are not Claude plugins. Install them with `npx skills`.
@@ -72,8 +72,8 @@ Canonical files are `skills/<name>/SKILL.md`. Plugins symlink at those directori
 ## Updating and uninstalling
 
 ```bash
-/plugin update engineering-skills@agent-skills
-/plugin uninstall engineering-skills@agent-skills
+/plugin update engineering-skills@dgalarza-agent-skills
+/plugin uninstall engineering-skills@dgalarza-agent-skills
 ```
 
 Marketplace renames map `tdd-workflow` and `conventional-commits` to `engineering-skills`. Retired plugins map to removal. See the changelog for the full list.

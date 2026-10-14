@@ -1,5 +1,5 @@
 {
-  "name": "agent-skills",
+  "name": "dgalarza-agent-skills",
   "version": "2026.10.0",
   "description": "Agent skills for Claude Code, Cursor, Codex, and other coding agents: codebase assessment, agent-ready scaffolding, and engineering workflows.",
   "owner": {

@@ -1,6 +1,6 @@
 # Agent Skills
 
-Contributor guide for this skills library. Codex, Cursor, and other agents that read `AGENTS.md` should follow this file. The marketplace name is `agent-skills`. The GitHub repository is `dgalarza/claude-code-workflows` until that repository is renamed to `dgalarza/agent-skills`.
+Contributor guide for this skills library. Codex, Cursor, and other agents that read `AGENTS.md` should follow this file. The marketplace name is `dgalarza-agent-skills`. The GitHub repository is `dgalarza/claude-code-workflows` until that repository is renamed to `dgalarza/agent-skills`.
 
 Architecture and the reasons for the layout are in [ARCHITECTURE.md](ARCHITECTURE.md).
 

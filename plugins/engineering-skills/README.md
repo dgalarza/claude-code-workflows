@@ -20,7 +20,7 @@ Claude Code:
 
 ```bash
 /plugin marketplace add dgalarza/agent-skills
-/plugin install engineering-skills@agent-skills
+/plugin install engineering-skills@dgalarza-agent-skills
 ```
 
 Cursor, Codex, and other agents — one skill:

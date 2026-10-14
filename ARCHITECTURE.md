@@ -30,7 +30,7 @@ A Ruby assessment does not need the Scala rubric in context. Reference files kee
 
 ### Plugin marketplace (`.claude-plugin/marketplace.json`)
 
-The registry Claude Code reads for `/plugin marketplace add` and `/plugin install`. The marketplace `name` is `agent-skills`. That name is what users type after `@`.
+The registry Claude Code reads for `/plugin marketplace add` and `/plugin install`. The marketplace `name` is `dgalarza-agent-skills`. That name is what users type after `@`. Claude Code reserves the bare name `agent-skills` for marketplaces from `github.com/anthropics/` and refuses to add it from any other source, so keep the `dgalarza-` prefix.
 
 Three plugins:
 

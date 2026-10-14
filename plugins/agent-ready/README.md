@@ -12,7 +12,7 @@ From this repository, after the marketplace is added:
 
 ```bash
 /plugin marketplace add dgalarza/agent-skills
-/plugin install agent-ready@agent-skills
+/plugin install agent-ready@dgalarza-agent-skills
 ```
 
 ```bash
