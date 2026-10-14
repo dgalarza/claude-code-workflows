@@ -1,77 +1,81 @@
-# Claude Code Workflows
+# Agent Skills
 
-A plugin marketplace for Claude Code — skills, agents, and bundles that extend Claude's capabilities with specialized workflows.
+Contributor guide for this skills library when working in Claude Code. The marketplace name is `dgalarza-agent-skills`. The GitHub repository is `dgalarza/claude-code-workflows` until that repository is renamed to `dgalarza/agent-skills`.
 
-For architecture details, design decisions, and the reasoning behind the plugin structure, see [ARCHITECTURE.md](ARCHITECTURE.md).
+Architecture and the reasons for the layout are in [ARCHITECTURE.md](ARCHITECTURE.md). [AGENTS.md](AGENTS.md) is the same guide for other agents.
 
 ## Repository Structure
 
 ```
-plugins/                        # Each subdirectory is a standalone plugin
-  <plugin-name>/
-    .claude-plugin/plugin.json  # Name, version, description, author
-    README.md                   # User-facing documentation
-    skills/<skill-name>/
-      SKILL.md                  # Frontmatter + instructions (required)
-      scripts/                  # Executable code (optional)
-      references/               # Docs loaded into context as needed (optional)
-      assets/                   # Templates, files used in output (optional)
-.claude-plugin/marketplace.json # Registry of all available plugins
-.agents/skills/                 # Locally installed skills (e.g., skill-creator)
-configs/                        # Claude Code configuration guides
-tips/                           # Short-form workflow guides
-scripts/                        # Utility scripts
+skills/<name>/
+  SKILL.md                    # Canonical skill (required)
+  scripts/                    # Executable code (optional)
+  references/                 # Docs loaded into context as needed (optional)
+  assets/                     # Templates and files used in output (optional)
+plugins/<plugin-name>/
+  .claude-plugin/plugin.json  # Thin manifest: name, version, description, author
+  README.md                   # User-facing plugin docs
+  skills/<name>               # Symlink to ../../../skills/<name>
+  tests/                      # Tests of that plugin's templates, when present
+.claude-plugin/marketplace.json
+.agents/skills/               # Vendored skill-creator used by CI. Not a published skill
 ```
+
+Claude Code plugins are `codebase-readiness`, `agent-ready`, and `engineering-skills`. Operator utilities (`buffer`, `buttondown`, `herdr-code-review`) stay under `skills/` and are installed with `npx skills` only.
+
+Symlinks stay inside this repository. Claude Code dereferences a symlink whose target is another directory in the same marketplace and copies that content into the plugin cache.
 
 ## Key Conventions
 
-- Plugin versions live in two places — bump both `plugins/<name>/.claude-plugin/plugin.json` AND `.claude-plugin/marketplace.json`
-- SKILL.md frontmatter requires `name` (kebab-case, max 64 chars) and `description` (max 1024 chars, no angle brackets)
-- Skill instructions use imperative/infinitive form, not second person
-- All JSON files must be valid — CI checks this automatically
-- Commit messages follow conventional commits: `feat:`, `fix:`, `chore:`, `docs:`
+- Plugin versions live in `plugins/<name>/.claude-plugin/plugin.json` and in `.claude-plugin/marketplace.json` (the plugin entry and the marketplace `version`). Keep them in sync.
+- Versions use calendar versioning: `YYYY.MM.PATCH` (this consolidation is `2026.10.0`). Increment `PATCH` for later changes in the same month.
+- SKILL.md frontmatter requires `name` (kebab-case, max 64 characters) and `description` (max 1024 characters, no angle brackets).
+- Skill instructions use imperative or infinitive form.
+- Skill steps that can run in parallel must also say what to do when the runtime has no subagents.
+- JSON files must be valid. CI checks this.
+- Commit messages follow conventional commits: `feat:`, `fix:`, `chore:`, `docs:`.
 
 ## Development Workflow
 
-1. Create or modify plugins under `plugins/`
-2. Validate locally: `python3 .agents/skills/skill-creator/scripts/quick_validate.py plugins/<name>/skills/<skill-name>`
-3. CI validates skills and JSON on PRs automatically
-4. Bump version in both plugin.json and marketplace.json before merging
+1. Add or edit the skill under `skills/<name>/`.
+2. For a Claude plugin, point `plugins/<plugin>/skills/<name>` at `../../../skills/<name>` and list the plugin in `.claude-plugin/marketplace.json`.
+3. Validate locally: `python3 .agents/skills/skill-creator/scripts/quick_validate.py skills/<name>`
+4. CI validates skills and JSON on pull requests.
+5. Bump the CalVer version in both plugin.json and marketplace.json before merging behavior changes.
 
 ## Releasing
 
-This repo uses **calendar-based release tags** (`YYYY.MM.DD`) for the marketplace as a whole, and **semantic versioning** for individual plugins.
+Git tags for the marketplace snapshot stay `YYYY.MM.DD`. If more than one tag lands on the same day, append a suffix: `YYYY.MM.DD.2`. Plugin and marketplace versions stay `YYYY.MM.PATCH`.
 
 ### When to Release
 
 Cut a release when one or more of these land on `main`:
-- New plugin added
-- New feature or language support added to an existing plugin
-- Bug fix that affects plugin behavior
 
-Documentation-only changes (README updates, tips, configs) don't need a release.
+- New plugin or skill added
+- New feature or language support added to an existing skill
+- Bug fix that affects skill or plugin behavior
+
+Documentation-only changes do not need a release.
 
 ### Release Checklist
 
-1. **Bump plugin version** in `plugins/<name>/.claude-plugin/plugin.json` — follow semver (patch for fixes, minor for features, major for breaking changes)
-2. **Sync version** in `.claude-plugin/marketplace.json` — must match the plugin.json version
-3. **Commit** the version bumps with the feature/fix commit (or as a separate `chore: bump <plugin> to X.Y.Z` commit)
-4. **Tag the release** after merging to `main`:
+1. Bump the plugin version in `plugins/<name>/.claude-plugin/plugin.json` using `YYYY.MM.PATCH`.
+2. Set the same version on that plugin's entry and on the top-level `version` in `.claude-plugin/marketplace.json`.
+3. Commit the version bump with the change, or as `chore: bump <plugin> to YYYY.MM.PATCH`.
+4. After the merge to `main`:
+
    ```bash
    git tag YYYY.MM.DD
    git push origin YYYY.MM.DD
    ```
-5. **Create a GitHub release** from the tag with a brief summary of what changed
 
-### Versioning Rules
+5. Create a GitHub release from the tag with a short summary.
 
-- **Release tags** are calendar dates (`YYYY.MM.DD`). If multiple releases happen on the same day, append a suffix: `YYYY.MM.DD.2`
-- **Plugin versions** are semver (`X.Y.Z`). The plugin version reflects changes to that specific plugin, not the overall repo
-- Version must be bumped in **both** plugin.json and marketplace.json before merging — CI doesn't enforce sync yet, so this is a manual check
+Retired plugin names stay in the marketplace `renames` map. Map a removed plugin to `null`. Map a plugin that moved into another plugin to that plugin's name. Keep old `renames` entries when adding new ones.
 
-## Adding a New Plugin
+## Adding a Skill
 
-1. Create `plugins/<name>/.claude-plugin/plugin.json` with name, version, description, author
-2. Create `plugins/<name>/skills/<skill-name>/SKILL.md` with frontmatter and instructions
-3. Add the plugin entry to `.claude-plugin/marketplace.json`
-4. Add a `plugins/<name>/README.md` for users
+1. Create `skills/<name>/SKILL.md` with frontmatter and instructions.
+2. To ship it in Claude Code, add a symlink under the right plugin and a marketplace entry.
+3. Add a short row to the matching group in `README.md` and `INSTALL.md`.
+4. Leave operator utilities out of `.claude-plugin/marketplace.json`.

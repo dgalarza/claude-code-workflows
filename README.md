@@ -1,105 +1,88 @@
-# Claude Code Workflows
+# Agent Skills
 
-A collection of skills, agents, and workflows for Claude Code.
+One skills library for Claude Code, Cursor, Codex, and other coding agents.
 
-> **[YouTube](https://youtube.com/@damian.galarza)** | **[Newsletter](https://www.damiangalarza.com/newsletter?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)** | **[Blog](https://www.damiangalarza.com?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)**
+> **[YouTube](https://youtube.com/@damian.galarza)** | **[Newsletter](https://www.damiangalarza.com/newsletter?utm_source=github&utm_medium=readme&utm_campaign=agent-skills)** | **[Blog](https://www.damiangalarza.com?utm_source=github&utm_medium=readme&utm_campaign=agent-skills)**
+
+Skills live in `skills/<name>/SKILL.md`. Claude Code plugins are thin manifests that point at those skills. Install details are in [INSTALL.md](INSTALL.md).
+
+The GitHub repository is still `dgalarza/claude-code-workflows` until it is renamed to `dgalarza/agent-skills`. This tree is the library that rename should point at. Do not create a second repository with the old name.
 
 ---
 
-## Quick Install
+## Assess & prepare
 
-**Via npx (skills only):**
+These two are the place to start. Each has its own landing page.
+
+| Skill | What it does | Start here |
+|-------|----------------|------------|
+| Codebase Readiness | Score a repository across 8 dimensions (0-100) and get a band plus an improvement roadmap | [damiangalarza.com/codebase-readiness](https://www.damiangalarza.com/codebase-readiness/?utm_source=github&utm_medium=readme&utm_campaign=codebase-readiness) |
+| Agent Ready | Scaffold AGENTS.md, ARCHITECTURE.md, docs, and a regression-aware quality gate. Claude Code 2.1.277+ reads AGENTS.md directly | [damiangalarza.com/agent-ready](https://www.damiangalarza.com/agent-ready/?utm_source=github&utm_medium=readme&utm_campaign=agent-ready) |
+
+Source: [codebase-readiness](plugins/codebase-readiness/README.md) and [agent-ready](plugins/agent-ready/README.md).
+
+[Get the Agent-Ready Codebase Playbook](https://www.damiangalarza.com/newsletter?utm_source=github&utm_medium=readme&utm_campaign=codebase-playbook)
+
+After a score, a [Foundation Sprint](https://www.damiangalarza.com/services/?utm_source=github&utm_medium=readme&utm_campaign=agent-skills) is two weeks on the highest-leverage problem, with a Production AI retainer if the work should continue.
+
+---
+
+## Engineering
+
+Install the bundle in Claude Code:
+
 ```bash
-npx skills add dgalarza/claude-code-workflows --skill "tdd-workflow"
+/plugin marketplace add dgalarza/agent-skills
+/plugin install engineering-skills@dgalarza-agent-skills
 ```
 
-**Via Claude marketplace (skills, agents, bundles):**
-```bash
-/plugin marketplace add dgalarza/claude-code-workflows
-/plugin install tdd-workflow@dgalarza-workflows
-```
-
-See [INSTALL.md](INSTALL.md) for full details.
-
----
-
-## Featured: Agent-Ready Codebase Assessment
-
-**Does your codebase support AI agent work — or fight against it?**
-
-The [Codebase Readiness](plugins/codebase-readiness/README.md) plugin scores your repo across 8 dimensions (0-100) and tells you exactly where you stand — framed against teams shipping 1,000+ AI-generated PRs per week.
+Or one skill on Cursor, Codex, or another agent:
 
 ```bash
-/plugin install codebase-readiness@dgalarza-workflows
-/codebase-readiness
+npx skills add dgalarza/agent-skills --skill team-code-review -a cursor
+npx skills add dgalarza/agent-skills --skill tdd -a codex
 ```
 
-You get a band rating (Agent-Ready → Not Agent-Ready), a concrete improvement roadmap, and an optional saved report to share with your team. Not opinions — evidence gathered from your actual codebase.
+| Skill | What it does |
+|-------|----------------|
+| [team-code-review](skills/team-code-review/SKILL.md) | Specialist review. Verify every finding before reporting it. Replaces parallel code review |
+| [stacked-prs](skills/stacked-prs/SKILL.md) | Break a large change into dependent pull requests with `gh stack` |
+| [conventional-comments](skills/conventional-comments/SKILL.md) | Review comments in the Conventional Comments format |
+| [conventional-commits](skills/conventional-commits/SKILL.md) | Commit messages in the Conventional Commits format |
+| [tdd](skills/tdd/SKILL.md) | Red-green-refactor, one behavior at a time, with the project's own test command |
 
-Once you have your score, the [agent-ready](plugins/agent-ready/README.md) plugin fixes the documentation gaps automatically: CLAUDE.md, ARCHITECTURE.md, and docs/ structure following progressive disclosure patterns.
-
-[Learn more →](plugins/codebase-readiness/README.md) | [See the full assessment details](https://www.damiangalarza.com/codebase-readiness/?utm_source=github&utm_medium=readme&utm_campaign=codebase-readiness) | [Get the Agent-Ready Codebase Playbook](https://www.damiangalarza.com/newsletter?utm_source=github&utm_medium=readme&utm_campaign=codebase-playbook) | [Want help improving your score?](https://www.damiangalarza.com/services/ai-enablement/?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)
-
----
-
-## Skills
-
-| Skill | Description |
-|-------|-------------|
-| [Codebase Readiness](plugins/codebase-readiness/README.md) | Score your repo's readiness for autonomous AI agent work |
-| [Agent Ready](plugins/agent-ready/README.md) | Fix documentation gaps and install regression-aware quality gates: CLAUDE.md, ARCHITECTURE.md, docs/, baseline-gated CI |
-| [TDD Workflow](plugins/tdd-workflow/README.md) | Test-driven development, one test at a time |
-| [Conventional Commits](plugins/conventional-commits/README.md) | Structured commit messages |
-| [Parallel Code Review](plugins/parallel-code-review/README.md) | Multi-agent code reviews |
-| [Meeting Transcript](plugins/meeting-transcript/README.md) | Process transcripts into structured notes |
-| [Gridfinity Planner](plugins/gridfinity-planner/README.md) | 3D printing baseplate planning |
-
-## Agents
-
-| Agent | Description |
-|-------|-------------|
-| [Cybersecurity Reviewer](plugins/cybersecurity-reviewer/README.md) | Security analysis and threat modeling |
-
-## Bundles
-
-| Bundle | Description |
-|--------|-------------|
-| [Rails Toolkit](plugins/rails-toolkit/README.md) | Complete Rails workflow with TDD, reviews, Linear integration |
-
-If this helped you, give it a star — it helps others find it.
+The bundle manifest is [plugins/engineering-skills](plugins/engineering-skills/README.md).
 
 ---
 
-## Tips & Tricks
+## Productivity
 
-| Tip | Description |
-|-----|-------------|
-| [Use Worktrees for Parallel Agents](tips/worktrees-for-parallel-agents.md) | Run multiple Claude Code agents on the same codebase without conflicts |
-| [Customize Your Status Bar](tips/customize-status-bar.md) | Configure the status bar to show model, tokens, and more |
-| [Compact Context Proactively](tips/compact-context-proactively.md) | Keep Claude effective by compacting at the right times |
-| [Structure Your CLAUDE.md Files](tips/structure-claude-md-files.md) | Give Claude the project context it needs |
-| [Use Subagents for Focused Tasks](tips/use-subagents-for-focused-tasks.md) | Spawn specialized subagents for reviews, research, and more |
-| [MCP Servers Worth Installing](tips/mcp-servers-worth-installing.md) | Linear, Memory, and Sentry integrations |
-| [Plugins Worth Installing](tips/plugins-worth-installing.md) | Claudit configuration auditor and more |
-| [Skills Worth Installing](tips/skills-worth-installing.md) | Frontend Design, Remotion video creation, and more |
+These are operator utilities. They are not Claude plugins. Install with `npx skills`.
 
----
+```bash
+npx skills add dgalarza/agent-skills --skill buffer
+npx skills add dgalarza/agent-skills --skill buttondown
+npx skills add dgalarza/agent-skills --skill herdr-code-review
+```
 
-## Configurations
-
-- [Status Bar Setup](configs/status-bar.md)
-- [MCP Server Recommendations](configs/mcp-servers.md)
+| Skill | What it does |
+|-------|----------------|
+| [buffer](skills/buffer/SKILL.md) | Schedule posts and manage a Buffer queue. Requires `BUFFER_API_TOKEN` |
+| [buttondown](skills/buttondown/SKILL.md) | Manage Buttondown tags, automations, subscribers, and emails. Requires `BUTTONDOWN_API_KEY` |
+| [herdr-code-review](skills/herdr-code-review/SKILL.md) | Run `team-code-review` in a fresh sibling Herdr pane. Requires `HERDR_ENV=1` |
 
 ---
+
+If this helped, a star helps other people find it.
 
 ## Contributing
 
-Found a bug? Have a workflow to share? PRs welcome.
+Bugs and workflow fixes are welcome. See [AGENTS.md](AGENTS.md) for the layout and how versions are bumped.
 
 ## License
 
-MIT
+[MIT](LICENSE)
 
 ---
 
-**Built by [Damian Galarza](https://www.damiangalarza.com?utm_source=github&utm_medium=readme&utm_campaign=claude-code-workflows)** - Former CTO, 15+ years in software. I make videos about Claude Code and AI development workflows.
+**Built by [Damian Galarza](https://www.damiangalarza.com?utm_source=github&utm_medium=readme&utm_campaign=agent-skills)** — former CTO, production AI for engineering teams.

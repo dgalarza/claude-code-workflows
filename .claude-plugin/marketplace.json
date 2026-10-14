@@ -1,76 +1,40 @@
 {
-  "name": "dgalarza-workflows",
-  "description": "Agent workflows and skills for agent-ready codebases, assessment, quality gates, and engineering practices.",
+  "name": "dgalarza-agent-skills",
+  "version": "2026.10.0",
+  "description": "Agent skills for Claude Code, Cursor, Codex, and other coding agents: codebase assessment, agent-ready scaffolding, and engineering workflows.",
   "owner": {
     "name": "Damian Galarza",
     "url": "https://www.damiangalarza.com"
   },
   "plugins": [
     {
-      "name": "tdd-workflow",
-      "source": "./plugins/tdd-workflow",
-      "description": "Test-driven development skill that enforces red-green-refactor, one test at a time",
-      "version": "1.1.0"
-    },
-    {
-      "name": "conventional-commits",
-      "source": "./plugins/conventional-commits",
-      "description": "Structured commit messages following the Conventional Commits specification",
-      "version": "1.0.0"
-    },
-    {
-      "name": "parallel-code-review",
-      "source": "./plugins/parallel-code-review",
-      "description": "Run multiple code review agents in parallel for comprehensive feedback",
-      "version": "1.0.0"
-    },
-    {
-      "name": "meeting-transcript",
-      "source": "./plugins/meeting-transcript",
-      "description": "Process meeting transcripts into structured notes with action items",
-      "version": "1.0.0"
-    },
-    {
-      "name": "cybersecurity-reviewer",
-      "source": "./plugins/cybersecurity-reviewer",
-      "description": "Security analysis agent for vulnerability assessment and threat modeling",
-      "version": "1.0.0"
-    },
-    {
-      "name": "rails-toolkit",
-      "source": "./plugins/rails-toolkit",
-      "description": "Complete Rails development workflow with TDD, security reviews, and Linear integration",
-      "version": "1.0.0"
-    },
-    {
-      "name": "gridfinity-planner",
-      "source": "./plugins/gridfinity-planner",
-      "description": "Plan and design gridfinity baseplates for 3D printing with optimal grid layouts",
-      "version": "1.1.0"
-    },
-    {
       "name": "codebase-readiness",
       "source": "./plugins/codebase-readiness",
-      "description": "Score your codebase's readiness for autonomous AI agent work across 8 dimensions, framed around the Stripe benchmark of 1k+ AI-generated PRs per week",
-      "version": "1.9.0"
+      "description": "Score a codebase's readiness for autonomous AI agent work across 8 dimensions and produce an improvement roadmap.",
+      "version": "2026.10.0"
     },
     {
       "name": "agent-ready",
       "source": "./plugins/agent-ready",
-      "description": "Make a codebase agent-ready with progressive-disclosure documentation, domain-context and ADR discipline, regression-aware quality gates, documentation checks, and opinionated stack-specific project skill recommendations. Uses AGENTS.md directly with Claude Code 2.1.277+ without requiring a CLAUDE.md symlink.",
-      "version": "1.6.1"
+      "description": "Make a codebase agent-ready with progressive-disclosure documentation, domain context, regression-aware quality gates, and stack-specific skill recommendations. Uses AGENTS.md directly with Claude Code 2.1.277+ without requiring a CLAUDE.md symlink.",
+      "version": "2026.10.0"
     },
     {
-      "name": "doc-audit",
-      "source": "./plugins/doc-audit",
-      "description": "Audit codebase documentation for accuracy, completeness, and freshness against actual code. Auto-fixes small discrepancies, reports structural changes. Companion to agent-ready.",
-      "version": "1.0.0"
-    },
-    {
-      "name": "doc-sentinel",
-      "source": "./plugins/doc-sentinel",
-      "description": "Proactive documentation drift detector. Hooks into commits to identify docs referencing changed code, flags drift before staleness accumulates, and resolves warnings via targeted fixes.",
-      "version": "1.0.5"
+      "name": "engineering-skills",
+      "source": "./plugins/engineering-skills",
+      "description": "Engineering workflow skills: team-code-review, stacked-prs, conventional-comments, conventional-commits, and tdd.",
+      "version": "2026.10.0"
     }
-  ]
+  ],
+  "renames": {
+    "tdd-workflow": "engineering-skills",
+    "conventional-commits": "engineering-skills",
+    "parallel-code-review": "engineering-skills",
+    "cybersecurity-reviewer": null,
+    "doc-audit": null,
+    "doc-sentinel": null,
+    "meeting-transcript": null,
+    "rails-toolkit": null,
+    "gridfinity-planner": null
+  }
 }

@@ -2,8 +2,36 @@
 
 All notable changes to this repository will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+Plugin and marketplace versions use calendar versioning, `YYYY.MM.PATCH` (example `2026.10.0`). Git release tags stay `YYYY.MM.DD`.
+
+## [2026.10.0] — 2026-10-14
+
+### Breaking
+- Marketplace name is `dgalarza-agent-skills`. It was `dgalarza-workflows`. The bare name `agent-skills` is reserved by Claude Code for Anthropic marketplaces. Existing Claude Code installs need `/plugin marketplace add dgalarza/agent-skills` and a fresh `/plugin install <name>@dgalarza-agent-skills`. The GitHub repository rename to `dgalarza/agent-skills` is a follow-up and is not part of this change.
+- Plugin versions moved to CalVer. `codebase-readiness`, `agent-ready`, and `engineering-skills` are `2026.10.0`.
+
+### Added
+- Canonical skills at `skills/<name>/SKILL.md`. Claude plugins are thin manifests with symlinks into that tree.
+- **engineering-skills** bundle: `team-code-review`, `stacked-prs`, `conventional-comments`, `conventional-commits`, and a rewritten `tdd`.
+- Operator utilities from `dgalarza/agent-skills`, installed with `npx skills` only: `buffer`, `buttondown`, `herdr-code-review`.
+- Marketplace `renames`: `tdd-workflow`, `conventional-commits`, and `parallel-code-review` point at `engineering-skills`. Retired plugins point at `null`.
+
+### Changed
+- **tdd** replaces `tdd-workflow`. The skill is red-green-refactor, one behavior at a time, and it does not install a Claude prompt hook.
+- **codebase-readiness** runs four assessment passes in parallel when the runtime has subagents, and sequentially in the current agent otherwise.
+- The codebase-readiness report CTA points at the [Foundation Sprint](https://www.damiangalarza.com/services/) on `/services/`. The old AI Workflow Enablement Program URL is gone. The report no longer tells the reader to create a CLAUDE.md symlink.
+
+### Removed
+- `cybersecurity-reviewer`
+- `doc-audit` (not folded into agent-ready)
+- `doc-sentinel`
+- `meeting-transcript` / `process-meeting-transcript`
+- `rails-toolkit`, including `rspec-testing` and `linear-implement`
+- `gridfinity-planner`
+- `parallel-code-review` (use `team-code-review` inside `engineering-skills`)
+- `tips/` and `configs/`
+- `creatorsignal-api` was not imported
 
 ## [2026.10.01] — 2026-10-01
 
@@ -66,6 +94,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Docs
 - Documented release process and versioning strategy
 
+[2026.10.0]: https://github.com/dgalarza/claude-code-workflows/tree/cursor/canonical-agent-skills-bb25
 [2026.10.01]: https://github.com/dgalarza/claude-code-workflows/tree/2026.10.01
 [2026.09.22]: https://github.com/dgalarza/claude-code-workflows/tree/2026.09.22
 [2026.09.06]: https://github.com/dgalarza/claude-code-workflows/tree/2026.09.06

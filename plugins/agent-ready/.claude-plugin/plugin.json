@@ -1,6 +1,6 @@
 {
   "name": "agent-ready",
-  "version": "1.6.1",
+  "version": "2026.10.0",
   "description": "Make a codebase agent-ready with progressive-disclosure documentation, domain-context and ADR discipline, regression-aware quality gates, documentation checks, and opinionated stack-specific project skill recommendations. Uses AGENTS.md directly with Claude Code 2.1.277+ without requiring a CLAUDE.md symlink.",
   "author": {
     "name": "Damian Galarza",

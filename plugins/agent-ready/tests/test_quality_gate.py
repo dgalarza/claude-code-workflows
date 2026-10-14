@@ -20,7 +20,7 @@ import tempfile
 import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ENGINE = os.path.join(HERE, "..", "skills", "agent-ready", "assets", "quality-gate.py")
+ENGINE = os.path.join(HERE, "..", "..", "..", "skills", "agent-ready", "assets", "quality-gate.py")
 
 
 class QualityGateTest(unittest.TestCase):

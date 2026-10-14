@@ -1,109 +1,79 @@
 # Installation
 
-## Installation Methods
+Canonical install paths for this library. Marketplace name: `dgalarza-agent-skills`. Repository shorthand: `dgalarza/agent-skills`.
 
-There are two ways to install from this repository:
+The GitHub rename from `dgalarza/claude-code-workflows` to `dgalarza/agent-skills` happens after this change merges. Use the commands below once that rename is in place. Rename the existing repository so the old URL keeps redirecting. A new repository created with the old name would break that redirect.
 
-### npx skills (Skills only)
-
-```bash
-npx skills add dgalarza/claude-code-workflows --skill "tdd-workflow"
-```
-
-### Claude Marketplace (Skills, Agents, Bundles)
+## Claude Code
 
 ```bash
-# Add the marketplace (one time)
-/plugin marketplace add dgalarza/claude-code-workflows
-
-# Install plugins
-/plugin install tdd-workflow@dgalarza-workflows
+/plugin marketplace add dgalarza/agent-skills
+/plugin install <name>@dgalarza-agent-skills
 ```
 
----
+Plugins:
 
-## Available Plugins
+| Plugin | Install name | What it contains |
+|--------|----------------|------------------|
+| Codebase Readiness | `codebase-readiness` | 8-dimension assessment. Get it from [the landing page](https://www.damiangalarza.com/codebase-readiness/). |
+| Agent Ready | `agent-ready` | Documentation scaffold, quality gates, migrate, and audit. Get it from [the landing page](https://www.damiangalarza.com/agent-ready/). |
+| Engineering skills | `engineering-skills` | `team-code-review`, `stacked-prs`, `conventional-comments`, `conventional-commits`, `tdd` |
 
-### Skills
+```bash
+/plugin install engineering-skills@dgalarza-agent-skills
+```
 
-*Installable via npx or marketplace*
+Operator utilities are not Claude plugins. Install them with `npx skills`.
+
+## Cursor, Codex, and other agents
+
+```bash
+npx skills add dgalarza/agent-skills [-a cursor|codex]
+```
+
+Examples:
+
+```bash
+npx skills add dgalarza/agent-skills --skill team-code-review -a cursor
+npx skills add dgalarza/agent-skills --skill stacked-prs -a codex
+npx skills add dgalarza/agent-skills --skill buffer
+npx skills add dgalarza/agent-skills --skill buttondown
+npx skills add dgalarza/agent-skills --skill herdr-code-review
+```
+
+`-a cursor` installs into Cursor's skill directory. `-a codex` installs into Codex's skill directory. Omit `-a` to use the CLI default for the current agent.
+
+## Skills
+
+Canonical files are `skills/<name>/SKILL.md`. Plugins symlink at those directories.
+
+### Engineering (`engineering-skills`)
 
 | Skill | Description |
 |-------|-------------|
-| `tdd-workflow` | Red-green-refactor TDD workflow |
+| `team-code-review` | Specialist review with every finding verified before it is reported |
+| `stacked-prs` | Dependent pull requests via GitHub stacked PRs and `gh stack` |
+| `conventional-comments` | Structured review comments |
 | `conventional-commits` | Structured commit messages |
-| `parallel-code-review` | Multi-agent code reviews |
-| `meeting-transcript` | Process transcripts into notes |
-| `gridfinity-planner` | 3D printing baseplate planning |
+| `tdd` | Red-green-refactor, one behavior at a time. No install hook |
 
-```bash
-# Via npx
-npx skills add dgalarza/claude-code-workflows --skill "tdd-workflow"
+### Productivity (npx only)
 
-# Via marketplace
-/plugin install tdd-workflow@dgalarza-workflows
-```
-
-### Agents
-
-*Marketplace only*
-
-| Agent | Description |
+| Skill | Description |
 |-------|-------------|
-| `cybersecurity-reviewer` | Security vulnerability analysis |
+| `buffer` | Buffer scheduling API. Requires `BUFFER_API_TOKEN` |
+| `buttondown` | Buttondown newsletter API. Requires `BUTTONDOWN_API_KEY` |
+| `herdr-code-review` | Delegate `team-code-review` to a fresh sibling Herdr pane. Requires `HERDR_ENV=1` and the `team-code-review` skill |
+
+### Assess and prepare
+
+`codebase-readiness` and `agent-ready` are separate plugins so each can stay attached to its landing page. The pages above are the supported entry points.
+
+## Updating and uninstalling
 
 ```bash
-/plugin install cybersecurity-reviewer@dgalarza-workflows
+/plugin update engineering-skills@dgalarza-agent-skills
+/plugin uninstall engineering-skills@dgalarza-agent-skills
 ```
 
-### Bundles
-
-*Marketplace only*
-
-| Bundle | Description |
-|--------|-------------|
-| `rails-toolkit` | Complete Rails dev workflow (agents + commands + skills) |
-| `codebase-readiness` | Agent-Ready Codebase Assessment — scored report across 8 dimensions |
-
-```bash
-/plugin install rails-toolkit@dgalarza-workflows
-/plugin install codebase-readiness@dgalarza-workflows
-```
-
----
-
-## Using Plugins
-
-Skills and agents activate automatically when relevant. Commands use the plugin namespace:
-
-```bash
-# Rails toolkit commands
-/rails-toolkit:full-code-review
-/rails-toolkit:linear-worktree myproject TRA-9
-```
-
----
-
-## Manual Installation
-
-If you prefer to copy files manually:
-
-1. Clone this repo
-2. Copy the desired plugin folder contents into your project's `.claude/` directory
-
-```bash
-# Example: Install tdd-workflow manually
-cp -r plugins/tdd-workflow/skills/tdd-workflow ~/.claude/skills/
-```
-
----
-
-## Updating & Uninstalling
-
-```bash
-# Update a plugin
-/plugin update tdd-workflow@dgalarza-workflows
-
-# Uninstall a plugin
-/plugin uninstall tdd-workflow@dgalarza-workflows
-```
+Marketplace renames map `tdd-workflow` and `conventional-commits` to `engineering-skills`. Retired plugins map to removal. See the changelog for the full list.

@@ -1,98 +1,67 @@
 # agent-ready
 
-Make a codebase agent-ready by scaffolding AGENTS.md, ARCHITECTURE.md, and docs/ structure following progressive disclosure patterns, installing a regression-aware quality gate, and recommending project-local skills for the detected stack.
+Make a codebase agent-ready by scaffolding AGENTS.md, ARCHITECTURE.md, and a `docs/` structure that follows progressive disclosure, installing a regression-aware quality gate, and recommending project-local skills for the detected stack.
 
-This is the **remediation companion** to [codebase-readiness](../codebase-readiness/). While codebase-readiness *scores* how agent-ready your codebase is, agent-ready *fixes* the gaps by generating the documentation and structural artifacts that make a codebase legible to AI agents.
+This is the remediation companion to [codebase readiness](https://www.damiangalarza.com/codebase-readiness/). Codebase readiness scores the repository. Agent-ready closes the documentation and quality-gate gaps.
+
+Start at the landing page: [agent-ready](https://www.damiangalarza.com/agent-ready/).
 
 ## Install
 
-```bash
-npx skills add dgalarza/claude-code-workflows --skill "agent-ready"
+From this repository, after the marketplace is added:
 
-# Or via Claude marketplace
-/plugin install agent-ready@dgalarza-workflows
+```bash
+/plugin marketplace add dgalarza/agent-skills
+/plugin install agent-ready@dgalarza-agent-skills
 ```
+
+```bash
+npx skills add dgalarza/agent-skills --skill agent-ready
+```
+
+These commands are the GitHub install path. The landing page is the supported way to get the skill.
 
 ## Modes
 
-| Mode | What It Does | Example Prompt |
+| Mode | What it does | Example prompt |
 |------|-------------|----------------|
 | **scaffold** | Full setup: docs/ structure, ARCHITECTURE.md, AGENTS.md, documentation check, quality gate | "Make this codebase agent-ready" |
-| **architecture** | Generate ARCHITECTURE.md from actual codebase analysis | "Create an ARCHITECTURE.md" |
+| **architecture** | Generate ARCHITECTURE.md from the actual codebase | "Create an ARCHITECTURE.md" |
 | **agents-md** | Create or refactor AGENTS.md for progressive disclosure | "Set up AGENTS.md" |
-| **quality-gates** | Install a regression-aware quality gate: native complexity/duplication/dead-code checks, reviewed baseline, merge-base-aware CI, docs, tests | "Set up quality gates", "baseline our tech debt" |
+| **quality-gates** | Install a regression-aware quality gate: native complexity, duplication, and dead-code checks, a reviewed baseline, merge-base-aware CI, docs, and tests | "Set up quality gates" |
 | **migrate** | Upgrade a legacy agent-ready scaffold to the current domain-context, ADR, and documentation-check contract | "Migrate our agent-ready docs" |
 | **audit** | Check existing agent-readiness artifacts and the quality gate for staleness, coherence, and governance | "Are my agent docs up to date?" |
 
-## Quality Gates
+## Quality gates
 
-Documentation tells agents what good looks like; a quality gate stops them from shipping the opposite. The `quality-gates` mode installs a **regression-aware** gate: legacy debt is inventoried in a baseline and allowed to stay, while any PR that adds new complexity, duplication, or dead code -- or makes a baselined finding worse -- fails CI.
-
-What gets installed in your repo:
+Documentation tells an agent what good looks like. A quality gate stops it from shipping the opposite. The `quality-gates` mode installs a regression-aware gate: legacy debt stays in a baseline, and any change that adds complexity, duplication, or dead code — or makes a baselined finding worse — fails CI.
 
 | Piece | Detail |
 |-------|--------|
-| Checks | The language's native tools (ESLint/knip/jscpd, RuboCop/flay/debride, ruff/pylint/vulture, golangci-lint, detekt/PMD, clippy, PHPStan/phpmd). Native baseline or diff modes are used where they exist; otherwise a small stdlib engine (`scripts/quality-gate.py`) fingerprints findings so line-number churn does not create false "new" debt |
-| Commands | `report` / `check` / `baseline --prune`, identical locally and in CI, exposed through the project's task runner |
-| Baseline | Created only with a written `--reason` and a human `--approve --reviewed-by`; `check` fails while it is unreviewed; refused in CI; CODEOWNERS-protected. Stale entries fail `check` until pruned, so the baseline only shrinks |
-| CI | Merge-base-aware job that annotates findings on the PR diff. No `continue-on-error` |
-| Docs | `docs/guides/quality-gates.md` plus Definition of Done and directives in AGENTS.md; scaffold also installs link and topology verification via `scripts/docs-check.py` |
+| Checks | The language's native tools. Native baseline or diff modes are used where they exist; otherwise a stdlib engine (`assets/quality-gate.py`) fingerprints findings so line-number churn does not look like new debt |
+| Commands | `report` / `check` / `baseline --prune`, identical locally and in CI |
+| Baseline | Created only with a written `--reason` and a human `--approve --reviewed-by`. `check` fails while it is unreviewed. Refused in CI. Stale entries fail until pruned |
+| CI | Merge-base-aware job that annotates findings on the pull request diff |
+| Docs | `docs/guides/quality-gates.md` plus Definition of Done directives in AGENTS.md |
 | Tests | A self-test proving a clean tree passes, synthetic debt fails, and stale entries are pruned |
 
-The pattern is documented in `references/quality-gates-pattern.md` with adapter recipes per language. The engine template has its own unit tests in `tests/`.
+## Agent instructions
 
-## Project Skill Recommendations
+The plugin generates **AGENTS.md** as the shared instruction file. Claude Code reads AGENTS.md directly starting with version 2.1.277, so do not add a CLAUDE.md symlink. Preserve an existing CLAUDE.md. If both files exist and disagree, say so.
 
-Agent-ready inspects tracked manifests and configuration for strong stack signals and recommends a curated set of skills:
+The skill source is `skills/agent-ready/`. This plugin directory is a thin manifest; `skills/agent-ready` here symlinks to that canonical skill.
 
-| Detected Project | Recommended Skill | Source |
-|------------------|-------------------|--------|
-| React web | `vercel-react-best-practices` | [Vercel](https://github.com/vercel-labs/agent-skills) |
-| React Native or Expo | `vercel-react-native-skills` | [Vercel](https://github.com/vercel-labs/agent-skills) |
-| Angular | `angular-developer` | [Angular](https://github.com/angular/angular) |
-| Svelte | `svelte-core-bestpractices` | [Svelte](https://github.com/sveltejs/ai-tools) |
-| Mastra | `mastra` | [Mastra](https://github.com/mastra-ai/skills) |
-| FastAPI | `fastapi` | [FastAPI](https://github.com/fastapi/fastapi) |
-| Laravel | `laravel-best-practices` | [Laravel](https://github.com/laravel/boost) |
-| Supabase | `supabase` | [Supabase](https://github.com/supabase/agent-skills) |
-| Stripe | `stripe-best-practices` | [Stripe](https://github.com/stripe/ai) |
-| Cloudflare Workers | `workers-best-practices` | [Cloudflare](https://github.com/cloudflare/skills) |
-| Terraform | `terraform-style-guide` | [HashiCorp](https://github.com/hashicorp/agent-skills) |
+## Recommended workflow
 
-For repositories with a clearly user-facing browser UI, it separately offers `frontend-design` from Anthropic and `web-design-guidelines` from Vercel as optional additions.
+1. Score the repo with [codebase readiness](https://www.damiangalarza.com/codebase-readiness/).
+2. Run agent-ready to fix documentation and structure.
+3. If the Gate Maturity Level is L0-L2, run agent-ready in **quality-gates** mode.
+4. Re-run the assessment to measure the change.
 
-Agent-ready checks project-local installations first, groups missing recommendations into one prompt, and waits for confirmation. Confirmed skills are installed from the repository root with `npx skills add` in project scope; optional skills are not selected by default, and nothing is installed globally or without consent.
+If `AGENT_READY_ASSESSMENT.md` exists, agent-ready reads it and suggests which mode to run first.
 
-## Principles
+## Want help beyond documentation?
 
-Built on two key sources:
+Built by [Damian Galarza](https://www.damiangalarza.com?utm_source=github&utm_medium=readme&utm_campaign=agent-ready).
 
-- **Harness Engineering (OpenAI)** -- repository as system of record, progressive disclosure, AGENTS.md as table of contents not encyclopedia, enforce invariants not implementations
-- **matklad's ARCHITECTURE.md** -- bird's-eye codemap, name important modules, call out invariants (especially absences), point out boundaries
-
-## AGENTS.md and Claude Code
-
-This plugin generates **AGENTS.md** as the shared instruction file. Claude Code supports AGENTS.md directly starting with version 2.1.277 ([announcement](https://x.com/trq212/status/2101009392611278961)), so no CLAUDE.md symlink is needed. Existing CLAUDE.md files are preserved; review them for conflicting instructions if both files exist.
-
-## Domain Context and ADRs
-
-`CONTEXT.md` is the canonical glossary when a project has resolved domain terminology. `docs/DOMAIN.md` documents supported workflows, relationships, and compliance context without duplicating that glossary. Agent-ready creates `CONTEXT.md` lazily rather than inferring business terms from code.
-
-Create an ADR only when the decision is hard to reverse, surprising without context, and the result of a meaningful trade-off. ADRs live in `docs/adr/` for new scaffolds; migrate mode can move legacy `docs/decisions/` records with `git mv` after confirmation.
-
-## Integration with codebase-readiness
-
-If an `AGENT_READY_ASSESSMENT.md` exists from a prior codebase-readiness assessment, agent-ready will read it and auto-suggest which mode to run first based on the weakest dimensions.
-
-**Recommended workflow:**
-
-1. Run [codebase-readiness](../codebase-readiness/) to score your repo and identify gaps
-2. Run agent-ready to fix the documentation and structure gaps automatically
-3. If the assessment's Gate Maturity Level is L0-L2, run agent-ready in **quality-gates** mode
-4. Re-run the assessment to measure improvement
-
-[What each dimension means and why it matters →](https://www.damiangalarza.com/codebase-readiness/?utm_source=github&utm_medium=readme&utm_campaign=agent-ready)
-
-## Want Help Beyond Documentation?
-
-Built by [Damian Galarza](https://www.damiangalarza.com?utm_source=github&utm_medium=readme&utm_campaign=agent-ready). Documentation is one dimension. If your assessment surfaced gaps across test infrastructure, architecture, or team adoption, the [AI Workflow Enablement Program](https://www.damiangalarza.com/services/ai-enablement/?utm_source=github&utm_medium=readme&utm_campaign=agent-ready) works through all of it on your actual codebase.
+A [Foundation Sprint](https://www.damiangalarza.com/services/?utm_source=github&utm_medium=readme&utm_campaign=agent-ready) is two weeks on the highest-leverage problem in the AI stack, followed by a Production AI retainer if the work should continue.

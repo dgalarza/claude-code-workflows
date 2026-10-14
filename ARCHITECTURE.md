@@ -2,87 +2,107 @@
 
 ## Design Philosophy
 
-This repository treats the **repository as the system of record** for agent capabilities. Every skill, agent definition, and workflow lives in-repo as versioned, structured artifacts that agents can discover and reason about directly.
+This repository is the system of record for agent skills. Every skill lives in-repo as a versioned artifact that Claude Code, Cursor, Codex, and other agents can install.
 
-The architecture follows the principle of **progressive disclosure** — agents encounter a small, stable entry point (SKILL.md frontmatter) and are taught where to look next (the SKILL.md body, then references, then scripts and assets), rather than being overwhelmed up front.
+The architecture follows progressive disclosure. An agent sees a small entry point (SKILL.md frontmatter), then the SKILL.md body, then references, scripts, and assets.
 
 ## Component Map
 
-### Plugin Marketplace (`.claude-plugin/marketplace.json`)
-
-The single registry that maps plugin names to their source directories and versions. This is what Claude Code reads when users run `/plugin marketplace add` or `/plugin install`.
-
-### Plugins (`plugins/`)
-
-Each plugin is self-contained and independently installable. A plugin can contain one or more skills, agents, or commands.
+### Canonical skills (`skills/`)
 
 ```
-plugins/<name>/
-├── .claude-plugin/plugin.json   ← identity + version
-├── README.md                    ← user-facing docs
-└── skills/<skill-name>/
-    ├── SKILL.md                 ← the skill itself
-    ├── scripts/                 ← deterministic, executable code
-    ├── references/              ← documentation loaded into context as needed
-    └── assets/                  ← files used in output (templates, images)
+skills/<name>/
+├── SKILL.md          ← the skill
+├── scripts/          ← deterministic, executable code
+├── references/       ← documentation loaded into context as needed
+└── assets/           ← files used in output (templates, images)
 ```
 
-**Why this structure matters:** Skills use a three-level loading system to manage context efficiently:
+Plugin template tests stay next to the plugin (`plugins/<name>/tests/`) so they are not part of the installed skill tree.
+
+**Why this structure matters:** Skills use a three-level loading system:
 
 1. **Metadata** (name + description from frontmatter) — always in context (~100 words)
 2. **SKILL.md body** — loaded when the skill triggers (<5k words)
-3. **Bundled resources** (references, scripts, assets) — loaded as needed by the agent
+3. **Bundled resources** (references, scripts, assets) — loaded as needed
 
-This mirrors the progressive disclosure pattern: agents start with a lightweight map and drill deeper only when needed, preserving context window for the actual task.
+A Ruby assessment does not need the Scala rubric in context. Reference files keep the body small.
 
-### Skill Resources
+### Plugin marketplace (`.claude-plugin/marketplace.json`)
 
-- **Scripts** (`scripts/`) — Code that would otherwise be rewritten every invocation. Token-efficient because scripts can be executed without being read into context. Example: `recon.sh` in codebase-readiness gathers project metadata deterministically.
+The registry Claude Code reads for `/plugin marketplace add` and `/plugin install`. The marketplace `name` is `dgalarza-agent-skills`. That name is what users type after `@`. Claude Code reserves the bare name `agent-skills` for marketplaces from `github.com/anthropics/` and refuses to add it from any other source, so keep the `dgalarza-` prefix.
 
-- **References** (`references/`) — Domain knowledge loaded into context when the agent determines it's needed. Keeps SKILL.md lean while making deep knowledge discoverable. Example: codebase-readiness stores language-specific scoring rubrics (Ruby, Python, TypeScript, etc.) and dimension guides as separate reference files.
+Three plugins:
 
-- **Assets** (`assets/`) — Files used in output, not loaded into context. Templates, images, boilerplate that get copied or modified. Example: report templates that agents fill in with assessment results.
+| Plugin | Skills |
+|--------|--------|
+| `codebase-readiness` | assessment |
+| `agent-ready` | scaffold, quality gates, migrate, audit |
+| `engineering-skills` | team-code-review, stacked-prs, conventional-comments, conventional-commits, tdd |
 
-### Supporting Content
+`buffer`, `buttondown`, and `herdr-code-review` are skills with no plugin entry. `npx skills` discovers them from `skills/`.
 
-- **`configs/`** — Opinionated Claude Code configuration recommendations (status bar, MCP servers)
-- **`tips/`** — Short-form guides for Claude Code workflows (worktrees, subagents, context management)
-- **`scripts/`** — Utility scripts not tied to a specific plugin
+The `renames` object records old plugin names. A string value is the plugin to load instead. `null` means the plugin was removed. Claude Code follows the chain and stops at a current plugin name or `null`. The map is append-only.
 
-### CI Validation (`.github/workflows/`)
+`forceRemoveDeletedPlugins` is unset, so a removal notice does not uninstall files from a user's machine.
 
-Enforces structural invariants mechanically:
+### Thin plugins (`plugins/`)
 
-- **Skill validation** — Checks SKILL.md frontmatter format, required fields, naming conventions on every PR
-- **JSON validation** — Ensures all plugin.json and marketplace.json files are syntactically valid
+A plugin directory holds a manifest, a README, and symlinks:
 
-These checks encode "taste" as enforceable rules — agents and contributors can ship fast without undermining structural consistency.
+```
+plugins/<name>/
+├── .claude-plugin/plugin.json
+├── README.md
+└── skills/<skill-name> -> ../../../skills/<skill-name>
+```
+
+Component paths in a manifest have to stay inside the plugin root, so the manifest does not point at `../skills` with a relative path. A symlink whose target is elsewhere in this same marketplace is the supported way to share one skill across plugins. Claude Code dereferences that symlink and copies the target into the plugin cache. A symlink that leaves the marketplace is ignored.
+
+### Skill resources
+
+- **Scripts** (`scripts/`) — code that would otherwise be rewritten every run. `recon.sh` in codebase-readiness gathers project metadata without a model.
+- **References** (`references/`) — domain knowledge loaded when the agent needs it.
+- **Assets** (`assets/`) — templates copied into the user's project or report. They are not loaded as instructions.
+
+### CI (`.github/workflows/`)
+
+- **Skill validation** — SKILL.md frontmatter on changed skills under `skills/`.
+- **Template tests** — the agent-ready quality-gate engine.
+- **JSON validation** — `marketplace.json` and every `plugin.json`.
+
+`.agents/skills/skill-creator` is vendored tooling for that validation. It is not part of the catalog.
+
+`scripts/` holds repository utilities that are not skills. `setup-rails-worktree.sh` is still here. The worktree tip that linked to it was removed with `tips/`.
 
 ## Invariants
 
-These rules are enforced either by CI or by convention:
-
-1. **Every plugin has a plugin.json** with name, version, description
-2. **Every skill has a SKILL.md** with valid frontmatter (name + description)
-3. **Versions are synchronized** between plugin.json and marketplace.json
-4. **Skill names are kebab-case**, max 64 characters
-5. **No stale JSON** — all JSON files parse cleanly
-6. **Skills are self-contained** — a plugin directory contains everything needed to use it
+1. Every published Claude plugin has a `plugin.json` with name, version, and description.
+2. Every skill has a `SKILL.md` with valid frontmatter (name + description).
+3. Versions match across `plugin.json` and `marketplace.json`.
+4. Skill names are kebab-case, max 64 characters.
+5. JSON files parse.
+6. The canonical skill directory is `skills/<name>/`. Plugin `skills/` entries are symlinks to it.
+7. Parallel skill steps include a sequential fallback for agents that cannot spawn subagents.
 
 ## Design Decisions
 
-### Why plugins over a monolithic skill collection?
+### Why three plugins?
 
-Plugins are independently installable and versionable. A user who only needs TDD workflow doesn't pull in meeting transcript processing. This also allows different release cadences per plugin.
+`codebase-readiness` and `agent-ready` each map to a landing page and an email sequence, so they stay separately installable. `engineering-skills` is one install for the review, stacking, commit, comment, and TDD workflow. Operator utilities stay out of that bundle so a Claude install does not pull in newsletter and social APIs.
+
+### Why skills at the repository root?
+
+`npx skills` discovers `skills/<name>/SKILL.md` for Cursor, Codex, and the other agents the CLI supports. Claude plugins reuse those directories through symlinks instead of a second copy.
 
 ### Why reference files instead of large SKILL.md files?
 
-Context is a scarce resource. A 2,000-line SKILL.md crowds out the actual task. Reference files let agents load only what's relevant — a Ruby assessment doesn't need to read the Scala rubric. This follows the same principle described in OpenAI's [Harness Engineering](https://openai.com/index/harness-engineering/) post: "give the agent a map, not a 1,000-page instruction manual."
+Context is scarce. Reference files let an agent load the Ruby rubric without the Scala rubric. The same idea is in OpenAI's [Harness Engineering](https://openai.com/index/harness-engineering/) post: give the agent a map, not a 1,000-page manual.
 
-### Why two layers of versioning?
+### Why CalVer on plugins and date tags on the repo?
 
-The repo uses calendar-based tags (`YYYY.MM.DD`) for marketplace-wide releases and semver (`X.Y.Z`) per plugin. Calendar tags answer "what's the latest snapshot of the marketplace?" — useful for users installing from the marketplace. Semver per plugin answers "did this specific plugin change?" — useful for users who installed a single plugin and want to know if they should update. Decoupling these lets plugins evolve at their own pace without forcing artificial version bumps on unrelated plugins.
+Plugin and marketplace versions use `YYYY.MM.PATCH` (example `2026.10.0`) so a release is a date plus a counter inside that month. Git tags stay `YYYY.MM.DD`, which is the tag scheme this repository already publishes. The tag answers "what snapshot is this?" The plugin version answers "which revision of this plugin is installed?"
 
-### Why enforce structure in CI?
+### Why `renames` instead of deleting names quietly?
 
-Documentation alone doesn't keep a growing plugin ecosystem coherent. Mechanical enforcement catches drift before it compounds — the same principle behind custom linters in agent-first codebases. A broken frontmatter field means the skill won't trigger correctly; catching it in CI is cheaper than debugging it in production.
+Claude Code reports a missing plugin when an enabled name disappears. `renames` migrates `tdd-workflow` and `conventional-commits` to `engineering-skills`, and tells users when a retired plugin is gone.
