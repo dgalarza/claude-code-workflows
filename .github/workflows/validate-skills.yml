@@ -3,10 +3,11 @@ name: Validate Skills
 on:
   pull_request:
     paths:
-      - 'plugins/*/skills/**'
+      - 'skills/**'
       - 'plugins/*/tests/**'
       - 'plugins/*/.claude-plugin/plugin.json'
       - '.claude-plugin/marketplace.json'
+      - '.github/workflows/validate-skills.yml'
 
 jobs:
   validate-skills:
@@ -28,10 +29,10 @@ jobs:
           VALIDATE_SCRIPT=".agents/skills/skill-creator/scripts/quick_validate.py"
           FAILED=0
 
-          # Get unique skill directories from changed files
+          # Canonical skills live at skills/<name>/SKILL.md
           SKILL_DIRS=$(git diff --name-only origin/${{ github.base_ref }}...HEAD \
-            | grep '^plugins/.*/skills/' \
-            | sed 's|\(plugins/[^/]*/skills/[^/]*\)/.*|\1|' \
+            | grep '^skills/' \
+            | sed 's|\(skills/[^/]*\)/.*|\1|' \
             | sort -u)
 
           if [ -z "$SKILL_DIRS" ]; then

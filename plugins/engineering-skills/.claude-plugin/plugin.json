@@ -1,0 +1,19 @@
+{
+  "name": "engineering-skills",
+  "version": "2026.10.0",
+  "description": "Engineering workflow skills for code review, stacked pull requests, conventional comments, conventional commits, and test-driven development.",
+  "author": {
+    "name": "Damian Galarza",
+    "url": "https://www.damiangalarza.com"
+  },
+  "repository": "https://github.com/dgalarza/claude-code-workflows",
+  "license": "MIT",
+  "keywords": [
+    "code-review",
+    "stacked-prs",
+    "conventional-commits",
+    "conventional-comments",
+    "tdd",
+    "engineering"
+  ]
+}
