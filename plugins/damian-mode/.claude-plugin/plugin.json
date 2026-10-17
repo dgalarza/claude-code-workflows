@@ -1,0 +1,12 @@
+{
+  "name": "damian-mode",
+  "version": "1.0.0",
+  "description": "Damian Galarza's working conventions for coding agents: response style, delegation, verification, and a stacked-PR review flow",
+  "author": {
+    "name": "Damian Galarza",
+    "url": "https://www.damiangalarza.com"
+  },
+  "repository": "https://github.com/dgalarza/claude-code-workflows",
+  "license": "MIT",
+  "keywords": ["workflow", "conventions", "delegation", "code-review", "stacked-prs"]
+}

@@ -53,6 +53,7 @@ Once you have your score, the [agent-ready](plugins/agent-ready/README.md) plugi
 | [Parallel Code Review](plugins/parallel-code-review/README.md) | Multi-agent code reviews |
 | [Meeting Transcript](plugins/meeting-transcript/README.md) | Process transcripts into structured notes |
 | [Gridfinity Planner](plugins/gridfinity-planner/README.md) | 3D printing baseplate planning |
+| [Damian Mode](plugins/damian-mode/README.md) | My working conventions for coding agents: replies, delegation, verification, PR flow |
 
 ## Agents
 
